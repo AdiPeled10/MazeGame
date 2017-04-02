@@ -25,11 +25,11 @@ namespace SearchAlgorithmsLib
             theRoadToVictory.Add(newLastState);
         }
 
-        public State<T> GetNextState()
+        public T GetNextStep()
         {
             State<T> st = theRoadToVictory.FirstOrDefault();
             theRoadToVictory.Remove(st);
-            return st;
+            return st.GetState();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace SearchAlgorithmsLib
     {
         private const double epsilon = 1e-14; // Math.Pow(10, 2 - 2 * sizeof(double));
         private T state; // the state
-        private double Cost { get; set; } // cost to reach this state (set by a setter)
+        private double Cost { get { return Cost; } set { Cost = value; } } // cost to reach this state (set by a setter)
         private State<T> cameFrom; // the state we came from to this state (setter)
 
         public State(T state) // CTOR
@@ -58,6 +58,12 @@ namespace SearchAlgorithmsLib
         {
             return this.cameFrom;
         }
+
+        public T GetState()
+        {
+            return this.state;
+        }
+
 
         public static bool operator ==(State<T> s1, State<T> s2)
         {

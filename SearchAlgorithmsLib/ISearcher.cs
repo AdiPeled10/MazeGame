@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SearchAlgorithmsLib
 {
-    interface ISearcher<T>
+    public interface ISearcher<T>
     {
         // the search method
         Solution<T> search(ISearchable<T> searchable);

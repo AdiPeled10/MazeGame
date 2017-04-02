@@ -17,7 +17,7 @@ namespace SearchAlgorithmsLib
             evaluatedNodes = 0;
         }
 
-        protected State<T> popOpenList()
+        protected State<T> PopOpenList()
         {
             evaluatedNodes++;
             State<T> st = openList.FirstOrDefault();
@@ -37,6 +37,6 @@ namespace SearchAlgorithmsLib
             return evaluatedNodes;
         }
 
-        public abstract Solution<T> search(ISearchable<T> searchable);
+        public abstract Solution<T> Search(ISearchable<State<T>> searchable);
     }
 }

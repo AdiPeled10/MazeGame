@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConcurrentPriorityQueue;
 
 namespace SearchAlgorithmsLib
 {
-    public abstract class Searcher<MyPriorityQueue, T> : ISearcher<T> where MyPriorityQueue : ICollection<State<T>>, new()
+    public abstract class Searcher<MyPriorityQueue, T> : ISearcher<T>
+        where MyPriorityQueue : IPriorityQueue<State<T>,int>, new()
     {
         private MyPriorityQueue openList;
         private int evaluatedNodes;
@@ -20,9 +22,7 @@ namespace SearchAlgorithmsLib
         protected State<T> PopOpenList()
         {
             evaluatedNodes++;
-            State<T> st = openList.FirstOrDefault();
-            openList.Remove(st);
-            return st;
+            return openList.Dequeue();
         }
 
         // a property of openList

@@ -7,8 +7,14 @@ using C5;
 
 namespace SearchAlgorithmsLib
 {
+    public class PriorityQueue<TElement> : ConcurrentPriorityQueue.ConcurrentPriorityQueue<TElement, int>
+    {
+        public PriorityQueue()
+        { }
+    }
+
     // Best First Search
-    public class BFSSearcher<U> : Searcher<Queue<State<U>>, U>
+    public class BFSSearcher<U> : Searcher<PriorityQueue<State<U>>, U>
     {
         public override Solution<U> Search(ISearchable<U> searchable)
         {

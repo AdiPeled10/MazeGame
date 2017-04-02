@@ -6,21 +6,23 @@ using System.Threading.Tasks;
 
 namespace SearchAlgorithmsLib
 {
-    public abstract class Searcher : ISearcher
+    public abstract class Searcher<MyPriorityQueue, T> : ISearcher<T> where MyPriorityQueue : ICollection<State<T>>, new()
     {
-        private MyPriorityQueue<State> openList;
+        private MyPriorityQueue openList;
         private int evaluatedNodes;
    
         public Searcher()
         {
-            openList = new MyPriorityQueue<State>();
+            openList = new MyPriorityQueue();
             evaluatedNodes = 0;
         }
 
-        protected State popOpenList()
+        protected State<T> popOpenList()
         {
             evaluatedNodes++;
-            return openList.poll();
+            State<T> st = openList.FirstOrDefault();
+            openList.Remove(st);
+            return st;
         }
 
         // a property of openList
@@ -30,12 +32,11 @@ namespace SearchAlgorithmsLib
         }
 
         // ISearcher’s methods:
-        public virtual int getNumberOfNodesEvaluated()
+        public int getNumberOfNodesEvaluated()
         {
             return evaluatedNodes;
         }
 
-        public abstract Solution search(ISearchable searchable);
+        public abstract Solution<T> search(ISearchable<T> searchable);
     }
-}
 }

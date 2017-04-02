@@ -8,7 +8,7 @@ using C5;
 namespace SearchAlgorithmsLib
 {
     // Best First Search
-    public class BFSSearcher<U> : Searcher<IntervalHeap<State<U>>, U>
+    public class BFSSearcher<U> : Searcher<Queue<State<U>>, U>
     {
         public override Solution<U> Search(ISearchable<State<U>> searchable)
         {

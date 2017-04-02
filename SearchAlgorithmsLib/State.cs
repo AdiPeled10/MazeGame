@@ -31,5 +31,15 @@ namespace SearchAlgorithmsLib
              */
             return state.GetHashCode();
         }
+
+        public static bool operator ==(State<T> s1, State<T> s2)
+        {
+            return s1.Equals(s2);
+        }
+
+        public static bool operator !=(State<T> s1, State<T> s2)
+        {
+            return !(s1 == s2);
+        }
     }
 }

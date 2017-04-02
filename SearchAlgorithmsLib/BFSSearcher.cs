@@ -10,7 +10,7 @@ namespace SearchAlgorithmsLib
     // Best First Search
     public class BFSSearcher<U> : Searcher<Queue<State<U>>, U>
     {
-        public override Solution<U> Search(ISearchable<State<U>> searchable)
+        public override Solution<U> Search(ISearchable<U> searchable)
         {
             return null;
         }

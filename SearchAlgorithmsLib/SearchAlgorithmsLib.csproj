@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BFSSearcher.cs" />
+    <Compile Include="MyPriorityQueue.cs" />
     <Compile Include="ISearchable.cs" />
     <Compile Include="ISearcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

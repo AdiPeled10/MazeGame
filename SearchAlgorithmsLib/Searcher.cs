@@ -7,22 +7,24 @@ using ConcurrentPriorityQueue;
 
 namespace SearchAlgorithmsLib
 {
-    public abstract class Searcher<MyPriorityQueue, T> : ISearcher<T>
-        where MyPriorityQueue : IPriorityQueue<State<T>,int>, new()
+    public abstract class Searcher<T> : ISearcher<T>
+      //  where MyPriorityQueue : IPriorityQueue<State<T>,int>, new()
     {
-        private MyPriorityQueue openList;
-        private int evaluatedNodes;
+        protected MyPriorityQueue<State<T>,double> openList;
+        protected int evaluatedNodes;
    
         public Searcher()
         {
-            openList = new MyPriorityQueue();
+            openList = new MyPriorityQueue<State<T>, double>();
             evaluatedNodes = 0;
         }
 
         protected State<T> PopOpenList()
         {
             evaluatedNodes++;
-            return openList.Dequeue();
+            KeyValuePair<State<T>,double> pair = openList.Dequeue();
+            // Return the state.
+            return pair.Key;
         }
 
         // a property of openList

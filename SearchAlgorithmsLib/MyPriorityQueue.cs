@@ -19,7 +19,8 @@ namespace SearchAlgorithmsLib
     /// </summary>
     /// <typeparam name="TPriority">Type of priorities</typeparam>
     /// <typeparam name="TValue">Type of values</typeparam>
-    public class MyPriorityQueue<TPriority, TValue> : ICollection<KeyValuePair<TPriority, TValue>>
+    public class MyPriorityQueue<TPriority, TValue> : 
+        ICollection<KeyValuePair<TPriority, TValue>>, ICollectionDataStructure<KeyValuePair<TPriority, TValue>>
     {
         private List<KeyValuePair<TPriority, TValue>> _baseHeap;
         private IComparer<TPriority> _comparer;
@@ -146,6 +147,18 @@ namespace SearchAlgorithmsLib
         #region Priority queue operations
 
         /// <summary>
+        /// Dequeues element with minimum priority and return its value
+        /// </summary>
+        /// <returns>value of the dequeued element</returns>
+        /// <remarks>
+        /// Method throws <see cref="InvalidOperationException"/> if priority queue is empty
+        /// </remarks>
+        public KeyValuePair<TPriority, TValue> PopFirst()
+        {
+            return Dequeue();
+        }
+
+        /// <summary>
         /// Enqueues element into priority queue
         /// </summary>
         /// <param name="priority">element priority</param>
@@ -153,6 +166,16 @@ namespace SearchAlgorithmsLib
         public void Enqueue(TPriority priority, TValue value)
         {
             Insert(priority, value);
+        }
+
+        /// <summary>
+        /// Enqueues element into priority queue
+        /// </summary>
+        /// <param name="priority">element priority</param>
+        /// <param name="value">element value</param>
+        public void Enqueue(KeyValuePair<TPriority, TValue> item)
+        {
+            Insert(item);
         }
 
         /// <summary>
@@ -235,6 +258,11 @@ namespace SearchAlgorithmsLib
         private void Insert(TPriority priority, TValue value)
         {
             KeyValuePair<TPriority, TValue> val = new KeyValuePair<TPriority, TValue>(priority, value);
+            Insert(val);
+        }
+
+        private void Insert(KeyValuePair<TPriority, TValue> val)
+        {
             _baseHeap.Add(val);
 
             // heap[i] have children heap[2*i + 1] and heap[2*i + 2] and parent heap[(i-1)/ 2];
@@ -242,7 +270,6 @@ namespace SearchAlgorithmsLib
             // heapify after insert, from end to beginning
             HeapifyFromEndToBeginning(_baseHeap.Count - 1);
         }
-
 
         private int HeapifyFromEndToBeginning(int pos)
         {
@@ -313,7 +340,7 @@ namespace SearchAlgorithmsLib
         /// <param name="item">element to add</param>
         public void Add(KeyValuePair<TPriority, TValue> item)
         {
-            Enqueue(item.Key, item.Value);
+            Enqueue(item);
         }
 
         /// <summary>

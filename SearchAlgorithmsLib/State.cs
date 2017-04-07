@@ -11,7 +11,6 @@ namespace SearchAlgorithmsLib
         private const double epsilon = 1e-14; // Math.Pow(10, 2 - 2 * sizeof(double));
         private T state; // the state
         private double cost;
-
         public double Cost
         {
             get { return cost; }
@@ -33,7 +32,6 @@ namespace SearchAlgorithmsLib
             //return (Cost - other.Cost) < epsilon && (other.Cost - Cost) < epsilon && state.Equals(other.state);
         }
         
-
         public int CompareTo(object obj)
         {
             State<T> other = obj as State<T>;
@@ -72,7 +70,6 @@ namespace SearchAlgorithmsLib
             return this.state;
         }
 
-        
         public static bool operator ==(State<T> s1, State<T> s2)
         {
             return s1.Equals(s2);

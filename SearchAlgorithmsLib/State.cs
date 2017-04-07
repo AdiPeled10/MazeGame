@@ -25,9 +25,16 @@ namespace SearchAlgorithmsLib
             //this.cameFrom = this;
         }
 
+        public State(T state, double cost) // CTOR
+        {
+            this.state = state;
+            this.cost = cost;
+            //this.cameFrom = this;
+        }
+
         public override bool Equals(object obj) // we override Object's Equals method
         {
-            return state.Equals((obj as State<T>).state);
+            return !ReferenceEquals(obj, null) && state.Equals((obj as State<T>).state);
             //State<T> other = obj as State<T>;
             //return (Cost - other.Cost) < epsilon && (other.Cost - Cost) < epsilon && state.Equals(other.state);
         }
@@ -72,7 +79,9 @@ namespace SearchAlgorithmsLib
 
         public static bool operator ==(State<T> s1, State<T> s2)
         {
-            return s1.Equals(s2);
+            // the "ReferenceEquals(s1, s2)" will evaluate only if s1 is null.
+            // And it will be true only if s2 is also null.
+            return !ReferenceEquals(s1, null) && s1.Equals(s2) || ReferenceEquals(s1, s2);
         }
 
         public static bool operator !=(State<T> s1, State<T> s2)

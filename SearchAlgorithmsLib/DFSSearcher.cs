@@ -49,7 +49,10 @@ namespace SearchAlgorithmsLib
                 foreach (State<T> st in succerssors)
                 {
                     if (!closed.Contains(st))
+                    {
+                        closed.Add(st);
                         AddToOpenList(st);
+                    }
                 }
             }
             return new Solution<T>();

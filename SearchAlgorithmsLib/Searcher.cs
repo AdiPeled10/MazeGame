@@ -17,7 +17,6 @@ namespace SearchAlgorithmsLib
         {
             openList = new DataStructure();
             evaluatedNodes = 0;
-
         }
 
         protected DataStructureElementsType PopOpenList()

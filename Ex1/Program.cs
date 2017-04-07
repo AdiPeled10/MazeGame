@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MazeLib;
 using MazeGeneratorLib;
+using SearchAlgorithmsLib;
 
 namespace Ex1
 {
@@ -12,11 +13,22 @@ namespace Ex1
     {
         static void Main(string[] args)
         {
-            DFSMazeGenerator dfsMaze = new DFSMazeGenerator();
-            Maze m = dfsMaze.Generate(10, 5);
-            m = new Maze(5, 5);
-            Console.WriteLine(m[1, 1]);
+            CompareSolvers();
             //Console.ReadKey();
+        }
+
+        static void CompareSolvers()
+        {
+            DFSMazeGenerator dfsMaze = new DFSMazeGenerator();
+            Maze maze = dfsMaze.Generate(1500, 1500);
+            ISearchable<Position> adapt = new MazeToSearchableAdapter(maze);
+            BFSSearcher<Position> bfs = new BFSSearcher<Position>();
+            DFSSearcher<Position> dfs = new DFSSearcher<Position>();
+            Console.WriteLine(maze);
+            bfs.Search(adapt);
+            Console.WriteLine("Best First Search evaluated {0} nodes.", bfs.getNumberOfNodesEvaluated());
+            dfs.Search(adapt);
+            Console.WriteLine("DFS evaluated {0} nodes.", dfs.getNumberOfNodesEvaluated());
         }
     }
 }

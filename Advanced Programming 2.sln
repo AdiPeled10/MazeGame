@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ex1", "Ex1\Ex1.csproj", "{A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchAlgorithmsLib", "SearchAlgorithmsLib\SearchAlgorithmsLib.csproj", "{D6991A69-AFF4-4E8C-AB11-BB9F0E5E171F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{DA97C989-0B06-4179-B069-E4C39D9E5093}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{D6991A69-AFF4-4E8C-AB11-BB9F0E5E171F}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{D6991A69-AFF4-4E8C-AB11-BB9F0E5E171F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6991A69-AFF4-4E8C-AB11-BB9F0E5E171F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA97C989-0B06-4179-B069-E4C39D9E5093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA97C989-0B06-4179-B069-E4C39D9E5093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA97C989-0B06-4179-B069-E4C39D9E5093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA97C989-0B06-4179-B069-E4C39D9E5093}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

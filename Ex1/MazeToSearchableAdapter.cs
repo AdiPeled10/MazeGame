@@ -8,10 +8,7 @@ namespace Ex1
     class MazeToSearchableAdapter : ISearchable<Position>
     {
         private Maze maze;
-        internal struct Location
-        {
-            public int row, col;
-        }
+   
 
         public MazeToSearchableAdapter(Maze maze)
         {
@@ -22,19 +19,19 @@ namespace Ex1
         {
             List<State<Position>> neighbors = new List<State<Position>>();
             int i = s.GetState().Row, j = s.GetState().Col;
-            Location[] locations = new Location[] {
-                new Location { row = i - 1, col = j },
-                new Location { row = i, col = j - 1 },
-                new Location { row = i, col = j + 1 },
-                new Location { row = i + 1, col = j }
+            Position[] locations = new Position[] {
+                new Position(i - 1, j),
+                new Position(i, j - 1),
+                new Position(i, j + 1),
+                new Position(i + 1, j)
             };
-            foreach (Location loc in locations)
+            foreach (Position loc in locations)
             {
                 try
                 {
-                    if (maze[loc.row, loc.col] == CellType.Free)
+                    if (maze[loc.Row, loc.Col] == CellType.Free)
                     {
-                        neighbors.Add(new State<Position>(new Position(loc.row, loc.col), 1));
+                        neighbors.Add(new State<Position>(loc, 1));
                     }
                 }
                 catch (IndexOutOfRangeException)

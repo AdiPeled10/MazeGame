@@ -13,16 +13,8 @@ namespace Ex1
     {
         static void Main(string[] args)
         {
-            string s = "adi";
-            foo(s);
-            Console.WriteLine(s);
-            //CompareSolvers();
-            Console.ReadKey();
-        }
-
-        static void foo(string s)
-        {
-            s = "peled";
+            CompareSolvers();
+            //Console.ReadKey();
         }
 
         static void CompareSolvers()

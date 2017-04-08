@@ -13,8 +13,16 @@ namespace Ex1
     {
         static void Main(string[] args)
         {
-            CompareSolvers();
-            //Console.ReadKey();
+            string s = "adi";
+            foo(s);
+            Console.WriteLine(s);
+            //CompareSolvers();
+            Console.ReadKey();
+        }
+
+        static void foo(string s)
+        {
+            s = "peled";
         }
 
         static void CompareSolvers()
@@ -26,9 +34,9 @@ namespace Ex1
             DFSSearcher<Position> dfs = new DFSSearcher<Position>();
             Console.WriteLine(maze);
             bfs.Search(adapt);
-            Console.WriteLine("Best First Search evaluated {0} nodes.", bfs.getNumberOfNodesEvaluated());
+            Console.WriteLine("Best First Search evaluated {0} nodes.", bfs.GetNumberOfNodesEvaluated());
             dfs.Search(adapt);
-            Console.WriteLine("DFS evaluated {0} nodes.", dfs.getNumberOfNodesEvaluated());
+            Console.WriteLine("DFS evaluated {0} nodes.", dfs.GetNumberOfNodesEvaluated());
         }
     }
 }

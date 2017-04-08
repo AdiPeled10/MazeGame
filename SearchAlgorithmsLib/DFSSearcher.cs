@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SearchAlgorithmsLib
 {
@@ -29,16 +26,16 @@ namespace SearchAlgorithmsLib
         public override Solution<T> Search(ISearchable<T> searchable)
         {
             List<State<T>> succerssors;
-            State<T> current, goal = searchable.getGoalState();
+            State<T> current, goal = searchable.GetGoalState();
             HashSet<State<T>> closed = new HashSet<State<T>>();
-            AddToOpenList(searchable.getInitialState());
+            AddToOpenList(searchable.GetInitialState());
             while (OpenListSize != 0)
             {
                 current = PopOpenList();
                 if (!current.Equals(goal))
                 {
                     // calling the delegated method, returns a list of states with n as a parent
-                    succerssors = searchable.getAllPossibleStates(current);
+                    succerssors = searchable.GetAllPossibleStates(current);
                 }
                 else
                 {

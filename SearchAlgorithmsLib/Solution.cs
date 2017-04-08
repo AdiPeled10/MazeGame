@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SearchAlgorithmsLib
 {
@@ -28,14 +24,14 @@ namespace SearchAlgorithmsLib
 
         public State<T> GetNextState()
         {
-            State<T> st = theRoadToVictory.FirstOrDefault();
+            State<T> st = theRoadToVictory[0];
             theRoadToVictory.Remove(st);
             return st;
         }
 
         public T GetNextStep()
         {
-            State<T> st = theRoadToVictory.FirstOrDefault();
+            State<T> st = theRoadToVictory[0];
             theRoadToVictory.Remove(st);
             return st.GetState();
         }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SearchAlgorithmsLib
 {
@@ -15,10 +11,10 @@ namespace SearchAlgorithmsLib
             KeyValuePair<double, State<T>> currentState;
             double pathPrice;
             List<State<T>> succerssors;
-            State<T> currentStateValue = searchable.getInitialState(), goal = searchable.getGoalState();
+            State<T> currentStateValue = searchable.GetInitialState(), goal = searchable.GetGoalState();
             Dictionary<State<T>, double> closed = new Dictionary<State<T>, double>();  // a list of all already visited
-            AddToOpenList(new KeyValuePair<double, State<T>>(currentStateValue.Cost, currentStateValue));
-            closed.Add(currentStateValue, currentStateValue.Cost);
+            AddToOpenList(new KeyValuePair<double, State<T>>(0, currentStateValue));
+            closed.Add(currentStateValue, 0);
             currentStateValue.SetCameFrom(null);
             while (OpenListSize > 0)
             {
@@ -28,7 +24,7 @@ namespace SearchAlgorithmsLib
                 if (!currentStateValue.Equals(goal))
                 {
                     // calling the delegated method, returns a list of states with n as a parent
-                    succerssors = searchable.getAllPossibleStates(currentStateValue);
+                    succerssors = searchable.GetAllPossibleStates(currentStateValue);
                 }
                 else
                 {

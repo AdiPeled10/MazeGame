@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MazeLib;
 using SearchAlgorithmsLib;
 
@@ -21,7 +18,7 @@ namespace Ex1
             this.maze = maze;
         }
 
-        public List<State<Position>> getAllPossibleStates(State<Position> s)
+        public List<State<Position>> GetAllPossibleStates(State<Position> s)
         {
             List<State<Position>> neighbors = new List<State<Position>>();
             int i = s.GetState().Row, j = s.GetState().Col;
@@ -47,12 +44,12 @@ namespace Ex1
             return neighbors;
         }
 
-        public State<Position> getGoalState()
+        public State<Position> GetGoalState()
         {
             return new State<Position>(maze.GoalPos, 1);
         }
 
-        public State<Position> getInitialState()
+        public State<Position> GetInitialState()
         {
             return new State<Position>(maze.InitialPos, 1);
         }

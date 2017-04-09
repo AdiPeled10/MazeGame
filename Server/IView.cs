@@ -8,12 +8,9 @@ namespace Server
 {
     public interface IView
     {
-        IController cont;
-        event ClientListener Clients;
-
-        void SendServerResponseTo(string res, Iclient c);
-        void HandleClientRequest(string res, Iclient c);
-        string GetAClientRequest();
+        void SendServerResponseTo(string res, IClient c);
+        void HandleClientRequest(string res, IClient c);
+        void GetClientRequests();
         void AddClient(IClient c); // IClient might be using TCP or UDP
     }
 }

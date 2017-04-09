@@ -14,18 +14,17 @@ namespace Server
         private IController con;
         protected event ClientListener Clients;
 
-        public void SendServerResponseTo(string res, Iclient c);
+        public void SendServerResponseTo(string res, IClient c);
 
-        public void HandleClientRequest(string res, Iclient c);
+        public void HandleClientRequest(string res, IClient c);
 
-        public string GetAClientRequest()
+        public void GetClientRequests()
         {
             Clients(); // I may be using it wrong
         }
 
         public void AddClient(IClient c) // IClient might be using TCP or UDP
         {
-            c.SetUnblocking();
             Clients += GenerateClientListener(c);
         }
 
@@ -37,13 +36,13 @@ namespace Server
             {
                 try
                 {
-                    string req = c.recv(); // should return 1 commend
+                    string req = c.RecvARequest(); // should return 1 commend
                     this.HandleClientRequest(req, c);
                 }
-                catch (EmptySocketException) // whatever it will throw if the socket is empty
+                catch (System.Net.Sockets.SocketException) // whatever it will throw if the socket is empty
                 {
                 }
-                catch (SocketIsClosedException) // whatever it will throw if the socket is closed
+                catch (System.ObjectDisposedException) // whatever it will throw if the socket is closed
                 {
                     this.Clients -= this.GenerateClientListener(c);  //TODO hope really hard this will work.
                 }

@@ -37,9 +37,13 @@ namespace SearchAlgorithmsLib
         
         public int CompareTo(object obj)
         {
-            State<T> other = obj as State<T>;
-            double diff = Cost - other.Cost;
-            return (diff > epsilon || -diff > epsilon) ? ((diff > epsilon) ? 1 : -1) : 0;
+            if (!ReferenceEquals(obj, null))
+            {
+                State<T> other = obj as State<T>;
+                double diff = Cost - other.Cost;
+                return (diff > epsilon || -diff > epsilon) ? ((diff > epsilon) ? 1 : -1) : 0;
+            }
+            return -1;
             //int res = state.CompareTo(other.state);
             //if(res==0 && ((Cost - other.Cost) > epsilon || (other.Cost - Cost) > epsilon))
             //{

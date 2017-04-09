@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
+using System.Text;
 
 namespace SearchAlgorithmsLib
 {
@@ -34,6 +35,13 @@ namespace SearchAlgorithmsLib
             State<T> st = theRoadToVictory[0];
             theRoadToVictory.Remove(st);
             return st.GetState();
+        }
+
+        public string ToJSON()
+        {
+            //StringBuilder str = new StringBuilder("");
+            //foreach(State<T> state in )
+            return "";
         }
 
         //

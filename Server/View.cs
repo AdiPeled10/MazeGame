@@ -14,11 +14,18 @@ namespace Server
         private IController con;
         protected event ClientListener Clients;
 
-        public void SendServerResponseTo(string res, IClient c);
+        // perhapse we can somehow enforce the do this because its not natural that the controller will pass us a client
+        public void SendServerResponseTo(string res, IClient c)
+        {
+            c.SendResponse(res);
+        }
 
-        public void HandleClientRequest(string res, IClient c);
+        public void HandleClientRequest(string res, IClient c)
+        {
 
-        public void GetClientRequests()
+        }
+
+        public void GetClientsRequests()
         {
             Clients(); // I may be using it wrong
         }
@@ -30,9 +37,7 @@ namespace Server
 
         protected ClientListener GenerateClientListener(IClient c) // IClient might be using TCP or UDP
         {
-            c.SetUnblocking(); // it's unsafe to this just once and not every time before "recv",
-                               // but for now we'll pass on the safer overhead
-            ClientListener f = delegate()
+            return delegate()
             {
                 try
                 {

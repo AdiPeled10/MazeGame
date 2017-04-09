@@ -10,7 +10,7 @@ namespace Server
     {
         void SendServerResponseTo(string res, IClient c);
         void HandleClientRequest(string res, IClient c);
-        void GetClientRequests();
+        void GetClientsRequests();
         void AddClient(IClient c); // IClient might be using TCP or UDP
     }
 }

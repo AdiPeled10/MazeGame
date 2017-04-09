@@ -1,48 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SearchAlgorithmsLib
 {
-    public class DFSSearcher<T> : StackSearcher<T>
+    public class StackAdapter<T> : Stack<T>, ICollectionDataStructure<T>
     {
-
-       
-        public override Solution<T> Search(ISearchable<T> searchable)
+        public T PopFirst()
         {
-
-            State<T> initialState = searchable.getInitialState(), currentState;
-            initialState.Property = true;
-            // Add the initial state to the stack.
-            stack.Push(initialState);
-            while (stack.Count != 0) {
-                currentState = stack.Pop();
-                if (currentState == searchable.getGoalState())
-                {
-                    //Backtrace
-                }
-                if ((bool)currentState.Property == true)
-                    continue;
-                else if (currentState.Property == null)
-                {
-                    //Time of discovery in DFS traversal.
-                    currentState.Property = true;
-                    //Pass through all of his sons in the graph.
-                    List<State<T>> sons = searchable.getAllPossibleStates(currentState);
-                    foreach (State<T> s in sons)
-                    {
-                        stack.Push(s);
-                    }
-                }
-                //Iterate until the stack will be empty.
-                //Pop from the stack the last State we entered in.
-
-            }
-            return null;
+            return base.Pop();
         }
 
-        
+        public bool Remove(T element)
+        {
+            throw new NotSupportedException();
+        }
+
+        public void Add(T element)
+        {
+            base.Push(element);
+        }
+    }
+
+    public class DFSSearcher<T> : Searcher<T, StackAdapter<State<T>>, State<T>>
+    {
+        public override Solution<T> Search(ISearchable<T> searchable)
+        {
+            List<State<T>> succerssors;
+            State<T> current, goal = searchable.GetGoalState();
+            HashSet<State<T>> closed = new HashSet<State<T>>();
+            AddToOpenList(searchable.GetInitialState());
+            while (OpenListSize != 0)
+            {
+                current = PopOpenList();
+                if (!current.Equals(goal))
+                {
+                    // calling the delegated method, returns a list of states with n as a parent
+                    succerssors = searchable.GetAllPossibleStates(current);
+                }
+                else
+                {
+                    //Back trace the path from the goal to the initial state.
+                    return new Solution<T>(BackTracePath(current));
+                }
+
+                foreach (State<T> st in succerssors)
+                {
+                    if (!closed.Contains(st))
+                    {
+                        closed.Add(st);
+                        AddToOpenList(st);
+                    }
+                }
+            }
+            return new Solution<T>();
+        }
     }
 }

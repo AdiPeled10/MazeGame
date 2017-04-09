@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public delegate void EventHandler<TEventArgs>(IView sender, TEventArgs e);
     public delegate void ClientListener();
 
-    class View : IView
+    public class View : IView
     {
-        private IController con;
+        protected IController con;
         protected event ClientListener Clients;
+
+        public View(IController con)
+        {
+            this.con = con;
+
+        }
 
         // perhapse we can somehow enforce the do this because its not natural that the controller will pass us a client
         public void SendServerResponseTo(string res, IClient c)
@@ -20,9 +25,9 @@ namespace Server
             c.SendResponse(res);
         }
 
-        public void HandleClientRequest(string res, IClient c)
+        public void HandleClientRequest(string req, IClient c)
         {
-
+            con.ExecuteCommand(req, c);
         }
 
         public void GetClientsRequests()
@@ -41,14 +46,15 @@ namespace Server
             {
                 try
                 {
-                    string req = c.RecvARequest(); // should return 1 commend
-                    this.HandleClientRequest(req, c);
+                    if (c.HasARequest())
+                    {
+                        string req = c.RecvARequest(); // should return 1 request
+                        this.HandleClientRequest(req, c);
+                    }
                 }
-                catch (System.Net.Sockets.SocketException) // whatever it will throw if the socket is empty
+                catch (System.ObjectDisposedException) // The client has disconnected
                 {
-                }
-                catch (System.ObjectDisposedException) // whatever it will throw if the socket is closed
-                {
+                    c.disconnect();
                     this.Clients -= this.GenerateClientListener(c);  //TODO hope really hard this will work.
                 }
             };

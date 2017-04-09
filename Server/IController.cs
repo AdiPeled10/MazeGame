@@ -8,5 +8,6 @@ namespace Server
 {
     public interface IController
     {
+        void ExecuteCommand(string commandLine, IClient client);
     }
 }

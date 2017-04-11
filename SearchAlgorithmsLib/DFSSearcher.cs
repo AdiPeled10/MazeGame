@@ -40,7 +40,7 @@ namespace SearchAlgorithmsLib
                 else
                 {
                     //Back trace the path from the goal to the initial state.
-                    return new Solution<T>(BackTracePath(current));
+                    return new Solution<T>(BackTracePath(current),GetNumberOfNodesEvaluated());
                 }
 
                 foreach (State<T> st in succerssors)

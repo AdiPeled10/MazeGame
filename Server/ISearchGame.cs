@@ -22,6 +22,8 @@ namespace Server
             get;
         }
 
+        string ToJSON();
+
         //returns true if the game rules allow a new player to join at the moment of calling it, false otherwise.
         bool CanAPlayerJoin();
 
@@ -42,6 +44,8 @@ namespace Server
 
         // serleize the game
         string Serialize();
+
+        List<Player> GetPlayers();
 
         ////Start the game.
         //void Start();

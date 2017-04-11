@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SearchAlgorithmsLib;
 using MazeLib;
+using Newtonsoft.Json.Linq;
 
 namespace Server
 {
@@ -37,6 +38,11 @@ namespace Server
         public bool CanAPlayerJoin()
         {
             return players.Count < MaxPlayerAllowed;
+        }
+
+        public List<Player> GetPlayers()
+        {
+            return players;
         }
 
         public bool AddPlayer(Player player)
@@ -91,6 +97,26 @@ namespace Server
             string name = str.Substring(0, splitAt);
             Maze maze = Maze.FromJSON(str.Substring(splitAt + 1));
             return new MazeGame(name, maze);
+        }
+
+        public string ToJSON()
+        {
+            JObject mazeObj = new JObject();
+            mazeObj["Name"] = Name;
+            mazeObj["Maze"] = maze.ToJSON();
+            mazeObj["Rows"] = maze.Rows;
+            mazeObj["Cols"] = maze.Cols;
+            Position start = maze.InitialPos;
+            JObject startObj = new JObject();
+            startObj["Row"] = start.Row;
+            startObj["Col"] = start.Col;
+            mazeObj["Start"] = startObj;
+            Position end = maze.GoalPos;
+            JObject endObj = new JObject();
+            endObj["Row"] = end.Row;
+            endObj["Col"] = end.Col;
+            mazeObj["End"] = endObj;
+            return mazeObj.ToString();
         }
 
         //    public bool IsPlaying(Player player)

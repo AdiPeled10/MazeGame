@@ -1,21 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using System.Text;
+using MazeLib;
 
 namespace SearchAlgorithmsLib
 {
     public class Solution<T> : IEnumerable<State<T>>, IEnumerable
     {
         private List<State<T>> theRoadToVictory;
+        private int numberOfNodesEvaluated;
 
         public Solution()
         {
             theRoadToVictory = new List<State<T>>();
+            numberOfNodesEvaluated = 0;
         }
 
-        public Solution(List<State<T>> theRoadToVictory)
+        public Solution(List<State<T>> theRoadToVictory,int evaluated)
         {
             this.theRoadToVictory = new List<State<T>>(theRoadToVictory);
+            this.numberOfNodesEvaluated = evaluated;
+        }
+
+        public int NodesEvaluated
+        {
+            get { return numberOfNodesEvaluated; }
         }
 
         public void AddState(State<T> newLastState)
@@ -36,13 +45,17 @@ namespace SearchAlgorithmsLib
             theRoadToVictory.Remove(st);
             return st.GetState();
         }
-
-        public string ToJSON()
+        
+        public State<T> this[int index]
         {
-            //StringBuilder str = new StringBuilder("");
-            //foreach(State<T> state in )
-            return "";
+            get { return theRoadToVictory[index]; }
         }
+
+        public int Size()
+        {
+            return theRoadToVictory.Count;
+        }
+
 
         //
         // Summary:
@@ -60,7 +73,9 @@ namespace SearchAlgorithmsLib
             return this.GetEnumerator();
         }
     }
+  
 }
+
 /*
 using System;
 using System.Collections.Generic;

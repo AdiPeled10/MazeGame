@@ -30,9 +30,11 @@ namespace Server
         // a model that doesn't support jsons
         public Model(ISearchGameGenerator generator)
         {
-            numToAlgorithm = new Dictionary<int, ISearcher<Position>>(2);
-            nameToGame = new Dictionary<string, ISearchGame>(10); // chosen 10 just out of intuition
+            numToAlgorithm = new Dictionary<int, ISearcher<Position>>();
+            nameToGame = new Dictionary<string, ISearchGame>(); 
+            //Save the generator.
             this.generator = generator;
+            //Create a new cache for all the solutions.
             cache = new SolutionCache();
             fromSerialized = str => null;
 
@@ -43,8 +45,8 @@ namespace Server
 
         public Model(ISearchGameGenerator generator, FromSerialized fromSerialized)
         {
-            numToAlgorithm = new Dictionary<int, ISearcher<Position>>(2);
-            nameToGame = new Dictionary<string, ISearchGame>(10); // chosen 10 just out of intuition
+            numToAlgorithm = new Dictionary<int, ISearcher<Position>>();
+            nameToGame = new Dictionary<string, ISearchGame>(); 
             this.generator = generator;
             cache = new SolutionCache();
             this.fromSerialized = fromSerialized;
@@ -78,10 +80,10 @@ namespace Server
              * serialization when the server is needed (for a solution for example).
              * see "GetGame" for the only dependecy on/use of the serialization for single player.
              */
-            return generator.Generate(name, rows, cols);
+            return generator.GenerateSearchGame(name, rows, cols);
         }
 
-        private ISearchGame GetGame(string str)
+        public ISearchGame GetGame(string str)
         {
             ISearchGame game;
             try
@@ -111,20 +113,21 @@ namespace Server
             if (!ReferenceEquals(game, null))
             {
                 // game was created/found
-                if (cache.IsSolved(game))
+                if (cache.IsSolved(name))
                 {
                     //Maze already solved, get solution from cache.
-                    return cache.GetSolution(game);
+                    return cache.GetSolution(name);
                 }
                 ISearcher<Position> searcher = numToAlgorithm[algorithm];
                 Solution<Position> solution = searcher.Search(game.AsSearchable());
                 //Add solution to the cache.
-                cache.AddSolution(game, solution);
+                cache.AddSolution(name, solution);
                 return solution;
             }
+            return null;
         }
 
-        public void StartGame(string name, int rows, int cols, Player creator)
+        public void StartGame(string name, int rows, int cols, IClient creator)
         {
             /*
              * If the game already exists, the user didn't used this command as he should and won't be getting a game.
@@ -136,7 +139,7 @@ namespace Server
             {
                 // Create a game with this name.
                 ISearchGame game = GenerateNewGame(name, rows, cols);
-                nameToGame[name].AddPlayer(creator);
+                connector.AddPlayerToGame(creator, nameToGame[name]);
             }
         }
 
@@ -159,18 +162,17 @@ namespace Server
             return availableGames;
         }
 
-        public void Join(string name, Player player)
+        public void Join(string name, IClient player)
         {
             // TODO Check if the game is already full and stuff like that.
-            nameToGame[name].AddPlayer(player);
+            connector.AddPlayerToGame(player, nameToGame[name]);
         }
 
         // TODO rewrite using connector or use connector at a command and just pass the game
-        public void Play(Direction move, Player player)
+        public void Play(Direction move, IClient player)
         {
-            // TODO Check about this cast.
-            ISearchGame game = (ISearchGame)nameToGame.Values.Where(elem => elem.IsPlaying(player) == true);
-            game.MovePlayer(player, move);
+            ISearchGame game = connector.GetGame(player);
+            game.MovePlayer(connector.GetPlayer(player), move);
         }
 
         // remove unnecerssay games from the dictionary (games that have ended,
@@ -182,6 +184,12 @@ namespace Server
                 if (entry.Value.hasEnded())
                     nameToGame.Remove(entry.Key);
             }
+        }
+
+        public void Close(string name)
+        {
+            connector.DeleteGame(nameToGame[name]);
+            nameToGame.Remove(name);
         }
     }
 }

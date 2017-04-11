@@ -9,19 +9,21 @@ namespace Server
 {
     public interface IModel
     {
-        Maze GenerateMaze(string name, int rows, int cols);
+        ISearchGame GenerateNewGame(string name, int rows, int cols);
 
         Solution<Position> ComputeSolution(string name, int algorithm);
 
-        void StartGame(string name, int rows, int cols);
+        void StartGame(string name, int rows, int cols,IClient client);
 
         List<string> GetJoinableGamesList();
 
-        void Join(string name,Player player);
+        void Join(string name,IClient player);
 
-        void Play(Direction move,Player player);
+        void Play(Direction move,IClient player);
 
         void Close(string name);
+
+        ISearchGame GetGame(string name);
 
 
     }

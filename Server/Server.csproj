@@ -64,8 +64,10 @@
     <Compile Include="IController.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="ISearchGame.cs" />
+    <Compile Include="ISearchGameGenerator.cs" />
     <Compile Include="IView.cs" />
     <Compile Include="MazeGame.cs" />
+    <Compile Include="MazeGameGenerator.cs" />
     <Compile Include="MazeToSearchableAdapter.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Player.cs" />

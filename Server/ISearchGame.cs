@@ -8,30 +8,51 @@ using MazeLib;
 
 namespace Server
 {
-    public interface ISearchGame
+    // TODO add support to "time since last move" or something like that.
+    public interface ISearchGame  // IGameWithMovingPlayers ?
     {
-        //Add a player to this game.
-        void AddPlayer(Player player);
-
-        
-        ISearchable<Position> AsSearchable();
-
-        //Start the game.
-        void Start();
-        
-        //Tells us if the game already started.
-        bool Started();
-
         //Get name of this game.
-        string GetName();
+        string Name
+        {
+            get;
+        }
 
-        //Close the game.
-        void Close();
+        int NumOfPlayer
+        {
+            get;
+        }
 
-        //Check if player is playing in this game.
-        bool IsPlaying(Player player);
+        //returns true if the game rules allow a new player to join at the moment of calling it, false otherwise.
+        bool CanAPlayerJoin();
+
+        //Add a player to the game if it can. returns "true" on success and "false" otherwise.
+        bool AddPlayer(Player player);
 
         //Move a player.
-        void MovePlayer(Player player,Direction move);
+        void MovePlayer(Player player, Direction move); // TODO consider copy the Direction to here to avoid dependecy
+
+        //// returns
+        //unsigned int GetMaxPlayersAllowed();
+
+        //Returns a searchable that represent the search game (recommended to return an adapter)
+        ISearchable<Position> AsSearchable();
+
+        // returns true if the game has ended.
+        bool hasEnded();
+
+        // serleize the game
+        string Serialize();
+
+        ////Start the game.
+        //void Start();
+        
+        ////Tells us if the game already started.
+        //bool Started();
+
+        ////Close the game.
+        //void Close();
+
+        ////Check if player is playing in this game.
+        //bool IsPlaying(Player player);
     }
 }

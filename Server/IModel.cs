@@ -15,7 +15,7 @@ namespace Server
 
         void StartGame(string name, int rows, int cols);
 
-        List<string> GetList();
+        List<string> GetJoinableGamesList();
 
         void Join(string name,Player player);
 

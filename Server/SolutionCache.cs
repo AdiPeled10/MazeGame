@@ -8,6 +8,10 @@ using SearchAlgorithmsLib;
 
 namespace Server
 {
+    // TODO search using the game because it's possiblr to have 2 games with the same maze but different names
+    // TODO dictionary keys as "maze.ToString()" or "maze.GetHashValue()"
+    // TODO save the actual solutions in files(and load it from the file if needed) to prevent the heap/main memory
+    // from growing very large.
     public class SolutionCache
     {
         private Dictionary<string,Solution<Position>> nameToSolution;

@@ -11,7 +11,6 @@ namespace Server
 {
     public class MazeGame : ISearchGame
     {
-        private string name;
         private Maze maze;
         private List<Player> players;
         private const int MaxPlayerAllowed = 2;
@@ -19,14 +18,14 @@ namespace Server
         public MazeGame(string name, Maze maze)
         {
             this.maze = maze;
-            this.name = name;
+            this.maze.Name = name;
             this.players = new List<Player>();
         }
 
         //Get name of this game.
         public string Name
         {
-            get { return name; }
+            get { return maze.Name; }
         }
 
         public int NumOfPlayer
@@ -40,7 +39,8 @@ namespace Server
             return players.Count < MaxPlayerAllowed;
         }
 
-        public List<Player> GetPlayers()
+        // TODO return Immutable list for safety
+        public IReadOnlyList<Player> GetPlayers()
         {
             return players;
         }
@@ -69,7 +69,7 @@ namespace Server
             //FindPlayer(player)?.Move(move, maze.Cols, maze.Rows);
         }
 
-        public bool hasEnded()
+        public bool HasEnded()
         {
             Position goal = maze.GoalPos;
             foreach (Player p in players)
@@ -86,24 +86,30 @@ namespace Server
             return false;
         }
 
-        public string Serialize()
+        public string GetSearchArea()
         {
-            return name + '\0' + maze.ToJSON();
+            return maze.ToString();
         }
 
-        public static MazeGame FromSerialized(string str)
-        {
-            int splitAt = str.IndexOf('\0');
-            string name = str.Substring(0, splitAt);
-            Maze maze = Maze.FromJSON(str.Substring(splitAt + 1));
-            return new MazeGame(name, maze);
-        }
+        //public string Serialize()
+        //{
+        //    return Name + '\0' + maze.ToJSON();
+        //}
+
+        //public static MazeGame FromSerialized(string str)
+        //{
+        //    int splitAt = str.IndexOf('\0');
+        //    string name = str.Substring(0, splitAt);
+        //    Maze maze = Maze.FromJSON(str.Substring(splitAt + 1));
+        //    return new MazeGame(name, maze);
+        //}
 
         public string ToJSON()
         {
+            // TODO verify the maze ToJSON doen't do a lot we do
             JObject mazeObj = new JObject();
             mazeObj["Name"] = Name;
-            mazeObj["Maze"] = maze.ToJSON();
+            mazeObj["Maze"] = maze.ToJSON(); // TODO verify it's the same as ToString
             mazeObj["Rows"] = maze.Rows;
             mazeObj["Cols"] = maze.Cols;
             Position start = maze.InitialPos;
@@ -117,6 +123,13 @@ namespace Server
             endObj["Col"] = end.Col;
             mazeObj["End"] = endObj;
             return mazeObj.ToString();
+        }
+
+        public static MazeGame FromJSON(string str)
+        {
+            JObject mazeGameObj = JObject.Parse(str);
+            Maze maze = Maze.FromJSON((string)mazeGameObj["Maze"]);
+            return new MazeGame((string)mazeGameObj["Name"], maze);
         }
 
         //    public bool IsPlaying(Player player)

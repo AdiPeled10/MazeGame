@@ -22,13 +22,13 @@ namespace Server
             get;
         }
 
-        string ToJSON();
-
         //returns true if the game rules allow a new player to join at the moment of calling it, false otherwise.
         bool CanAPlayerJoin();
 
         //Add a player to the game if it can. returns "true" on success and "false" otherwise.
         bool AddPlayer(Player player);
+
+        IReadOnlyList<Player> GetPlayers();
 
         //Move a player.
         void MovePlayer(Player player, Direction move); // TODO consider copy the Direction to here to avoid dependecy
@@ -40,12 +40,13 @@ namespace Server
         ISearchable<Position> AsSearchable();
 
         // returns true if the game has ended.
-        bool hasEnded();
+        bool HasEnded();
 
-        // serleize the game
-        string Serialize();
+        // Returns a string that represents where the search occurs.
+        // For example, if the game is a maze it will return a string representing the maze.
+        string GetSearchArea();
 
-        List<Player> GetPlayers();
+        string ToJSON();
 
         ////Start the game.
         //void Start();

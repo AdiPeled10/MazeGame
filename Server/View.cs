@@ -54,6 +54,7 @@ namespace Server
                 }
                 catch (System.ObjectDisposedException) // The client has disconnected
                 {
+                    // TODO add a command that will remove this client Player and from the games he take part of. "disconnect command".
                     c.disconnect();
                     this.Clients -= this.GenerateClientListener(c);  //TODO hope really hard this will work.
                 }

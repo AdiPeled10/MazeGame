@@ -52,9 +52,11 @@ namespace Server
             writer.Write(res);
         }
 
-        public void disconnect()
+        public void Disconnect()
         {
             writer.Close();
+            // TODO check this succeeds and not fails because the writer was closed before it 
+            // (and closed its stream)
             reader.Close();
         }
     }

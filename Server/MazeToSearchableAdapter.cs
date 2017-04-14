@@ -8,11 +8,14 @@ namespace Server
     class MazeToSearchableAdapter : ISearchable<Position>
     {
         private Maze maze;
-   
+        private Dictionary<Position, State<Position>> d;
+        private int numOfOldInARow;
 
         public MazeToSearchableAdapter(Maze maze)
         {
             this.maze = maze;
+            d = new Dictionary<Position, State<Position>>();
+            numOfOldInARow = 0;
         }
 
         public List<State<Position>> GetAllPossibleStates(State<Position> s)
@@ -31,7 +34,13 @@ namespace Server
                 {
                     if (maze[loc.Row, loc.Col] == CellType.Free)
                     {
-                        neighbors.Add(new State<Position>(loc, 1));
+                        //neighbors.Add(d.ContainsKey(loc) ? (d[loc]) : (d[loc] = new State<Position>(loc, 1)));
+                        //neighbors.Add(new State<Position>(loc, 1));
+                        if (!d.ContainsKey(loc))
+                        {
+                            d[loc] = new State<Position>(loc, 1);
+                        }
+                        neighbors.Add(d[loc]);
                     }
                 }
                 catch (IndexOutOfRangeException)

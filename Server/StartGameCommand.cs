@@ -17,14 +17,15 @@ namespace Server
             this.model = model;
         }
 
-        public string Execute(string[] args,IClient client)
+        public string Execute(string[] args, IClient client)
         {
             string name = args[0];
             int rows = int.Parse(args[1]);
             int cols = int.Parse(args[2]);
-            model.StartGame(name, rows, cols);
+            ISearchGame game = model.StartGame(name, rows, cols, client);
 
-            return model.GetGame(name).ToJSON();
+            return (!ReferenceEquals(game, null))? (game.ToJSON()) : 
+                ("A game with that name already exists and cannot be replaced at this point.");
         }
     }
 }

@@ -47,6 +47,7 @@ namespace SearchAlgorithmsLib
                 {
                     if (!closed.Contains(st))
                     {
+                        st.SetCameFrom(current);
                         closed.Add(st);
                         AddToOpenList(st);
                     }

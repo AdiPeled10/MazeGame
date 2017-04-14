@@ -16,13 +16,13 @@ namespace Server
             this.model = model;
         }
 
-        public string Execute(string[] args,IClient client)
+        public string Execute(string[] args, IClient client)
         {
 
             // TODO - It's very similar to the case of StartGameCommand maybe create abstract class for both.
             string name = args[0];
-            model.Join(name, new Player(client, 0));
-            return model.GetGame(name).ToJSON();
+            model.Join(name, client);
+            return model.GetGameByName(name).ToJSON();
         }
     }
 }

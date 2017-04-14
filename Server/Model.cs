@@ -9,113 +9,6 @@ using SearchAlgorithmsLib;
 
 namespace Server
 {
-    /*
-     * This class will help us connect between a player and his game.
-     * It has medium-high coupling with class Model. The only purpose of this class is to avoid handling
-     * all the connections between objects in the Model. The Model maybe uses many of Connector methods but
-     * it makes the Model simplier.
-     */
-    internal class Connector
-    {
-        private Dictionary<string, ISearchGame> nameToGame;
-        private Dictionary<Player, ISearchGame> playerToGame;
-        private Dictionary<IClient, Player> clientToPlayer;
-        private int idCounter;
-        //private 
-
-        public Connector()
-        {
-            nameToGame = new Dictionary<string, ISearchGame>(20);
-            playerToGame = new Dictionary<Player, ISearchGame>(20);
-            clientToPlayer = new Dictionary<IClient, Player>(20);
-            idCounter = 0;
-        }
-
-        public IEnumerable<ISearchGame> Games
-        {
-            get
-            {
-                return nameToGame.Values;
-            }
-        }
-
-        public void AddClientToGame(IClient client, ISearchGame game)
-        {
-            playerToGame[GetPlayer(client)] = game;
-        }
-
-        public void AddClientToGame(IClient client, string name)
-        {
-            playerToGame[GetPlayer(client)] = nameToGame[name];
-        }
-
-        public void AddClientAsPlayer(IClient client, Player player) // why?
-        {
-            clientToPlayer[client] = player;
-        }
-
-        public void AddGame(string name, ISearchGame game)
-        {
-            nameToGame[name] = game;
-        }
-
-        public bool ContainsGame(string name)
-        {
-            return nameToGame.ContainsKey(name);
-        }
-
-        public Player GetPlayer(IClient client)
-        {
-            try
-            {
-                return clientToPlayer[client];
-            }
-            catch (KeyNotFoundException)
-            {
-                Player p = clientToPlayer[client] = new Player(client, idCounter);
-                ++idCounter;
-                return p;
-            }
-        }
-
-        public ISearchGame GetGame(IClient player)
-        {
-            return GetGame(clientToPlayer[player]);
-        }
-
-        public ISearchGame GetGame(Player player)
-        {
-            return playerToGame[player];
-        }
-
-        public ISearchGame GetGame(string name)
-        {
-            return nameToGame[name];
-        }
-
-        public void DeleteGame(ISearchGame game)
-        {
-            IReadOnlyList<Player> players = game.GetPlayers();
-            nameToGame.Remove(game.Name);
-            foreach (Player myPlayer in players)
-            {
-                playerToGame.Remove(myPlayer);
-                // clientToPlayer.Remove(myPlayer.Client);
-            }
-        }
-
-        public void DeleteGame(string name)
-        {
-            IReadOnlyList<Player> players = nameToGame[name].GetPlayers();
-            nameToGame.Remove(name);
-            foreach (Player myPlayer in players)
-            {
-                playerToGame.Remove(myPlayer);
-                // clientToPlayer.Remove(myPlayer.Client);
-            }
-        }
-    }
-
     public delegate ISearchGame FromSerialized(string str);
 
     /*
@@ -189,7 +82,7 @@ namespace Server
             return generator.GenerateSearchGame(name, rows, cols);
         }
 
-        public ISearchGame GetGame(string str)
+        public ISearchGame GetGameByName(string str)
         {
             ISearchGame game;
             try
@@ -216,7 +109,7 @@ namespace Server
         public Solution<Position> ComputeSolution(string name, int algorithm)
         {
 
-            ISearchGame game = GetGame(name);
+            ISearchGame game = GetGameByName(name);
             if (!ReferenceEquals(game, null))
             {
                 // game was created/found
@@ -234,7 +127,7 @@ namespace Server
             return new Solution<Position>();
         }
 
-        public void StartGame(string name, int rows, int cols, IClient creator)
+        public ISearchGame StartGame(string name, int rows, int cols, IClient creator)
         {
             // TODO allow creator of a game delete a game if only his playing their
             /*
@@ -261,7 +154,9 @@ namespace Server
                 ISearchGame game = GenerateNewGame(name, rows, cols);
                 connector.AddGame(name, game);
                 connector.AddClientToGame(creator, game);
+                return game;
             }
+            return null;
         }
 
         public List<string> GetJoinableGamesList()
@@ -289,12 +184,19 @@ namespace Server
             connector.AddClientToGame(player, name);
         }
 
-        // TODO rewrite using connector or use connector at a command and just pass the game
-        public void Play(Direction move, IClient player)
+        public string Play(Direction move, IClient player)
         {
-            Player p = connector.GetPlayer(player);
-            ISearchGame game = connector.GetGame(p);
-            game.MovePlayer(p, move);
+            try
+            {
+                Player p = connector.GetPlayer(player);
+                ISearchGame game = connector.GetGame(p);
+                game.MovePlayer(p, move);
+                return game.Name;
+            }
+            catch (NullReferenceException)
+            {
+                return "Player doesn't belog to a game.";
+            }
         }
 
         // remove unnecerssay games from the dictionary (games that have ended,
@@ -315,6 +217,21 @@ namespace Server
         public void Close(string name)
         {
             connector.DeleteGame(name);
+        }
+
+        public void RemoveClient(IClient client)
+        {
+            Player p = connector.GetPlayer(client);
+            ISearchGame game = connector.GetGame(p);
+            // remove the clients player from his current game
+            game?.RemovePlayer(p);
+            // delete the clients player from the server
+            connector.DeleteClient(client);
+            // delete the game if the forfeit of the player made it end
+            if (!ReferenceEquals(game, null) && game.HasEnded())
+            {
+                connector.DeleteGame(game);
+            }
         }
     }
 }

@@ -33,8 +33,9 @@ namespace Server
             this.id = id;
         }
 
-        /* if a move request is invalid, we ignore it. A game is much funer if it doesn't bother you everytime you
-         * eccidently push the wrong button move forward to a wall.
+        /**
+         * if a move request is invalid, we ignore it. A game is much funer if it doesn't bother you
+         * everytime you eccidently push the wrong button move forward to a wall.
          */
         public void Move(Direction move, int width, int height)
         {
@@ -84,6 +85,12 @@ namespace Server
         public override int GetHashCode()
         {
             return id;
+        }
+
+        // TODO maybe not notify directly
+        public void NotifyWonOrLost(string message)
+        {
+            client.SendResponse(message);
         }
     }
 }

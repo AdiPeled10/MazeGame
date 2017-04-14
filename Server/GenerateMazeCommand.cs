@@ -23,9 +23,8 @@ namespace Server
             int rows = int.Parse(args[1]);
             int cols = int.Parse(args[2]);
 
-            ISearchGame maze = model.GenerateNewGame(name, rows, cols);
             //Return JSon format of this maze.
-            return maze.ToJSON();
+            return model.GenerateNewGame(name, rows, cols).ToJSON();
         }
 
     }

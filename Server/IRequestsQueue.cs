@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public interface IController
+    public interface IRequestsQueue
     {
-        void ExecuteCommand(string commandLine, IClient client);
-        void DisconnectClient(IClient client);
+        void Add(Action request, IClient client);
+        void Remove(IClient client);
     }
 }

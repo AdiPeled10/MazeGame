@@ -17,16 +17,17 @@ namespace Server
             this.model = model;
         }
 
-        public string Execute(string[] args,IClient client)
+        public string Execute(string[] args, IClient client)
         {
-            string name = args[0];
-            string direction = args[1];
+            string direction = args[0];
 
-            model.Play(Converter.StringToDirection(direction), new Player(client, 0));
+            string name = model.Play(Converter.StringToDirection(direction), client);
 
-            JObject playObj = new JObject();
-            playObj["Name"] = name;
-            playObj["Direction"] = direction;
+            JObject playObj = new JObject
+            {
+                ["Name"] = name,
+                ["Direction"] = direction
+            };
             return playObj.ToString();
         }
     }

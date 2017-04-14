@@ -30,6 +30,8 @@ namespace Server
 
         IReadOnlyList<Player> GetPlayers();
 
+        void RemovePlayer(Player player);
+
         //Move a player.
         void MovePlayer(Player player, Direction move); // TODO consider copy the Direction to here to avoid dependecy
 

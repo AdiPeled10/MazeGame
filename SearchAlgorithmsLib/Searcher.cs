@@ -45,7 +45,7 @@ namespace SearchAlgorithmsLib
             //Loop until we get to the initial state.
             while (currentState != null)
             {
-                path.Add(currentState);
+                path.Insert(0, currentState);
                 currentState = currentState.GetCameFrom();
             }
             return path;

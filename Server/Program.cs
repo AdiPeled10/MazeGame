@@ -10,6 +10,8 @@ using SearchAlgorithmsLib;
 using MazeLib;
 using Newtonsoft.Json.Linq;
 using MazeGeneratorLib;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Server
 {
@@ -17,28 +19,31 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            string name = "Adi Peled";
-            DFSMazeGenerator gen = new DFSMazeGenerator();
-            Maze maze = gen.Generate(10, 10);
+            CancellationTokenSource tokenSource2 = new CancellationTokenSource();
+            Task t = new Task(() => Console.WriteLine("First")), tcopy;
+            tcopy = t;
+            //tcopy.Start();
+            Thread.Sleep(1000);
+            t = t.ContinueWith(dummy => Console.WriteLine("Second"), tokenSource2.Token);
+            t = t.ContinueWith(dummy => Console.WriteLine("Third"), tokenSource2.Token);
+            t = t.ContinueWith(dummy => Console.WriteLine("Fourth"), tokenSource2.Token);
+            t = t.ContinueWith(dummy => Console.WriteLine("Fifth"));
+            t = t.ContinueWith(dummy => Console.WriteLine("Sixth"), tokenSource2.Token);
+            //return;
 
-            JObject mazeObj = new JObject();
-            mazeObj["Name"] = name;
-            mazeObj["Maze"] = maze.ToJSON(); // TODO verify it's the same as ToString
-            mazeObj["Rows"] = maze.Rows;
-            mazeObj["Cols"] = maze.Cols;
-            Position start = maze.InitialPos;
-            JObject startObj = new JObject();
-            startObj["Row"] = start.Row;
-            startObj["Col"] = start.Col;
-            mazeObj["Start"] = startObj;
-            Position end = maze.GoalPos;
-            JObject endObj = new JObject();
-            endObj["Row"] = end.Row;
-            endObj["Col"] = end.Col;
-            mazeObj["End"] = endObj;
+            tcopy.Start();
+            tokenSource2.Cancel();
 
-            name = mazeObj.ToString(); ;
-            Console.WriteLine(name);
+            Task<string> strTask = new Task<string>(() => "First "), strTaskCopy;
+            strTaskCopy = strTask;
+            strTask = strTask.ContinueWith(str => str.Result + "Second ");
+            strTask = strTask.ContinueWith(str => str.Result + "Third ");
+            strTask = strTask.ContinueWith(str => str.Result + "Fourth ");
+            strTask = strTask.ContinueWith(str => str.Result + "Fifth ");
+            strTask = strTask.ContinueWith(str => str.Result + "Sixth");
+            //tcopy.Start();
+            strTaskCopy.Start();
+            Console.WriteLine(strTask.Result);
             Console.ReadKey();
             return;
 

@@ -18,7 +18,7 @@ namespace SearchAlgorithmsLib
 
         public Solution(List<State<T>> theRoadToVictory,int evaluated)
         {
-            this.theRoadToVictory = new List<State<T>>(theRoadToVictory);
+            this.theRoadToVictory = theRoadToVictory; // new List<State<T>>(theRoadToVictory);
             this.numberOfNodesEvaluated = evaluated;
         }
 
@@ -32,6 +32,11 @@ namespace SearchAlgorithmsLib
             theRoadToVictory.Add(newLastState);
         }
 
+        /**
+         * Removes the returned state from the solution. Which means that if
+         * you want to go through the solution but skip the first state, you can
+         * call this right before the "foreach" loop.
+         */
         public State<T> GetNextState()
         {
             State<T> st = theRoadToVictory[0];
@@ -39,7 +44,12 @@ namespace SearchAlgorithmsLib
             return st;
         }
 
-        public T GetNextStep()
+        /**
+         * Removes the returned state from the solution. Which means that if
+         * you want to go through the solution but skip the first state, you can
+         * call this right before the "foreach" loop.
+         */
+        public T GetNextValue()
         {
             State<T> st = theRoadToVictory[0];
             theRoadToVictory.Remove(st);
@@ -51,11 +61,10 @@ namespace SearchAlgorithmsLib
             get { return theRoadToVictory[index]; }
         }
 
-        public int Size()
+        public int Length
         {
-            return theRoadToVictory.Count;
+            get { return theRoadToVictory.Count; }
         }
-
 
         //
         // Summary:

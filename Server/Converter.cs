@@ -10,36 +10,82 @@ namespace Server
 {
     public class Converter
     {
+        //// assumption: to != from
+        //protected static char GetDirection(Position from, Position to)
+        //{
+        //    /**
+        //     * on the space Col_Diff*Row_Diff*Direction would like to connect:
+        //     * "(to.Col - from.Col, to.Row - from.Row, direction)
+        //     * (-1,0,0)
+        //     * (1,0,1)
+        //     * (0,-1,2)
+        //     * (0,1,3)
+        //     * using Trilinear interpolation will get the function:
+        //     *              f(x,y) = (x + 1 + 5 * y * y + y) / 2 = (5 * y * y + y + x + 1) / 2
+        //     *
+        //     * I basically just computed linear line between(x,z): (-1,0),(1,1)
+        //     * and then I needed to use the Y values to "get in the game" under the need that when y=0 the
+        //     * X values will set Z. So I used newton interpolation betwwn(y,z): (0,0),(-1,2),(1,3).
+        //     * (Note: I should have done the x,z interpolation with (0,0) also, but it worked without it).
+        //     *
+        //     * (x,z) computation:
+        //     * m = (z1-z0)/(x1-x0) = (1-0)/(1--1) = 1/2
+        //     * z = (x--1)/2 = (x+1)/2
+        //     *
+        //     * (y,z) computation:
+        //     *  0  0
+        //     *          -2
+        //     * -1  2           2.5
+        //     *          1/2
+        //     *  1  3
+        //     *  we got: z = 0 - 2 * (y - 0) + 2.5 * (y - 0) * (y - -1) = -2y + 2.5*y*y + 2.5y = 2.5*y*y + y/2
+        //     *          z = (5*y*y + y)/2
+        //     */
+        //    int y = to.Row - from.Row;
+        //    int x = to.Col - from.Col;
+        //    // The ASCII value of '0' is 48. So I inserted it into the brackets.
+        //    return (char) ((5 * y * y + y + x + 97) >> 1);
+        //}
+
         public static string ToJSON(Solution<Position> solution)
         {
-            StringBuilder builder = new StringBuilder("");
-            Position currentPosition = solution[0].GetState();
-            Position nextPosition;
-            for (int i = 1; i < solution.Size(); i++)
+            int pos = 0;
+            char[] str = new char[solution.Length];
+            Position currentPosition = solution.GetNextValue(), nextPosition;
+
+            foreach (State<Position> s in solution)
             {
-                nextPosition = solution[i].GetState();
-                if (currentPosition.Col + 1 == nextPosition.Col)
+                nextPosition = s.GetState();
+                if (currentPosition.Col < nextPosition.Col)
                 {
-                    //Right
-                    builder.Append('1');
-                } else if (currentPosition.Col == nextPosition.Col + 1)
+                    //Right.
+                    str[pos] = '1';
+                }
+                else if (currentPosition.Col > nextPosition.Col)
                 {
                     //Left.
-                    builder.Append('0');
-                } else if (currentPosition.Row + 1 == nextPosition.Row)
+                    str[pos] = '0';
+                }
+                else if (currentPosition.Row < nextPosition.Row)
                 {
-                    // TODO - Check if + 1 is Really Down.
-                    builder.Append('3');
-                } else if ( currentPosition.Row == nextPosition.Row + 1)
+                    //Down.
+                    str[pos] = '3';
+                }
+                else if (currentPosition.Row > nextPosition.Row)
                 {
                     //Up
-                    builder.Append('2');
+                    str[pos] = '2';
                 }
                 currentPosition = nextPosition;
+                ++pos;
             }
-            return builder.ToString();
-
+            return new string(str);
         }
+
+        //TODO decide if to return a solution or just directions and use in client
+        //public static Solution<Position> FromJSON(string str)
+        //{
+        //}
 
         public static Direction StringToDirection(string direction)
         {

@@ -14,12 +14,14 @@ namespace Server
         private Maze maze;
         private List<Player> players;
         private const int MaxPlayerAllowed = 2;
+        private bool hasEnded;
 
         public MazeGame(string name, Maze maze)
         {
             this.maze = maze;
             this.maze.Name = name;
             this.players = new List<Player>();
+            this.hasEnded = false;
         }
 
         //Get name of this game.
@@ -39,10 +41,22 @@ namespace Server
             return players.Count < MaxPlayerAllowed;
         }
 
-        // TODO return Immutable list for safety
         public IReadOnlyList<Player> GetPlayers()
         {
             return players;
+        }
+
+        /**
+         * Removes a player from the game. Due to the game logic of our choice, once it was called
+         * the game ends and the remains player wins.
+         */
+        void RemovePlayer(Player player)
+        {
+            // TODO if the number of player will become higher then 2, 
+            // support "removing without ending the game if the game hasn't started"
+            // TODO verify if a safety check of "does the player play in this game" is required.
+            this.players.Remove(player);
+            DecalreWinner(players[0], "Connection lost with one of the player. Technical victory!");
         }
 
         public bool AddPlayer(Player player)
@@ -71,19 +85,34 @@ namespace Server
 
         public bool HasEnded()
         {
-            Position goal = maze.GoalPos;
-            foreach (Player p in players)
+            if (!hasEnded)
             {
-                if (!p.Location.Equals(goal))
+                Position goal = maze.GoalPos;
+                foreach (Player p in players)
                 {
-                    // do nothing
-                }
-                else
-                {
-                    return true;
+                    if (!p.Location.Equals(goal))
+                    {
+                        // do nothing
+                    }
+                    else
+                    {
+                        hasEnded = true;
+                        return true;
+                    }
                 }
             }
-            return false;
+            return hasEnded;
+        }
+
+        protected void DecalreWinner(Player winner, string winnerMessage)
+        {
+            players.Remove(winner);
+            winner.NotifyWonOrLost(winnerMessage);
+            hasEnded = true;
+            foreach (Player p in players)
+            {
+                p.NotifyWonOrLost("You Lost!");
+            }
         }
 
         public string GetSearchArea()
@@ -106,23 +135,7 @@ namespace Server
 
         public string ToJSON()
         {
-            // TODO verify the maze ToJSON doen't do a lot we do
-            JObject mazeObj = new JObject();
-            mazeObj["Name"] = Name;
-            mazeObj["Maze"] = maze.ToJSON(); // TODO verify it's the same as ToString
-            mazeObj["Rows"] = maze.Rows;
-            mazeObj["Cols"] = maze.Cols;
-            Position start = maze.InitialPos;
-            JObject startObj = new JObject();
-            startObj["Row"] = start.Row;
-            startObj["Col"] = start.Col;
-            mazeObj["Start"] = startObj;
-            Position end = maze.GoalPos;
-            JObject endObj = new JObject();
-            endObj["Row"] = end.Row;
-            endObj["Col"] = end.Col;
-            mazeObj["End"] = endObj;
-            return mazeObj.ToString();
+            return maze.ToJSON();
         }
 
         public static MazeGame FromJSON(string str)

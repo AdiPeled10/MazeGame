@@ -13,18 +13,19 @@ namespace Server
 
         Solution<Position> ComputeSolution(string name, int algorithm);
 
-        void StartGame(string name, int rows, int cols,IClient client);
+        ISearchGame StartGame(string name, int rows, int cols, IClient client);
 
         List<string> GetJoinableGamesList();
 
-        void Join(string name,IClient player);
+        void Join(string name, IClient player);
 
-        void Play(Direction move,IClient player);
+        // returns the name of the game the move took place in
+        string Play(Direction move, IClient player);
 
         void Close(string name);
 
-        ISearchGame GetGame(string name);
+        ISearchGame GetGameByName(string name);
 
-
+        void RemoveClient(IClient client);
     }
 }

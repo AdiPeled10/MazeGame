@@ -20,7 +20,7 @@ namespace Server
             this.model = model;
         }
 
-        public string Execute(string[] args, IClient client)
+        public void Execute(string[] args, IClient client)
         {
             string name = args[0];
             int algorithm = int.Parse(args[1]);
@@ -33,7 +33,7 @@ namespace Server
                 ["Solution"] = Converter.ToJSON(solution),
                 ["NodesEvaluated"] = solution.NodesEvaluated
             };
-            return solveObj.ToString();
+            client.SendResponse(solveObj.ToString());
         }
     }
 }

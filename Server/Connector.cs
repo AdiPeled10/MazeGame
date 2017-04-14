@@ -46,6 +46,16 @@ namespace Server
             playerToGame[GetPlayer(client)] = nameToGame[name];
         }
 
+        public void AddClientToGame(Player player, ISearchGame game)
+        {
+            playerToGame[player] = game;
+        }
+
+        public void AddClientToGame(Player player, string name)
+        {
+            playerToGame[player] = nameToGame[name];
+        }
+
         public void AddClientAsPlayer(IClient client, Player player) // why?
         {
             clientToPlayer[client] = player;

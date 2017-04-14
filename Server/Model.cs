@@ -152,7 +152,7 @@ namespace Server
             {
                 // Create a game with this name.
                 ISearchGame game = GenerateNewGame(name, rows, cols);
-                connector.AddGame(name, game);
+                connector.AddGame(game);
                 connector.AddClientToGame(creator, game);
                 return game;
             }
@@ -178,10 +178,18 @@ namespace Server
             return availableGames;
         }
 
-        public void Join(string name, IClient player)
+        public bool Join(string name, IClient player)
         {
-            // TODO Check if the game is already full and stuff like that.
-            connector.AddClientToGame(player, name);
+            Player p = connector.GetPlayer(player);
+            ISearchGame game = connector.GetGame(name);
+            // if the player isn't a part of an existing game and the game allows a player to join
+            if (ReferenceEquals(null, connector.GetGame(p)) && game.CanAPlayerJoin())
+            {
+                connector.AddClientToGame(p, name);
+                game.AddPlayer(p);
+                return true;
+            }
+            return false;
         }
 
         public string Play(Direction move, IClient player)

@@ -17,7 +17,7 @@ namespace Server
 
         List<string> GetJoinableGamesList();
 
-        void Join(string name, IClient player);
+        bool Join(string name, IClient player);
 
         // returns the name of the game the move took place in
         string Play(Direction move, IClient player);

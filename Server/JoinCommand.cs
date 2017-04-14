@@ -16,13 +16,25 @@ namespace Server
             this.model = model;
         }
 
-        public string Execute(string[] args, IClient client)
+        public void Execute(string[] args, IClient client)
         {
 
             // TODO - It's very similar to the case of StartGameCommand maybe create abstract class for both.
             string name = args[0];
-            model.Join(name, client);
-            return model.GetGameByName(name).ToJSON();
+            try
+            {
+                if (model.Join(name, client))
+                {
+                    ISearchGame game = model.GetGameByName(name);
+                    client.SendResponse((!ReferenceEquals(game, null)) ? 
+                        model.GetGameByName(name).ToJSON() : "No such game");
+                }
+            }
+            catch
+            { 
+                // nothing to do
+            }
+            client.SendResponse("Falied to join. No such game or You already a part of an existing game");
         }
     }
 }

@@ -13,7 +13,6 @@ namespace Server
         private IModel model;
         private IRequestsQueue queue;
         private Dictionary<string, ICommand> commands;
-        private ICommand cancellationCommand; // not in the dictionary to prevent clients from using it
 
         public Controller(IModel model, IRequestsQueue executionQueue)//, IView view)
         {
@@ -31,7 +30,6 @@ namespace Server
                 { "play", new PlayCommand(model) },
                 { "close", new CloseCommand(model) }
             };
-            this.cancellationCommand = new CancellationCommand(model);
         }
 
         public void ExecuteCommand(string commandLine, IClient client)
@@ -45,7 +43,7 @@ namespace Server
                 ICommand command = commands[commandKey];
                 request = () =>
                 {
-                    client.SendResponse(command.Execute(args, client)); // TODO maybe use IView for the send
+                    command.Execute(args, client); // TODO maybe use IView for the send
                 };
             }
             else
@@ -58,6 +56,7 @@ namespace Server
             queue.Add(request, client);
         }
 
+        // not in the dictionary to prevent clients from using it
         public void DisconnectClient(IClient client)
         {
             // remove all the client requeses

@@ -17,7 +17,7 @@ namespace Server
             this.model = model;
         }
 
-        public string Execute(string[] args, IClient client)
+        public void Execute(string[] args, IClient client)
         {
             string direction = args[0];
 
@@ -28,7 +28,7 @@ namespace Server
                 ["Name"] = name,
                 ["Direction"] = direction
             };
-            return playObj.ToString();
+            client.SendResponse(playObj.ToString());
         }
     }
 }

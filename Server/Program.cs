@@ -44,6 +44,10 @@ namespace Server
             //tcopy.Start();
             strTaskCopy.Start();
             Console.WriteLine(strTask.Result);
+
+            JObject playObj = new JObject();
+            Console.WriteLine(playObj.ToString());
+
             Console.ReadKey();
             return;
 

@@ -17,11 +17,10 @@ namespace Server
             this.model = model;
         }
 
-        public string Execute(string[] args,IClient client)
+        public void Execute(string[] args,IClient client)
         {
             List<string> games = model.GetJoinableGamesList();
-            string str = JsonConvert.SerializeObject(games);
-            return str;
+            client.SendResponse(JsonConvert.SerializeObject(games));
         }
     }
 }

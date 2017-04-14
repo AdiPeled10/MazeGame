@@ -9,13 +9,11 @@ namespace Server
     {
         private Maze maze;
         private Dictionary<Position, State<Position>> d;
-        private int numOfOldInARow;
 
         public MazeToSearchableAdapter(Maze maze)
         {
             this.maze = maze;
             d = new Dictionary<Position, State<Position>>();
-            numOfOldInARow = 0;
         }
 
         public List<State<Position>> GetAllPossibleStates(State<Position> s)

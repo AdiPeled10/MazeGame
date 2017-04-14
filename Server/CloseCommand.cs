@@ -16,11 +16,11 @@ namespace Server
             this.model = model;
         }
 
-        public string Execute(string[] args, IClient client = null)
+        public void Execute(string[] args, IClient client = null)
         {
             model.Close(args[0]);
             JObject playObj = new JObject();
-            return playObj.ToString();
+            client.SendResponse(playObj.ToString());
             // return "{ }";
         }
     }

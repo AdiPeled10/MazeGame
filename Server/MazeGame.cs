@@ -38,7 +38,7 @@ namespace Server
         //returns true if the game rules allow a new player to join at the moment of calling it, false otherwise.
         public bool CanAPlayerJoin()
         {
-            return players.Count < MaxPlayerAllowed;
+            return players.Count < MaxPlayerAllowed && !hasEnded;
         }
 
         public IReadOnlyList<Player> GetPlayers()
@@ -50,7 +50,7 @@ namespace Server
          * Removes a player from the game. Due to the game logic of our choice, once it was called
          * the game ends and the remains player wins.
          */
-        void RemovePlayer(Player player)
+        public void RemovePlayer(Player player)
         {
             // TODO if the number of player will become higher then 2, 
             // support "removing without ending the game if the game hasn't started"
@@ -96,7 +96,7 @@ namespace Server
                     }
                     else
                     {
-                        hasEnded = true;
+                        DecalreWinner(p, "You Won!");
                         return true;
                     }
                 }

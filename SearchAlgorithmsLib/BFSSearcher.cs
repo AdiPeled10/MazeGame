@@ -41,11 +41,12 @@ namespace SearchAlgorithmsLib
                         AddToOpenList(new KeyValuePair<double, State<T>>(pathPrice, s));
                         closed.Add(s, pathPrice);
                     }
-                    else if(pathPrice < closed[currentStateValue])
+                    else if(pathPrice < closed[s])
                     {
                         UpdatePriority(new KeyValuePair<double, State<T>>(closed[currentStateValue], currentStateValue),
                             pathPrice);
-                       s.SetCameFrom(currentStateValue);
+                        closed[s] = pathPrice;
+                        s.SetCameFrom(currentStateValue);
                     }
                 }
             }

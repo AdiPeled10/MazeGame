@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SearchAlgorithmsLib
 {
@@ -12,16 +13,45 @@ namespace SearchAlgorithmsLib
             get { return cost; }
             set { cost = value; }
         }
-
         private State<T> cameFrom; // the state we came from to this state (setter)
 
-        public State(T state) // CTOR
+        private static Dictionary<T, State<T>> StatePool = new Dictionary<T, State<T>>(32);
+
+        public static State<T> GetState(T state)
+        {
+            try
+            {
+                return State<T>.StatePool[state];
+            }
+            catch (KeyNotFoundException)
+            {
+                State<T> st = new State<T>(state);
+                State<T>.StatePool[state] = st;
+                return st;
+            }
+        }
+
+        public static State<T> GetState(T state, double initializeCost)
+        {
+            try
+            {
+                return State<T>.StatePool[state];
+            }
+            catch (KeyNotFoundException)
+            {
+                State<T> st = new State<T>(state, initializeCost);
+                State<T>.StatePool[state] = st;
+                return st;
+            }
+        }
+
+        private State(T state) // CTOR
         {
             this.state = state;
             //this.cameFrom = this;
         }
 
-        public State(T state, double cost) // CTOR
+        private State(T state, double cost) // CTOR
         {
             this.state = state;
             this.cost = cost;

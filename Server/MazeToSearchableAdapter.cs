@@ -8,18 +8,17 @@ namespace Server
     class MazeToSearchableAdapter : ISearchable<Position>
     {
         private Maze maze;
-        private Dictionary<Position, State<Position>> d;
 
         public MazeToSearchableAdapter(Maze maze)
         {
             this.maze = maze;
-            d = new Dictionary<Position, State<Position>>();
         }
 
         public List<State<Position>> GetAllPossibleStates(State<Position> s)
         {
             List<State<Position>> neighbors = new List<State<Position>>();
             int i = s.GetState().Row, j = s.GetState().Col;
+            /**
             Position[] locations = new Position[] {
                 new Position(i - 1, j),
                 new Position(i, j - 1),
@@ -34,28 +33,81 @@ namespace Server
                     {
                         //neighbors.Add(d.ContainsKey(loc) ? (d[loc]) : (d[loc] = new State<Position>(loc, 1)));
                         //neighbors.Add(new State<Position>(loc, 1));
-                        if (!d.ContainsKey(loc))
-                        {
-                            d[loc] = new State<Position>(loc, 1);
-                        }
-                        neighbors.Add(d[loc]);
+                        neighbors.Add(State<Position>.GetState(loc));
                     }
                 }
                 catch (IndexOutOfRangeException)
                 {
                 }
             }
+            */
+
+            // The neighbor above
+            try
+            {
+                if (maze[i - 1, j] == CellType.Free)
+                {
+                    //neighbors.Add(d.ContainsKey(loc) ? (d[loc]) : (d[loc] = new State<Position>(loc, 1)));
+                    //neighbors.Add(new State<Position>(loc, 1));
+                    neighbors.Add(State<Position>.GetState(new Position(i - 1, j), 1));
+                }
+            }
+            catch (IndexOutOfRangeException)
+            {
+            }
+
+            // The neighbor on the left
+            try
+            {
+                if (maze[i, j - 1] == CellType.Free)
+                {
+                    //neighbors.Add(d.ContainsKey(loc) ? (d[loc]) : (d[loc] = new State<Position>(loc, 1)));
+                    //neighbors.Add(new State<Position>(loc, 1));
+                    neighbors.Add(State<Position>.GetState(new Position(i, j - 1), 1));
+                }
+            }
+            catch (IndexOutOfRangeException)
+            {
+            }
+
+            // The neighbor on the right
+            try
+            {
+                if (maze[i, j + 1] == CellType.Free)
+                {
+                    //neighbors.Add(d.ContainsKey(loc) ? (d[loc]) : (d[loc] = new State<Position>(loc, 1)));
+                    //neighbors.Add(new State<Position>(loc, 1));
+                    neighbors.Add(State<Position>.GetState(new Position(i, j + 1), 1));
+                }
+            }
+            catch (IndexOutOfRangeException)
+            {
+            }
+
+            // The neighbor below
+            try
+            {
+                if (maze[i + 1, j] == CellType.Free)
+                {
+                    //neighbors.Add(d.ContainsKey(loc) ? (d[loc]) : (d[loc] = new State<Position>(loc, 1)));
+                    //neighbors.Add(new State<Position>(loc, 1));
+                    neighbors.Add(State<Position>.GetState(new Position(i + 1, j), 1));
+                }
+            }
+            catch (IndexOutOfRangeException)
+            {
+            }
             return neighbors;
         }
 
         public State<Position> GetGoalState()
         {
-            return new State<Position>(maze.GoalPos, 1);
+            return State<Position>.GetState(maze.GoalPos, 1);
         }
 
         public State<Position> GetInitialState()
         {
-            return new State<Position>(maze.InitialPos, 1);
+            return State<Position>.GetState(maze.InitialPos, 1);
         }
     }
 }

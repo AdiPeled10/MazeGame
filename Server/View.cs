@@ -16,7 +16,6 @@ namespace Server
         public View(IController con)
         {
             this.con = con;
-
         }
 
         // perhapse we can somehow enforce the do this because its not natural that the controller will pass us a client

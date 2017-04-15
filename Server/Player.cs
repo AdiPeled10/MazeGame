@@ -8,13 +8,19 @@ using MazeLib;
 
 namespace Server
 {
-    public class Player// : IPlayer
+    public delegate void MoveListener(string message);
+
+    // format a direction to a message to notify the move listeners 
+    public delegate string FormatNotificationToListeners(Direction direction);
+
+    public class Player
     {
-        // TODO Maybe use IPlayer interface later.
         private int id;  // will make a unique id to each player. If will have on one place that creates Players it
                          // will be unique (as long as we'll have up to 4,000,000,000 players).
         private IClient client;
         private Position location;
+        public event MoveListener NotifyMeWhenYouMove;
+        private FormatNotificationToListeners format;
 
         public IClient Client
         {
@@ -33,12 +39,29 @@ namespace Server
             this.id = id;
         }
 
+        public void ClearListeners()
+        {
+            NotifyMeWhenYouMove = new MoveListener((s) => { });
+            NotifyMeWhenYouMove = null;
+            MoveListener[] list = (MoveListener[])NotifyMeWhenYouMove.GetInvocationList();
+            foreach (MoveListener d in list)
+            {
+                NotifyMeWhenYouMove -= d;
+            }
+        }
+
+        public void SetFormat(FormatNotificationToListeners format)
+        {
+            this.format = format;
+        }
+
         /**
          * if a move request is invalid, we ignore it. A game is much funer if it doesn't bother you
          * everytime you eccidently push the wrong button move forward to a wall.
          */
         public void Move(Direction move, int width, int height)
         {
+            NotifyMeWhenYouMove(format(move));
             // TODO Check if it's like a GUI Up mean -1 Down +1.
             switch (move)
             {
@@ -62,23 +85,17 @@ namespace Server
                     }
                 case Direction.Right:
                     {
-                        if (location.Col + 1 < height)
+                        if (location.Col + 1 < width)
                             location.Col += 1;
                         break;
                     }
                 default:
                     break;
-
             }
         }
 
         public override bool Equals(object obj)
         {
-            ////Compare by string of TcpClient's hashcode.
-            ////We compare only by TcpClient cause we get only TcpClient in the command
-            //return (obj.ToString().GetHashCode() == this.client.ToString().GetHashCode());
-
-            // TODO THIS IS NOT SAFE. It assume every player has a different id and that same clients are stored at the same reference.
             return id == (obj as Player).id && ReferenceEquals(client, (obj as Player).client);
         }
 
@@ -87,8 +104,7 @@ namespace Server
             return id;
         }
 
-        // TODO maybe not notify directly
-        public void NotifyWonOrLost(string message)
+        public void NotifyAChangeInTheGame(string message)
         {
             client.SendResponse(message);
         }

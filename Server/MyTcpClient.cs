@@ -9,17 +9,18 @@ using System.IO;
 
 namespace Server
 {
-    class MyTcpClient : IClient
+    public class MyTcpClient : IClient
     {
         private StreamReader reader;
         private StreamWriter writer;
-        //private List<string> requestCache;
+        private int hashCode;
 
-        public MyTcpClient(TcpClient client)
+        public MyTcpClient(TcpClient client) // TODO fix the hash value
         {
             NetworkStream stream = client.GetStream();
             reader = new StreamReader(stream);
             writer = new StreamWriter(stream);
+            hashCode = client.GetHashCode();
             //requestCache = new List<string>();
         }
 
@@ -58,6 +59,11 @@ namespace Server
             // TODO check this succeeds and not fails because the writer was closed before it 
             // (and closed its stream)
             reader.Close();
+        }
+
+        public override int GetHashCode()
+        {
+            return hashCode;
         }
     }
 }

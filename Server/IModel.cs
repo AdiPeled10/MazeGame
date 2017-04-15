@@ -19,8 +19,13 @@ namespace Server
 
         bool Join(string name, IClient player);
 
-        // returns the name of the game the move took place in
-        string Play(Direction move, IClient player);
+        void Play(Direction move, IClient player);
+
+        Player GetPlayer(IClient player);
+
+        ISearchGame GetGameOf(IClient player);
+
+        ISearchGame GetGameOf(Player player);
 
         void Close(string name);
 

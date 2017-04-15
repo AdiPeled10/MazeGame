@@ -8,9 +8,14 @@ using MazeLib;
 
 namespace Server
 {
+    public delegate bool StartWhenTrue(ISearchGame game);
+
     // TODO add support to "time since last move" or something like that.
     public interface ISearchGame  // IGameWithMovingPlayers ?
     {
+        // listener that will be notified when the game starts
+        event Action TellMeWhenTheGameStarts;
+
         //Get name of this game.
         string Name
         {
@@ -33,7 +38,7 @@ namespace Server
         void RemovePlayer(Player player);
 
         //Move a player.
-        void MovePlayer(Player player, Direction move); // TODO consider copy the Direction to here to avoid dependecy
+        void MovePlayer(Player player, Direction move); // consider copy the Direction to here to avoid dependecy
 
         //// returns
         //unsigned int GetMaxPlayersAllowed();
@@ -41,8 +46,19 @@ namespace Server
         //Returns a searchable that represent the search game (recommended to return an adapter)
         ISearchable<Position> AsSearchable();
 
+        // set a function that wil detemine if the game can be started
+        void SetStartWhenTrue(StartWhenTrue func);
+
+        //Start the game.
+        void Start();
+
+        //returns true if the game can be started
+        bool CanStart();
+
         // returns true if the game has ended.
         bool HasEnded();
+
+        void DecalreWinner(string winnerMessage, string losersMessage);
 
         // Returns a string that represents where the search occurs.
         // For example, if the game is a maze it will return a string representing the maze.
@@ -50,9 +66,8 @@ namespace Server
 
         string ToJSON();
 
-        ////Start the game.
-        //void Start();
-        
+        void MakePlayersNotifyEachOtherAboutTheirMoves(FormatNotificationToListeners format);
+
         ////Tells us if the game already started.
         //bool Started();
 

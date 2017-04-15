@@ -18,10 +18,25 @@ namespace Server
 
         public void Execute(string[] args, IClient client = null)
         {
-            model.Close(args[0]);
+            // get a list of the players
+            Player player = model.GetPlayer(client);
+            IEnumerable<Player> players = model.GetGameByName(args[0]).GetPlayers();
+
+            // prepare closing message
             JObject playObj = new JObject();
-            client.SendResponse(playObj.ToString());
-            // return "{ }";
+            string message = playObj.ToString();
+
+            // notify the othe players the game is closed
+            foreach (Player p in players)
+            {
+                if (!player.Equals(p))
+                {
+                    p.NotifyAChangeInTheGame(message);
+                }
+            }
+
+            // close the game
+            model.Close(args[0]);
         }
     }
 }

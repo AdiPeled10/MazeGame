@@ -16,5 +16,8 @@ namespace Server
 
         // Removes allocated resources relating the client communication.
         void Disconnect();
+
+        //// to promise the clients will have good hash 
+        //int GetHashCode();
     }
 }

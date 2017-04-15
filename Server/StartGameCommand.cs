@@ -24,13 +24,13 @@ namespace Server
             int cols = int.Parse(args[2]);
             ISearchGame game = model.StartGame(name, rows, cols, client);
 
-            if (!ReferenceEquals(game,null))
+            if (!ReferenceEquals(game, null))
             {
-                while(game.NumOfPlayer != 2)
-                {
-                    Thread.Sleep(100);
-                }
-                client.SendResponse(game.ToJSON());
+                // set condition to start the game
+                game.SetStartWhenTrue((g) => (g.NumOfPlayer >= 2));
+
+                // send the client the game when it starts
+                game.TellMeWhenTheGameStarts += () => client.SendResponse(game.ToJSON());
             }
 
             client.SendResponse("A game with that name already exists and cannot be replaced at this point.");

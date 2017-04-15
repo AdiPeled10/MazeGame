@@ -38,12 +38,12 @@ namespace Server
 
         public void AddClientToGame(IClient client, ISearchGame game)
         {
-            playerToGame[GetPlayer(client)] = game;
+            AddClientToGame(GetPlayer(client), game);
         }
 
         public void AddClientToGame(IClient client, string name)
         {
-            playerToGame[GetPlayer(client)] = nameToGame[name];
+            AddClientToGame(GetPlayer(client), nameToGame[name]);
         }
 
         public void AddClientToGame(Player player, ISearchGame game)
@@ -107,7 +107,7 @@ namespace Server
 
         public void DeleteGame(string name)
         {
-            IReadOnlyList<Player> players = nameToGame[name].GetPlayers();
+            IEnumerable<Player> players = nameToGame[name].GetPlayers();
             nameToGame.Remove(name);
             foreach (Player myPlayer in players)
             {

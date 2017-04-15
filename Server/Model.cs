@@ -12,7 +12,6 @@ namespace Server
     public delegate ISearchGame FromSerialized(string str);
 
     /*
-     * TODO
      * security breach: if a muliplayer game has a name of a single player game it will hide
      * the existance of the single player game forever.
      */
@@ -22,9 +21,7 @@ namespace Server
         private SolutionCache<string> cache;
         private ISearchGameGenerator generator;
         private FromSerialized fromSerialized;
-        Connector connector; // TODO use this to get Player instead of getting Players as input
-                             // or use it in commands to hide socket/clients from model (it may "demage"
-                             // the controller, but not if will make the commands indepandece of the controller)
+        Connector connector;
 
         // a model that doesn't support jsons
         public Model(ISearchGameGenerator generator) : this(generator, str => null)
@@ -58,7 +55,7 @@ namespace Server
         public ISearchGame GenerateNewGame(string name, int rows, int cols)
         {
             ///*
-            // * TODO we don't save the maze in the dictionary because it's a single player maze and
+            // * we don't save the maze in the dictionary because it's a single player maze and
             // * don't has to be known at the sever. So when we write the client we'll want to
             // * to do a mapping between inner names and real names(like a Nat), it may not resolve
             // * the issue of "knowing" 
@@ -129,12 +126,13 @@ namespace Server
 
         public ISearchGame StartGame(string name, int rows, int cols, IClient creator)
         {
-            // TODO allow creator of a game delete a game if only his playing their
             /*
              * If the game already exists, the user didn't used this command as he should and won't be getting a game.
              * If we would join the client anyway, we will ignore his requst to "rows", "cols" and maybe he does't want
              * to play in a different size maze(it's like the difference between requesting a 100 pieces puzzle and
              * getting a 2000 pieces puzzle).
+             * If a game with that name already exists, We will generate a new game for the client if and only if
+             * he's the only player is the exitising game or, the exisiting game has ended.
              */
             bool toCreate = true;
             if (connector.ContainsGame(name))
@@ -192,19 +190,28 @@ namespace Server
             return false;
         }
 
-        public string Play(Direction move, IClient player)
+        // set "name" to the game name and returns the list of players
+        // Moves the client and returns the game where the player was moved
+        public void Play(Direction move, IClient player)
         {
-            try
-            {
-                Player p = connector.GetPlayer(player);
-                ISearchGame game = connector.GetGame(p);
-                game.MovePlayer(p, move);
-                return game.Name;
-            }
-            catch (NullReferenceException)
-            {
-                return "Player doesn't belog to a game.";
-            }
+            Player p = connector.GetPlayer(player);
+            ISearchGame game = connector.GetGame(p);
+            game.MovePlayer(p, move);
+        }
+
+        public Player GetPlayer(IClient player)
+        {
+            return connector.GetPlayer(player);
+        }
+
+        public ISearchGame GetGameOf(IClient player)
+        {
+            return connector.GetGame(player);
+        }
+
+        public ISearchGame GetGameOf(Player player)
+        {
+            return connector.GetGame(player);
         }
 
         // remove unnecerssay games from the dictionary (games that have ended,

@@ -20,15 +20,42 @@ namespace Server
         public void Execute(string[] args, IClient client)
         {
             string direction = args[0];
+            Player player = model.GetPlayer(client);
+            ISearchGame game = model.GetGameOf(player);
 
-            string name = model.Play(Converter.StringToDirection(direction), client);
-
-            JObject playObj = new JObject
+            try
             {
-                ["Name"] = name,
-                ["Direction"] = direction
-            };
-            client.SendResponse(playObj.ToString());
+                // make the move
+                model.Play(Converter.StringToDirection(direction), client);
+
+                //// create the notification message about the move
+                //JObject playObj = new JObject
+                //{
+                //    ["Name"] = game.Name,
+                //    ["Direction"] = direction
+                //};
+                //string move = playObj.ToString();
+
+                //// notify the other players
+                //IEnumerable<Player> players = game.GetPlayers();
+                //foreach (Player p in players)
+                //{
+                //    if (!player.Equals(p))
+                //    {
+                //        p.NotifyAChangeInTheGame(move);
+                //    }
+                //}
+
+                // check if the game has ended
+                if (game.HasEnded())
+                {
+                    game.DecalreWinner("You Won!", "You Lost!");
+                }
+            }
+            catch (NullReferenceException)
+            {
+                client.SendResponse("Player doesn't belog to a game.");
+            }
         }
     }
 }

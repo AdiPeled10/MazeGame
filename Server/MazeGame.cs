@@ -13,7 +13,10 @@ namespace Server
     {
         private Maze maze;
         private List<Player> players;
-        private const int MaxPlayerAllowed = 2;
+        private Player winner;
+        public event Action TellMeWhenTheGameStarts; // TODO check what happens when it's empty but called 
+        private StartWhenTrue startWhenTrue;
+        public const int MaxPlayerAllowed = 2;
         private bool hasEnded;
 
         public MazeGame(string name, Maze maze)
@@ -22,6 +25,12 @@ namespace Server
             this.maze.Name = name;
             this.players = new List<Player>();
             this.hasEnded = false;
+            this.startWhenTrue = (g) => true;
+        }
+
+        public void SetStartWhenTrue(StartWhenTrue func)
+        {
+            startWhenTrue = func;
         }
 
         //Get name of this game.
@@ -52,16 +61,16 @@ namespace Server
          */
         public void RemovePlayer(Player player)
         {
-            // TODO if the number of player will become higher then 2, 
+            // TODO if the max number of player will become higher then 2, 
             // support "removing without ending the game if the game hasn't started"
             // TODO verify if a safety check of "does the player play in this game" is required.
             this.players.Remove(player);
-            DecalreWinner(players[0], "Connection lost with one of the player. Technical victory!");
+            winner = players[0];
+            hasEnded = true;
         }
 
         public bool AddPlayer(Player player)
         {
-            //TODO Check how does it compares 2 players.
             if (players.Count < MaxPlayerAllowed && !players.Contains(player))
             {
                 players.Add(player);
@@ -75,12 +84,20 @@ namespace Server
             return new MazeToSearchableAdapter(maze);
         }
 
-        //TODO decide if we want to notify user if the player isn't a part of the game.
         public void MovePlayer(Player player, Direction move)
         {
             //Find the matching player which holds his location and if a player was found, move him.
-            players.Find(player.Equals)?.Move(move, maze.Cols, maze.Rows); // TODO make sure find works
-            //FindPlayer(player)?.Move(move, maze.Cols, maze.Rows);
+            players.Find(player.Equals)?.Move(move, maze.Cols, maze.Rows);
+        }
+
+        public bool CanStart()
+        {
+            return startWhenTrue(this);
+        }
+
+        public void Start()
+        {
+            TellMeWhenTheGameStarts();
         }
 
         public bool HasEnded()
@@ -96,7 +113,8 @@ namespace Server
                     }
                     else
                     {
-                        DecalreWinner(p, "You Won!");
+                        winner = p;
+                        hasEnded = true;
                         return true;
                     }
                 }
@@ -104,14 +122,14 @@ namespace Server
             return hasEnded;
         }
 
-        protected void DecalreWinner(Player winner, string winnerMessage)
+        public void DecalreWinner(string winnerMessage, string loserMessage)
         {
             players.Remove(winner);
-            winner.NotifyWonOrLost(winnerMessage);
+            winner.NotifyAChangeInTheGame(winnerMessage);
             hasEnded = true;
             foreach (Player p in players)
             {
-                p.NotifyWonOrLost("You Lost!");
+                p.NotifyAChangeInTheGame(loserMessage);
             }
         }
 
@@ -140,9 +158,33 @@ namespace Server
 
         public static MazeGame FromJSON(string str)
         {
-            JObject mazeGameObj = JObject.Parse(str);
-            Maze maze = Maze.FromJSON((string)mazeGameObj["Maze"]);
-            return new MazeGame((string)mazeGameObj["Name"], maze);
+            //JObject mazeGameObj = JObject.Parse(str);
+            Maze maze = Maze.FromJSON(str);// (string)mazeGameObj["Maze"]);
+            return new MazeGame(maze.Name, maze);// (string)mazeGameObj["Name"], maze);
+        }
+
+        public void MakePlayersNotifyEachOtherAboutTheirMoves(FormatNotificationToListeners format)
+        {
+            MoveListener notifyFunc;
+            // delete old listeners and set format
+            foreach (Player player in players)
+            {
+                player.ClearListeners();
+                player.SetFormat(format);
+            }
+
+            // set each player new listeners
+            foreach (Player player in players)
+            {
+                notifyFunc = (move) => player.NotifyAChangeInTheGame(move);
+                foreach (Player p in players)
+                {
+                    if (!player.Equals(p))
+                    {
+                        p.NotifyMeWhenYouMove += notifyFunc;
+                    }
+                }
+            }
         }
 
         //    public bool IsPlaying(Player player)

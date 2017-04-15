@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.12
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ex1", "Ex1\Ex1.csproj", "{ABB1EDB6-9CB9-436A-A67C-F5878B6A4FA8}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csp
 	ProjectSection(ProjectDependencies) = postProject
 		{D6991A69-AFF4-4E8C-AB11-BB9F0E5E171F} = {D6991A69-AFF4-4E8C-AB11-BB9F0E5E171F}
 	EndProjectSection
+EndProject
+Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "DependencyValidation1", "DependencyValidation1\DependencyValidation1.modelproj", "{900B386A-6820-4252-ABCB-FC76F1FB4077}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DA97C989-0B06-4179-B069-E4C39D9E5093}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA97C989-0B06-4179-B069-E4C39D9E5093}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA97C989-0B06-4179-B069-E4C39D9E5093}.Release|Any CPU.Build.0 = Release|Any CPU
+		{900B386A-6820-4252-ABCB-FC76F1FB4077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{900B386A-6820-4252-ABCB-FC76F1FB4077}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{900B386A-6820-4252-ABCB-FC76F1FB4077}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{900B386A-6820-4252-ABCB-FC76F1FB4077}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

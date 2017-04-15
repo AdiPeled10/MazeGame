@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.IO;
+using ClientForServer;
 
 namespace Server
 {
@@ -49,6 +44,11 @@ namespace Server
         }
 
         public void SendResponse(string res)
+        {
+            writer.Write(res);
+        }
+
+        public void Notify(string res)
         {
             writer.Write(res);
         }

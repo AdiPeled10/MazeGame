@@ -1,6 +1,6 @@
 ﻿using ClientForServer;
 
-namespace Controller
+namespace Controllers
 {
     interface ICommand
     {

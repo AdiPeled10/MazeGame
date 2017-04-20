@@ -11,15 +11,16 @@ namespace SearchGames
         private List<Player> players;
         private Player winner;
         public event Action TellMeWhenTheGameStarts; // TODO check what happens when it's empty but called 
-        private StartWhenTrue startWhenTrue;
-        public const int MaxPlayerAllowed = 2;
+        private StartWhenTrue startWhenTrue; // Only a suggestion. a player can move before it's true.
+        //public const int MaxPlayersAllowed = 2; // TODO only not const until the client will handle single player
+        public int MaxPlayersAllowed = 2;
         private bool hasEnded;
 
         public MazeGame(string name, Maze maze)
         {
             this.maze = maze;
             this.maze.Name = name;
-            this.players = new List<Player>();
+            this.players = new List<Player>(MaxPlayersAllowed);
             this.hasEnded = false;
             this.startWhenTrue = (g) => true;
         }
@@ -43,7 +44,7 @@ namespace SearchGames
         //returns true if the game rules allow a new player to join at the moment of calling it, false otherwise.
         public bool CanAPlayerJoin()
         {
-            return players.Count < MaxPlayerAllowed && !hasEnded;
+            return players.Count < MaxPlayersAllowed && !hasEnded;
         }
 
         public IReadOnlyList<Player> GetPlayers()
@@ -62,14 +63,17 @@ namespace SearchGames
             // TODO verify if a safety check of "does the player play in this game" is required.
             this.players.Remove(player);
             winner = players[0];
+            // notify the other clients that a player has left the game in the future.
+            winner.NotifyAChangeInTheGame("The other player has forfiet.");
             hasEnded = true;
         }
 
         public bool AddPlayer(Player player)
         {
-            if (players.Count < MaxPlayerAllowed && !players.Contains(player))
+            if (players.Count < MaxPlayersAllowed && !players.Contains(player))
             {
                 players.Add(player);
+                player.Location = maze.InitialPos;
                 return true;
             }
             return false;
@@ -82,8 +86,24 @@ namespace SearchGames
 
         public void MovePlayer(Player player, Direction move)
         {
-            //Find the matching player which holds his location and if a player was found, move him.
-            players.Find(player.Equals)?.Move(move, maze.Cols, maze.Rows);
+            // if the game hasn't ended. This prevents player from keep playing after someone has won.
+            if (!HasEnded())
+            {
+                //Find the matching player which holds his location and if a player was found, move him.
+                players.Find(player.Equals)?.Move(move, IsLegalMove);
+            }
+        }
+
+        private bool IsLegalMove(Position loc)
+        {
+            try
+            {
+                return maze[loc.Row, loc.Col].Equals(CellType.Free);
+            }
+            catch // if it causes an exception, it's probably not legal.
+            {
+                return false;
+            }
         }
 
         public bool CanStart()
@@ -118,16 +138,24 @@ namespace SearchGames
             return hasEnded;
         }
 
-        public void DecalreWinner(string winnerMessage, string loserMessage)
-        {
-            players.Remove(winner);
-            winner.NotifyAChangeInTheGame(winnerMessage);
-            hasEnded = true;
-            foreach (Player p in players)
-            {
-                p.NotifyAChangeInTheGame(loserMessage);
-            }
-        }
+        //public void DecalreWinner(string winnerMessage, string loserMessage)
+        //{
+        //    /*
+        //     * TODO for now this method doesn't notify anyone because we don't need/know how to handle
+        //     * it right now (it creates a problem of "when the client will see the message" if the client
+        //     * is in "read input" state before the message got to him). In the future we probably move this
+        //     * logic to the client application to easy the work of the server.
+        //     */
+        //    //winner.NotifyAChangeInTheGame(winnerMessage);
+        //    hasEnded = true;
+        //    foreach (Player p in players)
+        //    {
+        //        if (!winner.Equals(p))
+        //        {
+        //            //p.NotifyAChangeInTheGame(loserMessage);
+        //        }
+        //    }
+        //}
 
         public string GetSearchArea()
         {
@@ -172,7 +200,17 @@ namespace SearchGames
             // set each player new listeners
             foreach (Player player in players)
             {
-                notifyFunc = (move) => player.NotifyAChangeInTheGame(move);
+                notifyFunc = (move) =>
+                {
+                    try
+                    {
+                        player.NotifyAChangeInTheGame(move);
+                    }
+                    catch
+                    {
+                        // do nothing, to avoid efecting the other players
+                    }
+                };
                 foreach (Player p in players)
                 {
                     if (!player.Equals(p))

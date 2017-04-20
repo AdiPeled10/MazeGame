@@ -1,5 +1,6 @@
 ﻿using MazeLib;
 using ClientForServer;
+using System;
 
 namespace SearchGames
 {
@@ -27,16 +28,17 @@ namespace SearchGames
         {
             this.client = client;
             this.id = id;
+            // initialize as empty
+            NotifyMeWhenYouMove = new MoveListener((s) => { });
+            format = (dir) => "";
         }
 
         public void ClearListeners()
         {
-            NotifyMeWhenYouMove = new MoveListener((s) => { });
-            NotifyMeWhenYouMove = null;
-            MoveListener[] list = (MoveListener[])NotifyMeWhenYouMove.GetInvocationList();
-            foreach (MoveListener d in list)
+            Delegate[] list = NotifyMeWhenYouMove.GetInvocationList();
+            foreach (Delegate d in list)
             {
-                NotifyMeWhenYouMove -= d;
+                NotifyMeWhenYouMove -= (MoveListener)d;
             }
         }
 
@@ -49,34 +51,61 @@ namespace SearchGames
          * if a move request is invalid, we ignore it. A game is much funer if it doesn't bother you
          * everytime you eccidently push the wrong button move forward to a wall.
          */
-        public void Move(Direction move, int width, int height)
+        public void Move(Direction move, IsLegalPlayerLocation isLegal)
         {
-            NotifyMeWhenYouMove(format(move));
             // TODO Check if it's like a GUI Up mean -1 Down +1.
             switch (move)
             {
                 case Direction.Up:
                     {
-                        if (location.Row - 1 >= 0)
-                            location.Row -= 1;
+                        location.Row -= 1;
+                        if (isLegal(location))
+                        {
+                            NotifyMeWhenYouMove(format(move));
+                        }
+                        else
+                        {
+                            location.Row += 1;
+                        }
                         break;
                     }
                 case Direction.Down:
                     {
-                        if (location.Row + 1 < height)
-                            location.Row += 1;
+                        location.Row += 1;
+                        if (isLegal(location))
+                        {
+                            NotifyMeWhenYouMove(format(move));
+                        }
+                        else
+                        {
+                            location.Row -= 1;
+                        }
                         break;
                     }
                 case Direction.Left:
                     {
-                        if (location.Col - 1 >= 0)
-                            location.Col -= 1;
+                        location.Col -= 1;
+                        if (isLegal(location))
+                        {
+                            NotifyMeWhenYouMove(format(move));
+                        }
+                        else
+                        {
+                            location.Col += 1;
+                        }
                         break;
                     }
                 case Direction.Right:
                     {
-                        if (location.Col + 1 < width)
-                            location.Col += 1;
+                        location.Col += 1;
+                        if (isLegal(location))
+                        {
+                            NotifyMeWhenYouMove(format(move));
+                        }
+                        else
+                        {
+                            location.Col -= 1;
+                        }
                         break;
                     }
                 default:

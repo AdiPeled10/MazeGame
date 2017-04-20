@@ -1,6 +1,6 @@
 ﻿using ClientForServer;
 
-namespace View
+namespace Views
 {
     public interface IView
     {

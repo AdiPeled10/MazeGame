@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Model;
+using Models;
 using ClientForServer;
 using SearchGames;
 
-namespace Controller
+namespace Controllers
 {
     public class Controller : IController
     {
@@ -49,14 +49,14 @@ namespace Controller
                 };
                 queue.Add(request, client);
             }
-            //else
-            //{
-            //    request =() =>
-            //    {
-            //        client.SendResponse("Command not found"); // TODO maybe use IView for the send
-            //    };
-            //}
-            //queue.Add(request, client);
+            else // TODO this is just for the debugging
+            {
+                request = () =>
+                {
+                    client.SendResponse("");
+                };
+                queue.Add(request, client);
+            }
         }
 
         // not in the dictionary to prevent clients from using it
@@ -68,9 +68,17 @@ namespace Controller
             // remove all the client requeses
             queue.Remove(client);
 
-            // declare technical winning.
-            game.DecalreWinner("Connection lost with one of the player. Technical victory!",
-                "Connection lost with one of your teammate. Technical Lost!");
+            ///*
+            // * TODO for now this method doesn't notify anyone because we don't need/know how to handle
+            // * it right now (it creates a problem of "when the client will see the message" if the client
+            // * is in "read input" state before the message got to him). In the future we probably move this
+            // * logic to the client application to easy the work of the server.
+            // * maybe we don't need to worry about the other the clients player, because he will just
+            // * freeze in the game.
+            // */
+            //// declare technical winning.
+            //game.DecalreWinner("Connection lost with one of the player. Technical victory!",
+            //    "Connection lost with one of your teammate. Technical Lost!");
 
             /**
              * Removing the client from the server(game and player). This task doesn't has to be

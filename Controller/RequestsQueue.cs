@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using ClientForServer;
 
-namespace Controller
+namespace Controllers
 {
     internal class TaskTokenPair
     {

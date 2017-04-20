@@ -4,24 +4,37 @@ using ClientForServer;
 
 namespace Server
 {
+    //internal delegate void SendAlias(string message);
+
     public class MyTcpClient : IClient
     {
+        private TcpClient client;
+        private NetworkStream stream;
         private StreamReader reader;
         private StreamWriter writer;
         private int hashCode;
 
         public MyTcpClient(TcpClient client) // TODO fix the hash value
         {
-            NetworkStream stream = client.GetStream();
+            this.client = client;
+            stream = client.GetStream();
             reader = new StreamReader(stream);
             writer = new StreamWriter(stream);
             hashCode = client.GetHashCode();
-            //requestCache = new List<string>();
+
+            // set the writer to immediately flush
+            writer.AutoFlush = true;
         }
 
         public bool HasARequest()
         {
-            return !reader.EndOfStream; // requestCache.Count != 0 || !reader.EndOfStream;
+            if (client.Connected)
+            {
+                // stream has internal buffer and may contain many
+                // requests while the stream won't.
+                return stream.DataAvailable || reader.Peek() > 0;
+            }
+            throw new IOException("Client is disconnected");
         }
 
         public string RecvARequest()
@@ -45,12 +58,12 @@ namespace Server
 
         public void SendResponse(string res)
         {
-            writer.Write(res);
+            writer.WriteLine(res);// + System.Environment.NewLine);
         }
 
-        public void Notify(string res)
+        public void Notify(string res)// = this.SendResponse;
         {
-            writer.Write(res);
+            writer.WriteLine(res);
         }
 
         public void Disconnect()
@@ -59,6 +72,8 @@ namespace Server
             // TODO check this succeeds and not fails because the writer was closed before it 
             // (and closed its stream)
             reader.Close();
+            stream.Close();
+            client.Close();
         }
 
         public override int GetHashCode()

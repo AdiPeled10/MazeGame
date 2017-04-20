@@ -2,7 +2,7 @@
 using SearchGames;
 using ClientForServer;
 
-namespace Model
+namespace Models
 {
     /*
       * This class will help us connect between a player and his game.
@@ -90,7 +90,14 @@ namespace Model
 
         public ISearchGame GetGame(Player player)
         {
-            return playerToGame[player];
+            try
+            {
+                return playerToGame[player];
+            }
+            catch (KeyNotFoundException)
+            {
+                return null;
+            }
         }
 
         public ISearchGame GetGame(string name)

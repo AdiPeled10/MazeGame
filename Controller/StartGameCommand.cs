@@ -1,8 +1,8 @@
-﻿using Model;
+﻿using Models;
 using ClientForServer;
 using SearchGames;
 
-namespace Controller
+namespace Controllers
 {
     public class StartGameCommand : ICommand
     {
@@ -28,8 +28,13 @@ namespace Controller
                 // send the client the game when it starts
                 game.TellMeWhenTheGameStarts += () => client.SendResponse(game.ToJSON());
             }
-
-            client.SendResponse("A game with that name already exists and cannot be replaced at this point.");
+            else
+            {
+                if (!ReferenceEquals(model.GetGameByName(name), null))
+                    client.SendResponse("A game with that name already exists and cannot be replaced at this point.");
+                else
+                    client.SendResponse("You're already a part of a game. Please close that game and try again.");
+            }
         }
     }
 }

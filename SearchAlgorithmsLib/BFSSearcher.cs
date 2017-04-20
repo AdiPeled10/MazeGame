@@ -6,7 +6,7 @@ namespace SearchAlgorithmsLib
     // Best First Search
     public class BFSSearcher<T> : PrioritySearcher<T>
     {
-        public override Solution<T> Search(ISearchable<T> searchable)
+        protected override Solution<T> RealSearch(ISearchable<T> searchable)
         {
             KeyValuePair<double, State<T>> currentState;
             double pathPrice;

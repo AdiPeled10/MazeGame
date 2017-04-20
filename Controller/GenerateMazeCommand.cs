@@ -1,7 +1,8 @@
-﻿using Model;
+﻿using Models;
 using ClientForServer;
+using SearchGames; // only here until the client will approve TODO
 
-namespace Controller
+namespace Controllers
 {
     class GenerateMazeCommand : ICommand
     {
@@ -18,8 +19,14 @@ namespace Controller
             int rows = int.Parse(args[1]);
             int cols = int.Parse(args[2]);
 
-            //Return JSon format of this maze.
+            // Return JSON format of this maze.
             client.SendResponse(model.GenerateNewGame(name, rows, cols).ToJSON());
+
+            // TODO - also effected rhe code of model.GenerateNewGame.
+            // No need to know the name of the single player game, but while the
+            // client application is stupid will know it. Afterward we can replace it with the coe above
+            model.Join(name, client);
+            (model.GetGameByName(name) as MazeGame).MaxPlayersAllowed = 1;
         }
 
     }

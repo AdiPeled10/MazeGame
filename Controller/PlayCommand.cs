@@ -1,9 +1,8 @@
 ﻿using System;
-using Model;
+using Models;
 using ClientForServer;
-using SearchGames;
 
-namespace Controller
+namespace Controllers
 {
     public class PlayCommand : ICommand
     {
@@ -17,8 +16,8 @@ namespace Controller
         public void Execute(string[] args, IClient client)
         {
             string direction = args[0];
-            Player player = model.GetPlayer(client);
-            ISearchGame game = model.GetGameOf(player);
+            //Player player = model.GetPlayer(client);
+            //ISearchGame game = model.GetGameOf(player);
 
             try
             {
@@ -43,11 +42,17 @@ namespace Controller
                 //    }
                 //}
 
+                /*
+                 * TODO for now this method doesn't notify anyone because we don't need/know how to handle
+                 * it right now (it creates a problem of "when the client will see the message" if the client
+                 * is in "read input" state before the message got to him). In the future we probably move this
+                 * logic to the client application to easy the work of the server.
+                 */
                 // check if the game has ended
-                if (game.HasEnded())
-                {
-                    game.DecalreWinner("You Won!", "You Lost!");
-                }
+                //if (game.HasEnded())
+                //{
+                //    game.DecalreWinner("You Won!", "You Lost!");
+                //}
             }
             catch (NullReferenceException)
             {

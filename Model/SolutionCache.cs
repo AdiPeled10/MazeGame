@@ -2,7 +2,7 @@
 using MazeLib;
 using SearchAlgorithmsLib;
 
-namespace Model
+namespace Models
 {
     // TODO save the actual solutions in files(and load it from the file if needed) to prevent the heap/main memory
     // from growing very large.

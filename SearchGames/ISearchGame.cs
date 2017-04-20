@@ -6,6 +6,7 @@ using MazeLib;
 namespace SearchGames
 {
     public delegate bool StartWhenTrue(ISearchGame game);
+    public delegate bool IsLegalPlayerLocation(Position loc);
 
     // TODO add support to "time since last move" or something like that.
     public interface ISearchGame  // IGameWithMovingPlayers ?
@@ -55,7 +56,13 @@ namespace SearchGames
         // returns true if the game has ended.
         bool HasEnded();
 
-        void DecalreWinner(string winnerMessage, string losersMessage);
+        ///*
+        // * TODO for now this method doesn't notify anyone because we don't need/know how to handle
+        // * it right now (it creates a problem of "when the client will see the message" if the client
+        // * is in "read input" state before the message got to him). In the future we probably move this
+        // * logic to the client application to easy the work of the server.
+        // */
+        //void DecalreWinner(string winnerMessage, string losersMessage);
 
         // Returns a string that represents where the search occurs.
         // For example, if the game is a maze it will return a string representing the maze.

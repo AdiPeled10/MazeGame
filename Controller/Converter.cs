@@ -1,7 +1,9 @@
 ﻿using SearchAlgorithmsLib;
 using MazeLib;
+using System;
+using System.Collections.Generic;
 
-namespace Controller
+namespace Controllers
 {
     public class Converter
     {
@@ -45,12 +47,29 @@ namespace Controller
         public static string ToJSON(Solution<Position> solution)
         {
             int pos = 0;
-            char[] str = new char[solution.Length];
-            Position currentPosition = solution.GetNextValue(), nextPosition;
+            // -1 because we have one char for each "space" between states
+            char[] str;
+            Position currentPosition, nextPosition;
+            IEnumerator<Position> states = solution.GetEnumerator();
 
-            foreach (State<Position> s in solution)
+            // for some reason the first thing is always null
+            states.MoveNext();
+
+            // try to take the first position of the Solution.
+            try
             {
-                nextPosition = s.GetState();
+                currentPosition = states.Current;
+                str = new char[solution.Length - 1];
+            }
+            catch
+            {
+                // The Solution is empty/null, return "".
+                return "";
+            }
+
+           while(states.MoveNext())
+            {
+                nextPosition = states.Current;
                 if (currentPosition.Col < nextPosition.Col)
                 {
                     //Right.
@@ -84,27 +103,36 @@ namespace Controller
 
         public static Direction StringToDirection(string direction)
         {
-            switch (direction)
+            // Easier to maintain. If Direction will change the code will not.
+            try
             {
-                case "up":
-                    {
-                        return Direction.Up;
-                    }
-                case "down":
-                    {
-                        return Direction.Down;
-                    }
-                case "left":
-                    {
-                        return Direction.Left;
-                    }
-                case "right":
-                    {
-                        return Direction.Right;
-                    }
-                default:
-                    return Direction.Unknown;
+                return (Direction)Enum.Parse(typeof(Direction), direction, true);
             }
+            catch
+            {
+                return Direction.Unknown;
+            }
+            //switch (direction)
+            //{
+            //    case "up":
+            //        {
+            //            return Direction.Up;
+            //        }
+            //    case "down":
+            //        {
+            //            return Direction.Down;
+            //        }
+            //    case "left":
+            //        {
+            //            return Direction.Left;
+            //        }
+            //    case "right":
+            //        {
+            //            return Direction.Right;
+            //        }
+            //    default:
+            //        return Direction.Unknown;
+            //}
         }
     }
 }

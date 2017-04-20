@@ -1,10 +1,10 @@
 ﻿using MazeLib;
 using SearchAlgorithmsLib;
 using Newtonsoft.Json.Linq;
-using Model;
+using Models;
 using ClientForServer;
 
-namespace Controller
+namespace Controllers
 {
     class SolveMazeCommand : ICommand
     {
@@ -18,7 +18,7 @@ namespace Controller
         public void Execute(string[] args, IClient client)
         {
             string name = args[0];
-            int algorithm = int.Parse(args[1]);
+            Algorithm algorithm = (Algorithm)int.Parse(args[1]);
 
             Solution<Position> solution = model.ComputeSolution(name, algorithm);
             //Convert the solution to JSON format.

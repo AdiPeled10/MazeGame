@@ -5,21 +5,32 @@ using MazeLib;
 
 namespace SearchAlgorithmsLib
 {
-    public class Solution<T> : IEnumerable<State<T>>, IEnumerable
+    // Immutable
+    public class Solution<T> : IEnumerable<T>, IEnumerable
     {
-        private List<State<T>> theRoadToVictory;
+        private List<T> theRoadToVictory;
         private int numberOfNodesEvaluated;
 
         public Solution()
         {
-            theRoadToVictory = new List<State<T>>();
+            theRoadToVictory = new List<T>();
             numberOfNodesEvaluated = 0;
         }
 
-        public Solution(List<State<T>> theRoadToVictory,int evaluated)
+        public Solution(ICollection<State<T>> thePathToVictory, int evaluated)
         {
-            this.theRoadToVictory = theRoadToVictory; // new List<State<T>>(theRoadToVictory);
+            this.theRoadToVictory = new List<T>(thePathToVictory.Count);
+            foreach (State<T> st in thePathToVictory)
+            {
+                this.theRoadToVictory.Add(st.GetState());
+            }
             this.numberOfNodesEvaluated = evaluated;
+        }
+
+        public Solution(Solution<T> sol)
+        {
+            theRoadToVictory = new List<T>(sol.theRoadToVictory);
+            numberOfNodesEvaluated = sol.numberOfNodesEvaluated;
         }
 
         public int NodesEvaluated
@@ -27,39 +38,39 @@ namespace SearchAlgorithmsLib
             get { return numberOfNodesEvaluated; }
         }
 
-        public void AddState(State<T> newLastState)
-        {
-            theRoadToVictory.Add(newLastState);
-        }
+        //public void AddState(State<T> newLastState)
+        //{
+        //    theRoadToVictory.Add(newLastState);
+        //}
 
-        /**
-         * Removes the returned state from the solution. Which means that if
-         * you want to go through the solution but skip the first state, you can
-         * call this right before the "foreach" loop.
-         */
-        public State<T> GetNextState()
-        {
-            State<T> st = theRoadToVictory[0];
-            theRoadToVictory.Remove(st);
-            return st;
-        }
+        ///**
+        // * Removes the returned state from the solution. Which means that if
+        // * you want to go through the solution but skip the first state, you can
+        // * call this right before the "foreach" loop.
+        // */
+        //public State<T> GetNextState()
+        //{
+        //    State<T> st = theRoadToVictory[0];
+        //    theRoadToVictory.Remove(st);
+        //    return st;
+        //}
 
-        /**
-         * Removes the returned state from the solution. Which means that if
-         * you want to go through the solution but skip the first state, you can
-         * call this right before the "foreach" loop.
-         */
-        public T GetNextValue()
-        {
-            State<T> st = theRoadToVictory[0];
-            theRoadToVictory.Remove(st);
-            return st.GetState();
-        }
+        ///**
+        // * Removes the returned state from the solution. Which means that if
+        // * you want to go through the solution but skip the first state, you can
+        // * call this right before the "foreach" loop.
+        // */
+        //public T GetNextValue()
+        //{
+        //    State<T> st = theRoadToVictory[0];
+        //    theRoadToVictory.Remove(st);
+        //    return st.GetState();
+        //}
         
-        public State<T> this[int index]
-        {
-            get { return theRoadToVictory[index]; }
-        }
+        //public T this[int index]
+        //{
+        //    get { return theRoadToVictory[index]; }
+        //}
 
         public int Length
         {
@@ -72,7 +83,7 @@ namespace SearchAlgorithmsLib
         //
         // Returns:
         //     An enumerator that can be used to iterate through the collection.
-        public IEnumerator<State<T>> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             return theRoadToVictory.GetEnumerator();
         }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Model;
+using Models;
 using ClientForServer;
 using Newtonsoft.Json;
 
-namespace Controller
+namespace Controllers
 {
     public class ListCommand : ICommand
     {
@@ -17,7 +17,7 @@ namespace Controller
         public void Execute(string[] args,IClient client)
         {
             List<string> games = model.GetJoinableGamesList();
-            client.SendResponse(JsonConvert.SerializeObject(games));
+            client.SendResponse(JsonConvert.SerializeObject(games, Formatting.Indented));
         }
     }
 }

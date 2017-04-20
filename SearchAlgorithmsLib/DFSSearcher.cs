@@ -23,12 +23,14 @@ namespace SearchAlgorithmsLib
 
     public class DFSSearcher<T> : Searcher<T, StackAdapter<State<T>>, State<T>>
     {
-        public override Solution<T> Search(ISearchable<T> searchable)
+        protected override Solution<T> RealSearch(ISearchable<T> searchable)
         {
             List<State<T>> succerssors;
-            State<T> current, goal = searchable.GetGoalState();
+            State<T> current = searchable.GetInitialState(), goal = searchable.GetGoalState();
             HashSet<State<T>> closed = new HashSet<State<T>>();
-            AddToOpenList(searchable.GetInitialState());
+            AddToOpenList(current);
+            closed.Add(current);
+            current.SetCameFrom(null);
             while (OpenListSize != 0)
             {
                 current = PopOpenList();
@@ -40,7 +42,7 @@ namespace SearchAlgorithmsLib
                 else
                 {
                     //Back trace the path from the goal to the initial state.
-                    return new Solution<T>(BackTracePath(current),GetNumberOfNodesEvaluated());
+                    return new Solution<T>(BackTracePath(current), GetNumberOfNodesEvaluated());
                 }
 
                 foreach (State<T> st in succerssors)

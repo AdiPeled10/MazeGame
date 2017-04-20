@@ -4,13 +4,19 @@ using SearchAlgorithmsLib;
 using SearchGames;
 using ClientForServer;
 
-namespace Model
+namespace Models
 {
+    public enum Algorithm
+    {
+        BFS = 0,
+        DFS = 1
+    };
+
     public interface IModel
     {
         ISearchGame GenerateNewGame(string name, int rows, int cols);
 
-        Solution<Position> ComputeSolution(string name, int algorithm);
+        Solution<Position> ComputeSolution(string name, Algorithm algorithm);
 
         ISearchGame StartGame(string name, int rows, int cols, IClient client);
 

@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
-using Model;
+using Models;
 using ClientForServer;
 using SearchGames;
 
-namespace Controller
+namespace Controllers
 {
     public class JoinCommand : ICommand
     {
@@ -16,7 +16,6 @@ namespace Controller
 
         public void Execute(string[] args, IClient client)
         {
-
             string name = args[0];
             try
             {
@@ -43,10 +42,14 @@ namespace Controller
                         game.Start();
                     }
                 }
+                else
+                {
+                    client.SendResponse("Falied to join. You already a part of an existing game. Please close that game and try again.");
+                }
             }
             catch //(NullReferenceException, KeyNotFoundException)
             {
-                client.SendResponse("Falied to join. No such game or You already a part of an existing game.");
+                client.SendResponse("Falied to join. No such game.");
             }
         }
 

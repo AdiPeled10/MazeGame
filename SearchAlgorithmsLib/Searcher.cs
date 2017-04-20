@@ -38,14 +38,14 @@ namespace SearchAlgorithmsLib
             get { return openList.Count; }
         }
 
-        protected List<State<T>> BackTracePath(State<T> goalState)
+        protected LinkedList<State<T>> BackTracePath(State<T> goalState)
         {
             State<T> currentState = goalState;
-            List<State<T>> path = new List<State<T>>();
+            LinkedList<State<T>> path = new LinkedList<State<T>>();
             //Loop until we get to the initial state.
-            while (currentState != null)
+            while (!ReferenceEquals(currentState, null))
             {
-                path.Insert(0, currentState);
+                path.AddFirst(currentState);
                 currentState = currentState.GetCameFrom();
             }
             return path;
@@ -57,7 +57,15 @@ namespace SearchAlgorithmsLib
             return evaluatedNodes;
         }
 
-        public abstract Solution<T> Search(ISearchable<T> searchable);
+        // reuseable search
+        public Solution<T> Search(ISearchable<T> searchable)
+        {
+            openList.Clear();
+            evaluatedNodes = 0;
+            return RealSearch(searchable);
+        }
+
+        protected abstract Solution<T> RealSearch(ISearchable<T> searchable);
     }
 
     public abstract class PrioritySearcher<T> : 

@@ -1,7 +1,7 @@
 ﻿using System;
 using ClientForServer;
 
-namespace Controller
+namespace Controllers
 {
     public interface IRequestsQueue
     {

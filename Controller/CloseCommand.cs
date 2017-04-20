@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using Model;
+using Models;
 using ClientForServer;
 using SearchGames;
 
-namespace Controller
+namespace Controllers
 {
     class CloseCommand : ICommand
     {
@@ -21,16 +20,13 @@ namespace Controller
             Player player = model.GetPlayer(client);
             IEnumerable<Player> players = model.GetGameByName(args[0]).GetPlayers();
 
-            // prepare closing message
-            JObject playObj = new JObject();
-            string message = playObj.ToString();
-
             // notify the othe players the game is closed
             foreach (Player p in players)
             {
                 if (!player.Equals(p))
                 {
-                    p.NotifyAChangeInTheGame(message);
+                    // sending an empty JSON object
+                    p.NotifyAChangeInTheGame("{}");
                 }
             }
 

@@ -6,7 +6,7 @@ using SearchAlgorithmsLib;
 using SearchGames;
 using ClientForServer;
 
-namespace Model
+namespace Models
 {
     public delegate ISearchGame FromSerialized(string str);
 
@@ -16,7 +16,7 @@ namespace Model
      */
     public class Model : IModel // consider usesing template so different games will have different models. it will allow us to have 2 different games with the same name.
     {
-        private Dictionary<int, ISearcher<Position>> numToAlgorithm;
+        private Dictionary<Algorithm, ISearcher<Position>> numToAlgorithm;
         private SolutionCache<string> cache;
         private ISearchGameGenerator generator;
         private FromSerialized fromSerialized;
@@ -40,42 +40,35 @@ namespace Model
 
         public Model(ISearchGameGenerator generator, FromSerialized fromSerialized)
         {
-            numToAlgorithm = new Dictionary<int, ISearcher<Position>>();
+            numToAlgorithm = new Dictionary<Algorithm, ISearcher<Position>>();
             this.generator = generator;
             cache = new SolutionCache<string>();
             this.fromSerialized = fromSerialized;
             this.connector = new Connector();
 
             // initial numToAlgorithm
-            numToAlgorithm[0] = new BFSSearcher<Position>();
-            numToAlgorithm[1] = new DFSSearcher<Position>();
+            numToAlgorithm[Algorithm.BFS] = new BFSSearcher<Position>();
+            numToAlgorithm[Algorithm.DFS] = new DFSSearcher<Position>();
         }
 
         public ISearchGame GenerateNewGame(string name, int rows, int cols)
         {
+            //// TODO check this works
             ///*
-            // * we don't save the maze in the dictionary because it's a single player maze and
-            // * don't has to be known at the sever. So when we write the client we'll want to
-            // * to do a mapping between inner names and real names(like a Nat), it may not resolve
-            // * the issue of "knowing" 
+            // * we don't need to save the game in the dictionary because it's a single player game and
+            // * doesn't has to be known by the sever. So when we write the client we'll want/need to
+            // * make sure to do a mapping between inner names and their serialization and send only the
+            // * serialization when the server is needed (for a solution for example).
+            // * see "GetGame" for the only dependecy on/use of the serialization for single player.
             // */
-            //if (!nameToGame.ContainsKey(name) || nameToGame[name].NumOfPlayer == 0 || nameToGame[name].hasEnded())
-            //{
-            //    ISearchGame game = generator.Generate(name, rows, cols);
-            //    //Add the new maze to the dictionary.
-            //    nameToGame[name] = game;
-            //    return game;
-            //}
-            //return null; // risky, but seem the most appropriate.
+            //return generator.GenerateSearchGame(name, rows, cols);
 
-            /*
-             * we don't need to save the game in the dictionary because it's a single player game and
-             * doesn't has to be known by the sever. So when we write the client we'll want/need to
-             * make sure to do a mapping between inner names and their serialization and send only the
-             * serialization when the server is needed (for a solution for example).
-             * see "GetGame" for the only dependecy on/use of the serialization for single player.
-             */
-            return generator.GenerateSearchGame(name, rows, cols);
+            // TODO - also effected the code of GenerateMazeCommand.
+            // No need to know the name of the single player game, but while the
+            // client application is stupid will know it. Afterward we can replace it with the coe above
+            ISearchGame game = generator.GenerateSearchGame(name, rows, cols);
+            connector.AddGame(game);
+            return game;
         }
 
         public ISearchGame GetGameByName(string str)
@@ -102,7 +95,7 @@ namespace Model
             return game;
         }
 
-        public Solution<Position> ComputeSolution(string name, int algorithm)
+        public Solution<Position> ComputeSolution(string name, Algorithm algorithm)
         {
 
             ISearchGame game = GetGameByName(name);
@@ -134,23 +127,29 @@ namespace Model
              * he's the only player is the exitising game or, the exisiting game has ended.
              */
             bool toCreate = true;
+            Player p = connector.GetPlayer(creator);
+            ISearchGame g1 = connector.GetGame(p), g = null;
+            if (!ReferenceEquals(null, g1))
+            {
+                toCreate = g1.HasEnded() || (g1.NumOfPlayer == 1 && g1.GetPlayers().Contains(p));
+            }
             if (connector.ContainsGame(name))
              {
-                ISearchGame g = connector.GetGame(name);
+                g = connector.GetGame(name);
                 // g.NumOfPlayer > 0 always because the server know only multiplayer games
                 // replace the existing game if it has ended or the only player in it in the one who asks to replace it.
-                toCreate = g.HasEnded() || (g.NumOfPlayer == 1 && g.GetPlayers().Contains(connector.GetPlayer(creator)));
-                if (toCreate)
-                {
-                    connector.DeleteGame(g);
-                }
+                toCreate &= (g.HasEnded() || (g.NumOfPlayer == 1 && g.GetPlayers().Contains(p)));
             }
             if (toCreate)
             {
+                // delete exitsing games
+                connector.DeleteGame(g);
+                connector.DeleteGame(g1);
                 // Create a game with this name.
                 ISearchGame game = GenerateNewGame(name, rows, cols);
                 connector.AddGame(game);
                 connector.AddClientToGame(creator, game);
+                game.AddPlayer(connector.GetPlayer(creator));
                 return game;
             }
             return null;
@@ -158,8 +157,8 @@ namespace Model
 
         public List<string> GetJoinableGamesList()
         {
-            List<string> availableGames = new List<string>();
             IEnumerable<ISearchGame> values = connector.Games;
+            List<string> availableGames = new List<string>(values.Count());
             foreach (ISearchGame game in values)
             {
                 if (!game.CanAPlayerJoin())
@@ -222,7 +221,6 @@ namespace Model
             {
                 if (g.HasEnded())
                 {
-                    // this.close(entry.Key);
                     connector.DeleteGame(g);
                 }
             }

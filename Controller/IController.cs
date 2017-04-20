@@ -1,6 +1,6 @@
 ﻿using ClientForServer;
 
-namespace Controller
+namespace Controllers
 {
     public interface IController
     {

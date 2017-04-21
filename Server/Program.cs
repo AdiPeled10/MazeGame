@@ -4,6 +4,7 @@ using Views;
 using Models;
 using Controllers;
 using SearchGames;
+using System.Configuration;
 
 namespace Server
 {
@@ -17,12 +18,13 @@ namespace Server
             Model model = new Model(generator, MazeGame.FromJSON);
             Controller controller = new Controller(model, queue);
             View view = new View(controller);
-            Server server = new Server(8000, view);
+            Server server = new Server(int.Parse(ConfigurationManager.AppSettings["Port"]), view);
 
             // start getting clients
             server.Start();
 
             // close the server
+            Console.WriteLine("Press any button to close the server.");
             Console.ReadKey();
             server.Stop();
             //CancellationTokenSource tokenSource2 = new CancellationTokenSource();

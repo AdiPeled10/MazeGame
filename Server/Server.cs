@@ -75,16 +75,16 @@ namespace Server
         {
             // create a thread that will get clients requests and handle them
             Thread thread = new Thread(() => {
-                Thread.Sleep(100); // wait a little until a client will connect
+                //Thread.Sleep(100); // wait a little until a client will connect
                 while (true)
                 {
                     try
                     {
                         view.GetClientsRequests();
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
-                        Console.WriteLine(e.ToString());
+                        //Console.WriteLine(e.ToString());
                     }
                 }
             });

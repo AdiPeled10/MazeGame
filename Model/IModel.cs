@@ -32,7 +32,7 @@ namespace Models
 
         ISearchGame GetGameOf(Player player);
 
-        void Close(string name);
+        void Close(string name, IClient player);
 
         ISearchGame GetGameByName(string name);
 

@@ -107,17 +107,20 @@ namespace Models
 
         public void DeleteGame(ISearchGame game)
         {
-            DeleteGame(game.Name);
+            DeleteGame(game?.Name);
         }
 
         public void DeleteGame(string name)
         {
-            IEnumerable<Player> players = nameToGame[name].GetPlayers();
-            nameToGame.Remove(name);
-            foreach (Player myPlayer in players)
+            if (!ReferenceEquals(name, null))
             {
-                playerToGame[myPlayer] = null;
-                // clientToPlayer.Remove(myPlayer.Client);
+                IEnumerable<Player> players = nameToGame[name].GetPlayers();
+                nameToGame.Remove(name);
+                foreach (Player myPlayer in players)
+                {
+                    playerToGame[myPlayer] = null;
+                    // clientToPlayer.Remove(myPlayer.Client);
+                }
             }
         }
 

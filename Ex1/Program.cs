@@ -24,7 +24,7 @@ namespace Ex1
             ISearchable<Position> adapt = new MazeToSearchableAdapter(maze);
             BFSSearcher<Position> bfs = new BFSSearcher<Position>();
             DFSSearcher<Position> dfs = new DFSSearcher<Position>();
-            Console.WriteLine(maze);
+            //Console.WriteLine(maze);
             bfs.Search(adapt);
             Console.WriteLine("Best First Search evaluated {0} nodes.", bfs.GetNumberOfNodesEvaluated());
             dfs.Search(adapt);

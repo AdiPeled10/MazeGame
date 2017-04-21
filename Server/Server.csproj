@@ -32,12 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClientForServer">
-      <HintPath>..\ClientForServer\bin\Debug\ClientForServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Controller">
-      <HintPath>..\Controller\bin\Debug\Controller.dll</HintPath>
-    </Reference>
     <Reference Include="Ex1">
       <HintPath>..\Ex1\bin\Debug\Ex1.exe</HintPath>
     </Reference>
@@ -47,16 +41,11 @@
     <Reference Include="MazeLib">
       <HintPath>..\Ex1\MazeLib.dll</HintPath>
     </Reference>
-    <Reference Include="Model">
-      <HintPath>..\Model\bin\Debug\Model.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SearchGames">
-      <HintPath>..\SearchGames\bin\Debug\SearchGames.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -64,9 +53,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="View">
-      <HintPath>..\View\bin\Debug\View.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MyTcpClient.cs" />
@@ -80,6 +66,28 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.DependencyValidation.Analyzers.0.9.0\analyzers\dotnet\cs\Microsoft.DependencyValidation.Analyzers.resources.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClientForServer\ClientForServer.csproj">
+      <Project>{3cec5f59-782d-48aa-9f9f-4da7de803d2f}</Project>
+      <Name>ClientForServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Controller\Controllers.csproj">
+      <Project>{92c10ded-0a2f-4d47-9f43-8ebc26e5793f}</Project>
+      <Name>Controllers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Models.csproj">
+      <Project>{d79d04c6-1349-4648-8cba-380c5dc36706}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SearchGames\SearchGames.csproj">
+      <Project>{72db0c47-e558-4b95-ac35-7fa79031c26e}</Project>
+      <Name>SearchGames</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\View\Views.csproj">
+      <Project>{72ec3b1c-b7ce-4421-ac57-0d476324316a}</Project>
+      <Name>Views</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -30,12 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClientForServer">
-      <HintPath>..\ClientForServer\bin\Debug\ClientForServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Controller">
-      <HintPath>..\Controller\bin\Debug\Controller.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +43,16 @@
     <Compile Include="IView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClientForServer\ClientForServer.csproj">
+      <Project>{3cec5f59-782d-48aa-9f9f-4da7de803d2f}</Project>
+      <Name>ClientForServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Controller\Controllers.csproj">
+      <Project>{92c10ded-0a2f-4d47-9f43-8ebc26e5793f}</Project>
+      <Name>Controllers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

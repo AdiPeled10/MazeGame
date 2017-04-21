@@ -30,7 +30,8 @@ namespace Controllers
                     // check if we can start the game
                     if (game.CanStart())
                     {
-                        game.MakePlayersNotifyEachOtherAboutTheirMoves((move) => {
+                        game.MakePlayersNotifyEachOtherAboutTheirMoves((move) =>
+                        {
                             // create the notification message about the move
                             JObject playObj = new JObject
                             {
@@ -39,20 +40,26 @@ namespace Controllers
                             };
                             return playObj.ToString();
                         });
-                        game.Start();
+                        try
+                        {
+                            game.Start();
+                        }
+                        catch
+                        {
+                            client.SendResponse("Failed To join. Something is wrong with the game setting.");
+                        }
                     }
                 }
                 else
                 {
-                    client.SendResponse("Falied to join. You already a part of an existing game. Please close that game and try again.");
+                    client.SendResponse("Falied to join. You already a part of an existing game.\r\n Please close that game and try again.");
                 }
             }
-            catch //(NullReferenceException, KeyNotFoundException)
+            catch //(System.NullReferenceException)
             {
                 client.SendResponse("Falied to join. No such game.");
             }
         }
-
         //public void MakePlayersNotifyEachOtherAboutTheirMoves(IEnumerable<Player> players,
         //    FormatNotificationToListeners format)
         //{

@@ -72,6 +72,8 @@ namespace SearchGames
 
         void MakePlayersNotifyEachOtherAboutTheirMoves(FormatNotificationToListeners format);
 
+        void close(Player closingPlayer, string closingMessage = "{}");
+
         ////Tells us if the game already started.
         //bool Started();
 

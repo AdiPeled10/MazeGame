@@ -49,14 +49,14 @@ namespace Controllers
                 };
                 queue.Add(request, client);
             }
-            else // TODO this is just for the debugging
-            {
-                request = () =>
-                {
-                    client.SendResponse("");
-                };
-                queue.Add(request, client);
-            }
+            //else // this is just for the debugging
+            //{
+            //    request = () =>
+            //    {
+            //        client.SendResponse("");
+            //    };
+            //    queue.Add(request, client);
+            //}
         }
 
         // not in the dictionary to prevent clients from using it

@@ -2,9 +2,10 @@
 using System.Net.Sockets;
 using System.Net;
 using System.IO;
-
+using System.Configuration;
 using System.Threading;
 using System.Collections.Generic;
+
 
 namespace Client
 {
@@ -34,10 +35,9 @@ namespace Client
 
         static void Main(string[] args)
         {
-            Console.ReadKey(); // to stop it untill the server is ready.
-
             //connect to the server
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
+            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"),
+                int.Parse(ConfigurationManager.AppSettings["ServerPort"]));
             TcpClient client = new TcpClient();
             client.Connect(ep);
             Console.WriteLine("You are connected");

@@ -15,10 +15,15 @@ namespace Views
         protected IController con;
         protected event ClientListener Clients;
 
+        private class PointerToClientListener
+        {
+            public ClientListener pointer;
+        }
+
         public View(IController con)
         {
             this.con = con;
-            this.Clients = () => { }; // To avoid exceptions while it's empty
+            //this.Clients = () => { }; // To avoid exceptions while it's empty in debug
         }
 
         // perhapse we can somehow enforce the do this because its not natural that the controller will pass us a client
@@ -44,8 +49,8 @@ namespace Views
 
         protected ClientListener GenerateClientListener(IClient c) // IClient might be using TCP or UDP
         {
-            int placeAt = this.Clients.GetInvocationList().Count();
-            return delegate()
+            PointerToClientListener thisClient = new PointerToClientListener();
+            ClientListener clientListener = delegate()
             {
                 try
                 {
@@ -65,9 +70,11 @@ namespace Views
                     {
                         // the client is new and have no resources
                     }
-                    this.Clients -= (ClientListener)Clients.GetInvocationList()[placeAt];//this.GenerateClientListener(c);  //TODO hope really hard this will work.
+                    this.Clients -= thisClient.pointer;  //TODO hope really hard this will work.
                 }
             };
+            thisClient.pointer = clientListener;
+            return clientListener;
         }
     }
 }

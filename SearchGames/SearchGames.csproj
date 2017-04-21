@@ -30,17 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClientForServer">
-      <HintPath>..\ClientForServer\bin\Debug\ClientForServer.dll</HintPath>
-    </Reference>
     <Reference Include="MazeGeneratorLib">
       <HintPath>..\MazeGeneratorLib.dll</HintPath>
     </Reference>
     <Reference Include="MazeLib">
       <HintPath>..\MazeLib.dll</HintPath>
-    </Reference>
-    <Reference Include="SearchAlgorithmsLib">
-      <HintPath>..\SearchAlgorithmsLib\bin\Debug\SearchAlgorithmsLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,6 +53,16 @@
     <Compile Include="MazeToSearchableAdapter.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClientForServer\ClientForServer.csproj">
+      <Project>{3cec5f59-782d-48aa-9f9f-4da7de803d2f}</Project>
+      <Name>ClientForServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SearchAlgorithmsLib\SearchAlgorithmsLib.csproj">
+      <Project>{d6991a69-aff4-4e8c-ab11-bb9f0e5e171f}</Project>
+      <Name>SearchAlgorithmsLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

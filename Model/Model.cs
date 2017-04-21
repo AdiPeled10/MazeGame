@@ -182,8 +182,7 @@ namespace Models
             if (ReferenceEquals(null, connector.GetGame(p)) && game.CanAPlayerJoin())
             {
                 connector.AddClientToGame(p, name);
-                game.AddPlayer(p);
-                return true;
+                return game.AddPlayer(p);
             }
             return false;
         }
@@ -226,8 +225,9 @@ namespace Models
             }
         }
 
-        public void Close(string name)
+        public void Close(string name, IClient player)
         {
+            GetGameByName(name)?.close(connector.GetPlayer(player));
             connector.DeleteGame(name);
         }
 

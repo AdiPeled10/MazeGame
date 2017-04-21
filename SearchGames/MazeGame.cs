@@ -138,6 +138,19 @@ namespace SearchGames
             return hasEnded;
         }
 
+        public void close(Player closingPlayer, string closingMessage = "{}")
+        {
+            // notify the othe players the game is closed
+            foreach (Player p in players)
+            {
+                if (!closingPlayer.Equals(p))
+                {
+                    // sending an empty JSON object
+                    p.NotifyAChangeInTheGame(closingMessage);
+                }
+            }
+        }
+
         //public void DecalreWinner(string winnerMessage, string loserMessage)
         //{
         //    /*

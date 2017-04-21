@@ -17,7 +17,7 @@ namespace SearchAlgorithmsLib
     /// </summary>
     /// <typeparam name="TPriority">Type of priorities</typeparam>
     /// <typeparam name="TValue">Type of values</typeparam>
-    public class MyPriorityQueue<TPriority, TValue> : 
+    public class MyPriorityQueue<TPriority, TValue> :
         ICollection<KeyValuePair<TPriority, TValue>>, ICollectionDataStructure<KeyValuePair<TPriority, TValue>>
     {
         private List<KeyValuePair<TPriority, TValue>> _baseHeap;

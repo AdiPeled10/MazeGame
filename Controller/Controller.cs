@@ -8,13 +8,38 @@ using SearchGames;
 
 namespace Controllers
 {
+    /// <summary>
+    /// This is the controller class which we will use in the implementation of the MVC 
+    /// architectural pattern, it will implement all the methods in the IController which is
+    /// the interface for all of the controllers in our application.
+    /// </summary>
     public class Controller : IController
     {
-        //private IView view;
+        /// <summary>
+        /// The model which we will use.
+        /// </summary>
         private IModel model;
+
+        /// <summary>
+        /// A queue of request from clients.
+        /// </summary>
         private IRequestsQueue queue;
+
+        /// <summary>
+        /// A dictionary that matches between a given string to the correct command.
+        /// </summary>
         private Dictionary<string, ICommand> commands;
 
+        /// <summary>
+        /// Constructor of the controller, it gets the model of the controller and the queue 
+        /// of requests.
+        /// </summary>
+        /// <param name="model">
+        /// This is the model which we will use.
+        /// </param>
+        /// <param name="executionQueue">
+        /// The queue of client's requests.
+        /// </param>
         public Controller(IModel model, IRequestsQueue executionQueue)//, IView view)
         {
             this.model = model;
@@ -33,6 +58,15 @@ namespace Controllers
             };
         }
 
+        /// <summary>
+        /// Execute the given command in the command line from the given client.
+        /// </summary>
+        /// <param name="commandLine">
+        /// The command that was given as a string.
+        /// </param>
+        /// <param name="client">
+        /// The client that sent this command.
+        /// </param>
         public void ExecuteCommand(string commandLine, IClient client)
         {
             Action request;
@@ -59,7 +93,13 @@ namespace Controllers
             //}
         }
 
-        // not in the dictionary to prevent clients from using it
+        /// <summary>
+        /// Disconnect the given client from the server.
+        /// Not in the dictionary to prevent clients from using it
+        /// </summary>
+        /// <param name="client">
+        /// The client that will be disconnected.
+        /// </param>
         public void DisconnectClient(IClient client)
         {
             // get the game

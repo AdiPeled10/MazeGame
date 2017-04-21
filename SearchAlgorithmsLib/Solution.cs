@@ -5,18 +5,46 @@ using MazeLib;
 
 namespace SearchAlgorithmsLib
 {
-    // Immutable
+    /// <summary>
+    /// This class represents the solution to the Searchable which is the path from the initial
+    /// state of the searchable to the goal state. We expect the search to be Enumerable.
+    /// </summary>
+    /// <typeparam name="T">
+    /// This template represents the type of the states of the Solution.
+    /// </typeparam>
     public class Solution<T> : IEnumerable<T>, IEnumerable
     {
+        /// <summary>
+        /// This is the list of the states which represents the path from the initial state to
+        /// the goal path.
+        /// </summary>
         private List<T> theRoadToVictory;
+
+        /// <summary>
+        /// The number of nodes evaluated during the search.
+        /// </summary>
         private int numberOfNodesEvaluated;
 
+        /// <summary>
+        /// Default Constructor, create an empty list and set the number of
+        /// nodes evaluated to be zero.
+        /// </summary>
         public Solution()
         {
             theRoadToVictory = new List<T>();
             numberOfNodesEvaluated = 0;
         }
 
+        /// <summary>
+        /// Constructor for the Solution class, we will get the list of states of the path from
+        /// the initial state to the goal state and the number of nodes evaluated.
+        /// </summary>
+        /// <param name="thePathToVictory">
+        /// A list of states from the initial state to the goal state.
+        /// </param>
+        /// <param name="evaluated">
+        /// The number of nodes evaluated.
+        /// </param>
         public Solution(ICollection<State<T>> thePathToVictory, int evaluated)
         {
             this.theRoadToVictory = new List<T>(thePathToVictory.Count);
@@ -27,134 +55,55 @@ namespace SearchAlgorithmsLib
             this.numberOfNodesEvaluated = evaluated;
         }
 
+        /// <summary>
+        /// Copy constructor for the solution class.
+        /// </summary>
+        /// <param name="sol">
+        /// The solution we are going to replicate.
+        /// </param>
         public Solution(Solution<T> sol)
         {
             theRoadToVictory = new List<T>(sol.theRoadToVictory);
             numberOfNodesEvaluated = sol.numberOfNodesEvaluated;
         }
 
+        /// <summary>
+        /// Property for the number of nodes evaluated until finding the solution.
+        /// </summary>
         public int NodesEvaluated
         {
             get { return numberOfNodesEvaluated; }
         }
 
-        //public void AddState(State<T> newLastState)
-        //{
-        //    theRoadToVictory.Add(newLastState);
-        //}
-
-        ///**
-        // * Removes the returned state from the solution. Which means that if
-        // * you want to go through the solution but skip the first state, you can
-        // * call this right before the "foreach" loop.
-        // */
-        //public State<T> GetNextState()
-        //{
-        //    State<T> st = theRoadToVictory[0];
-        //    theRoadToVictory.Remove(st);
-        //    return st;
-        //}
-
-        ///**
-        // * Removes the returned state from the solution. Which means that if
-        // * you want to go through the solution but skip the first state, you can
-        // * call this right before the "foreach" loop.
-        // */
-        //public T GetNextValue()
-        //{
-        //    State<T> st = theRoadToVictory[0];
-        //    theRoadToVictory.Remove(st);
-        //    return st.GetState();
-        //}
-        
-        //public T this[int index]
-        //{
-        //    get { return theRoadToVictory[index]; }
-        //}
-
+        /// <summary>
+        /// Property to get the length of the Solution.
+        /// </summary>
         public int Length
         {
             get { return theRoadToVictory.Count; }
         }
 
-        //
-        // Summary:
-        //     Returns an enumerator that iterates through the collection.
-        //
-        // Returns:
-        //     An enumerator that can be used to iterate through the collection.
+        /// <summary>
+        ///  Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        ///  An enumerator that can be used to iterate through the collection.
+        /// </returns>
         public IEnumerator<T> GetEnumerator()
         {
             return theRoadToVictory.GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns an enumerator for the Solution itself.
+        /// </summary>
+        /// <returns>
+        /// An enumerator for this class.
+        /// </returns>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }
     }
-  
+
 }
-
-/*
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SearchAlgorithmsLib
-{
-    public class Solution<T> : IEnumerable<T>
-    {
-        private List<T> theRoadToVictory;
-
-        public Solution()
-        {
-            theRoadToVictory = new List<T>();
-        }
-
-        public Solution(List<T> theRoadToVictory)
-        {
-            this.theRoadToVictory = new List<T>(theRoadToVictory);
-        }
-
-        public Solution(List<State<T>> theRoadToVictory)
-        {
-            this.theRoadToVictory = new List<T>(theRoadToVictory.Count);
-            foreach (State<T> s in theRoadToVictory)
-            {
-                this.theRoadToVictory.Add(s.GetState());
-            }
-            this.theRoadToVictory.Reverse();
-        }
-
-        public void AddState(State<T> newLastState)
-        {
-            theRoadToVictory.Add(newLastState.GetState());
-        }
-
-        public T GetNextStep()
-        {
-            State<T> st = theRoadToVictory.FirstOrDefault();
-            theRoadToVictory.Remove(st);
-            return st.GetState();
-        }
-
-        //
-        // Summary:
-        //     Returns an enumerator that iterates through the collection.
-        //
-        // Returns:
-        //     An enumerator that can be used to iterate through the collection.
-        IEnumerator<T> GetEnumerator()
-        {
-            List<T> l = new List<T>(theRoadToVictory.Count);
-            foreach (State<T> s in theRoadToVictory)
-            {
-                l.
-            }
-        }
-    }
-}
-*/

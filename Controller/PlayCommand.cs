@@ -4,15 +4,40 @@ using ClientForServer;
 
 namespace Controllers
 {
+    /// <summary>
+    /// Implementation of the Play command which implements the ICommand interface.
+    /// </summary>
     public class PlayCommand : ICommand
     {
+        /// <summary>
+        /// The model which we will use.
+        /// </summary>
         private IModel model;
 
+        /// <summary>
+        /// Constructor of the Play command with the model as it's input.
+        /// </summary>
+        /// <param name="model">
+        /// The model which we are going to use it's functionality.
+        /// </param>
         public PlayCommand(IModel model)
         {
             this.model = model;
         }
 
+        /// <summary>
+        /// Execution of the play command based on the given arguments
+        /// and the client which sent this request.
+        /// </summary>
+        /// <exception cref="Exception">
+        /// In the case in which there is no game to start.
+        /// </exception>
+        /// <param name="args">
+        /// The arguments of the command.
+        /// </param>
+        /// <param name="client">
+        /// The client that sent this command.
+        /// </param>
         public void Execute(string[] args, IClient client)
         {
             string direction = args[0];

@@ -5,17 +5,60 @@ using MazeLib;
 
 namespace SearchGames
 {
+    /// <summary>
+    /// This is the MazeGame class, it implements the ISearchGame interface and implements it's
+    /// methods to match the MazeGame that we want to create.
+    /// </summary>
     public class MazeGame : ISearchGame
     {
+        /// <summary>
+        /// The maze which the game is played on.
+        /// </summary>
         private Maze maze;
+
+        /// <summary>
+        /// The list of players in this game.
+        /// </summary>
         private List<Player> players;
+
+        /// <summary>
+        /// The winner of this game.
+        /// </summary>
         private Player winner;
-        public event Action TellMeWhenTheGameStarts; // TODO check what happens when it's empty but called 
-        private StartWhenTrue startWhenTrue; // Only a suggestion. a player can move before it's true.
-        //public const int MaxPlayersAllowed = 2; // TODO only not const until the client will handle single player
+
+        /// <summary>
+        /// An event that's activated to tell when the game starts.
+        /// TODO check what happens when it's empty but called
+        /// </summary>
+        public event Action TellMeWhenTheGameStarts;
+
+        /// <summary>
+        /// A delegate that tells us to start the MazeGame when some condition is true.
+        /// Only a suggestion. a player can move before it's true.
+        /// </summary>
+        private StartWhenTrue startWhenTrue;
+
+        /// <summary>
+        /// The max number of players allowed in this game.
+        /// TODO only not const until the client will handle single player.
+        /// </summary>
         public int MaxPlayersAllowed = 2;
+
+        /// <summary>
+        /// A member that tells us if this game has ended.
+        /// </summary>
         private bool hasEnded;
 
+        /// <summary>
+        /// Constructor for the MazeGame which gets the name and the Maze which
+        /// the MazeGame operates on.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the maze.
+        /// </param>
+        /// <param name="maze">
+        /// The maze that the game will be played on.
+        /// </param>
         public MazeGame(string name, Maze maze)
         {
             this.maze = maze;
@@ -25,28 +68,57 @@ namespace SearchGames
             this.startWhenTrue = (g) => true;
         }
 
+        /// <summary>
+        /// Set the delegate that tells the game to start when some condition is true.
+        /// </summary>
+        /// <param name="func">
+        /// The delegate that we will save as a member.
+        /// </param>
         public void SetStartWhenTrue(StartWhenTrue func)
         {
             startWhenTrue = func;
         }
 
-        //Get name of this game.
+        /// <summary>
+        /// Get name of this game.
+        /// </summary>
+        /// <return>
+        /// The name of the game.
+        /// </return>
         public string Name
         {
             get { return maze.Name; }
         }
 
+        /// <summary>
+        /// Get the number of players in this game.
+        /// </summary>
+        /// <return>
+        /// The number of players in the game.
+        /// </return>
         public int NumOfPlayer
         {
             get { return players.Count; }
         }
 
-        //returns true if the game rules allow a new player to join at the moment of calling it, false otherwise.
+        /// <summary>
+        /// Tells us if a player can join this game.
+        /// </summary>
+        /// <returns>
+        /// Returns true if the game rules allow a new player to join at
+        /// the moment of calling it, false otherwise.
+        /// </returns>
         public bool CanAPlayerJoin()
         {
             return players.Count < MaxPlayersAllowed && !hasEnded;
         }
 
+        /// <summary>
+        /// Get the players in this game as a ReadOnlyList.
+        /// </summary>
+        /// <returns>
+        /// A ReadOnlyList of the players in this game.
+        /// </returns>
         public IReadOnlyList<Player> GetPlayers()
         {
             return players;
@@ -56,6 +128,10 @@ namespace SearchGames
          * Removes a player from the game. Due to the game logic of our choice, once it was called
          * the game ends and the remains player wins.
          */
+        ///<summary>
+        ///Removes a player from the game. Due to the game logic of our choice, once it was called
+        ///the game ends and the remains player wins.
+        /// </summary>
         public void RemovePlayer(Player player)
         {
             // TODO if the max number of player will become higher then 2, 
@@ -68,6 +144,15 @@ namespace SearchGames
             hasEnded = true;
         }
 
+        /// <summary>
+        /// Add a player to this MazeGame.
+        /// </summary>
+        /// <param name="player">
+        /// The player that we are going to add to this game.
+        /// </param>
+        /// <returns>
+        /// True if this player is added, false otherwise.
+        /// </returns>
         public bool AddPlayer(Player player)
         {
             if (players.Count < MaxPlayersAllowed && !players.Contains(player))
@@ -79,14 +164,29 @@ namespace SearchGames
             return false;
         }
 
+        /// <summary>
+        /// Return this maze game as a Searchable by using our adapter.
+        /// </summary>
+        /// <returns>
+        /// Returns this MazeGame in the form of a Searchable.
+        /// </returns>
         public ISearchable<Position> AsSearchable()
         {
             return new MazeToSearchableAdapter(maze);
         }
 
+        /// <summary>
+        /// Move a player on the game maze.
+        /// </summary>
+        /// <param name="player">
+        /// The player that is moved.
+        /// </param>
+        /// <param name="move">
+        /// The direction of the movement.
+        /// </param>
         public void MovePlayer(Player player, Direction move)
         {
-            // if the game hasn't ended. This prevents player from keep playing after someone has won.
+            // If the game hasn't ended. This prevents player from keep playing after someone has won.
             if (!HasEnded())
             {
                 //Find the matching player which holds his location and if a player was found, move him.
@@ -94,28 +194,56 @@ namespace SearchGames
             }
         }
 
+        /// <summary>
+        /// Checks for a Position if a move to this position is legal.
+        /// </summary>
+        /// <param name="loc">
+        /// The Position that we will check if it's legal.
+        /// </param>
+        /// <exception cref="Exception">
+        /// If the position is illegal we will know if an excption
+        /// is thrown.
+        /// </exception>
+        /// <returns>
+        /// True if it's legal, false otherwise.
+        /// </returns>
         private bool IsLegalMove(Position loc)
         {
             try
             {
                 return maze[loc.Row, loc.Col].Equals(CellType.Free);
             }
-            catch // if it causes an exception, it's probably not legal.
+            catch // If it causes an exception, it's probably not legal.
             {
                 return false;
             }
         }
 
+        /// <summary>
+        /// Tells us if a game can start.
+        /// </summary>
+        /// <returns>
+        /// True if it can start,false otherwise.
+        /// </returns>
         public bool CanStart()
         {
             return startWhenTrue(this);
         }
 
+        /// <summary>
+        /// Start this game.
+        /// </summary>
         public void Start()
         {
             TellMeWhenTheGameStarts();
         }
 
+        /// <summary>
+        /// Tells us if this game has ended.
+        /// </summary>
+        /// <returns>
+        /// True if the game ended, false otherwise.
+        /// </returns>
         public bool HasEnded()
         {
             if (!hasEnded)
@@ -125,7 +253,7 @@ namespace SearchGames
                 {
                     if (!p.Location.Equals(goal))
                     {
-                        // do nothing
+                        // Do nothing
                     }
                     else
                     {
@@ -138,19 +266,29 @@ namespace SearchGames
             return hasEnded;
         }
 
-        public void close(Player closingPlayer, string closingMessage = "{}")
+        /// <summary>
+        /// Close this game.
+        /// </summary>
+        /// <param name="closingPlayer">
+        /// The player which sent the Close command.
+        /// </param>
+        /// <param name="closingMessage">
+        /// The message of the request to close.
+        /// </param>
+        public void Close(Player closingPlayer, string closingMessage = "{}")
         {
-            // notify the othe players the game is closed
+            // Notify the othe players the game is closed
             foreach (Player p in players)
             {
                 if (!closingPlayer.Equals(p))
                 {
-                    // sending an empty JSON object
+                    // Sending an empty JSON object
                     p.NotifyAChangeInTheGame(closingMessage);
                 }
             }
         }
 
+        //Didn't delete it cause we may use it in the future.
         //public void DecalreWinner(string winnerMessage, string loserMessage)
         //{
         //    /*
@@ -170,11 +308,19 @@ namespace SearchGames
         //    }
         //}
 
+        /// <summary>
+        /// Get the SearchArea of this MazeGame by using the toString
+        /// method of the Maze class.
+        /// </summary>
+        /// <returns>
+        /// Representation of the maze as a string.
+        /// </returns>
         public string GetSearchArea()
         {
             return maze.ToString();
         }
 
+        //May use this later,so we didn't delete this.
         //public string Serialize()
         //{
         //    return Name + '\0' + maze.ToJSON();
@@ -188,29 +334,49 @@ namespace SearchGames
         //    return new MazeGame(name, maze);
         //}
 
+        /// <summary>
+        /// Convert this MazeGame to JSON format.
+        /// </summary>
+        /// <returns>
+        /// Return a string of the JSON format of this class.
+        /// </returns>
         public string ToJSON()
         {
             return maze.ToJSON();
         }
 
+        /// <summary>
+        /// Static method to convert back to Maze game from the JSON format.
+        /// </summary>
+        /// <param name="str">
+        /// The name of the MazeGame.
+        /// </param>
+        /// <returns>
+        /// The MazeGame that we have created.
+        /// </returns>
         public static MazeGame FromJSON(string str)
         {
-            //JObject mazeGameObj = JObject.Parse(str);
-            Maze maze = Maze.FromJSON(str);// (string)mazeGameObj["Maze"]);
-            return new MazeGame(maze.Name, maze);// (string)mazeGameObj["Name"], maze);
+            Maze maze = Maze.FromJSON(str);
+            return new MazeGame(maze.Name, maze);
         }
 
+        /// <summary>
+        /// Notify the players of the moves that the other players have made.
+        /// </summary>
+        /// <param name="format">
+        /// The format that we will use to notify the players.
+        /// </param>
         public void MakePlayersNotifyEachOtherAboutTheirMoves(FormatNotificationToListeners format)
         {
             MoveListener notifyFunc;
-            // delete old listeners and set format
+            // Delete old listeners and set format
             foreach (Player player in players)
             {
                 player.ClearListeners();
                 player.SetFormat(format);
             }
 
-            // set each player new listeners
+            // Set each player new listeners
             foreach (Player player in players)
             {
                 notifyFunc = (move) =>
@@ -221,7 +387,7 @@ namespace SearchGames
                     }
                     catch
                     {
-                        // do nothing, to avoid efecting the other players
+                        // Do nothing, to avoid efecting the other players
                     }
                 };
                 foreach (Player p in players)
@@ -233,27 +399,5 @@ namespace SearchGames
                 }
             }
         }
-
-        //    public bool IsPlaying(Player player)
-        //    {
-        //       if (FindPlayer(player) == null)
-        //        {
-        //            return false;
-        //        }
-        //        return true;
-        //    }
-
-        //    private Player FindPlayer(Player player)
-        //    {
-        //        foreach (Player myPlayer in players)
-        //        {
-        //            if (myPlayer.Equals(player.Client))
-        //            {
-        //                //This player is playing in this game.
-        //                return myPlayer;
-        //            }
-        //        }
-        //        return null;
-        //    }
     }
 }

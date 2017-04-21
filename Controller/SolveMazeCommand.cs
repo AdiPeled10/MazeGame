@@ -6,15 +6,37 @@ using ClientForServer;
 
 namespace Controllers
 {
+    /// <summary>
+    /// Implementation of the Solve command which implements the ICommand interface.
+    /// </summary>
     class SolveMazeCommand : ICommand
     {
+        /// <summary>
+        /// The model which we will use.
+        /// </summary>
         private IModel model;
 
+        /// <summary>
+        /// Construcotor of the solve command with the model as it's input.
+        /// </summary>
+        /// <param name="model">
+        /// The model that we are going to use.
+        /// </param>
         public SolveMazeCommand(IModel model)
         {
             this.model = model;
         }
 
+        /// <summary>
+        /// Execution of the solve command based on the arguments
+        /// and the client that sent the command.
+        /// </summary>
+        /// <param name="args">
+        /// The arguments of the command.
+        /// </param>
+        /// <param name="client">
+        /// The client that sent this command.
+        /// </param>
         public void Execute(string[] args, IClient client)
         {
             string name = args[0];

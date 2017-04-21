@@ -5,15 +5,38 @@ using SearchGames;
 
 namespace Controllers
 {
+    /// <summary>
+    /// Implementation of the Join command which implements the ICommand interface.
+    /// </summary>
     public class JoinCommand : ICommand
     {
+        /// <summary>
+        /// The model which we will use.
+        /// </summary>
         private IModel model;
 
+        /// <summary>
+        /// Constructor of the join command which will get the model that we 
+        /// will use in the command's execution.
+        /// </summary>
+        /// <param name="model">
+        /// The model that we are going to use it's functionality.
+        /// </param>
         public JoinCommand(IModel model)
         {
             this.model = model;
         }
 
+        /// <summary>
+        /// Execution of the join command based on the given arguments and the client
+        /// that sent this command.
+        /// </summary>
+        /// <param name="args">
+        /// The arguments of the command.
+        /// </param>
+        /// <param name="client">
+        /// The client that sent this command.
+        /// </param>
         public void Execute(string[] args, IClient client)
         {
             string name = args[0];

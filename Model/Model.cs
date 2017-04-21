@@ -8,23 +8,68 @@ using ClientForServer;
 
 namespace Models
 {
+    /// <summary>
+    /// Delegate that helps us serialize different names.
+    /// </summary>
+    /// <param name="str">
+    /// The string that we will serialize.
+    /// </param>
+    /// <returns>
+    /// Get the game from the string.
+    /// </returns>
     public delegate ISearchGame FromSerialized(string str);
 
     /*
      * security breach: if a muliplayer game has a name of a single player game it will hide
      * the existance of the single player game forever.
      */
-    public class Model : IModel // consider usesing template so different games will have different models. it will allow us to have 2 different games with the same name.
+    /// <summary>
+    /// This is the model that we will use to implement the MVC architectural pattern, it will implement all
+    /// the methods that we have in the IModel interface to create the functionality,algorithms and handle all
+    /// the data of the application.
+    /// Security breach: if a muliplayer game has a name of a single player game it will hide 
+    /// the existance of the single player game forever.
+     /// </summary>
+    public class Model : IModel 
     {
+        /// <summary>
+        /// Dictionary that matches between an algorithm to it's Searcher.
+        /// </summary>
         private Dictionary<Algorithm, ISearcher<Position>> numToAlgorithm;
+
+        /// <summary>
+        /// A cache of solutions that we will use to save solutions that were already computed.
+        /// </summary>
         private SolutionCache<string> cache;
+
+        /// <summary>
+        /// A generator the SearchGame.
+        /// </summary>
         private ISearchGameGenerator generator;
+
+        /// <summary>
+        /// The delegate that we defined above of functions that get a string and
+        /// returns a SearchGame.
+        /// </summary>
         private FromSerialized fromSerialized;
+
+        /// <summary>
+        /// A connector that will help us handle all the collections between Players,IClients
+        /// and SearchGames.
+        /// </summary>
         Connector connector;
 
-        // a model that doesn't support jsons
+   
+        /// <summary>
+        /// Constructor of the Model class that gets a SearchGame generator and 
+        /// sets the FromSerialized by default.
+        /// </summary>
+        /// <param name="generator">
+        /// The SearchGameGenerator that we will use to create SearchGames.
+        /// </param>
         public Model(ISearchGameGenerator generator) : this(generator, str => null)
         {
+            //Maybe use it later,saved here for now.
             //numToAlgorithm = new Dictionary<int, ISearcher<Position>>();
             //nameToGame = new Dictionary<string, ISearchGame>(); 
             ////Save the generator.
@@ -38,6 +83,16 @@ namespace Models
             //numToAlgorithm[1] = new DFSSearcher<Position>();
         }
 
+        /// <summary>
+        /// Constructor for the model class which gets the generator for the SearchGames and the 
+        /// delegate that we will use to get SearchGames from serialized strings.
+        /// </summary>
+        /// <param name="generator">
+        /// The generator that will help us create SearchGames.
+        /// </param>
+        /// <param name="fromSerialized">
+        /// A function that will return a SearchGame from a Serialized string.
+        /// </param>
         public Model(ISearchGameGenerator generator, FromSerialized fromSerialized)
         {
             numToAlgorithm = new Dictionary<Algorithm, ISearcher<Position>>();
@@ -46,11 +101,26 @@ namespace Models
             this.fromSerialized = fromSerialized;
             this.connector = new Connector();
 
-            // initial numToAlgorithm
+            // Initial numToAlgorithm
             numToAlgorithm[Algorithm.BFS] = new BFSSearcher<Position>();
             numToAlgorithm[Algorithm.DFS] = new DFSSearcher<Position>();
         }
 
+        /// <summary>
+        /// Generate a new game, based on the generate command.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the game that is going to be generated.
+        /// </param>
+        /// <param name="rows">
+        /// The number of rows.
+        /// </param>
+        /// <param name="cols">
+        /// The number of columns.
+        /// </param>
+        /// <returns>
+        /// The SearchGame that will be generated.
+        /// </returns>
         public ISearchGame GenerateNewGame(string name, int rows, int cols)
         {
             //// TODO check this works
@@ -71,6 +141,18 @@ namespace Models
             return game;
         }
 
+        /// <summary>
+        /// Get a specific game by it's name.
+        /// </summary>
+        /// <exception cref="KeyNotFoundException">
+        /// In case there isn't a game with this name there is no key of it's name in the dictionary.
+        /// </exception>
+        /// <param name="str">
+        /// The game's name.
+        /// </param>
+        /// <returns>
+        /// The SearchGame which it's name is the input string.
+        /// </returns>
         public ISearchGame GetGameByName(string str)
         {
             ISearchGame game;
@@ -95,6 +177,19 @@ namespace Models
             return game;
         }
 
+        /// <summary>
+        /// Compute the solution of the SearchGame with the given name by using
+        /// the algorithm in the input.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the SearchGame that will be solved.
+        /// </param>
+        /// <param name="algorithm">
+        /// The algorithm that we will use.
+        /// </param>
+        /// <returns>
+        /// The solution that was computed.
+        /// </returns>
         public Solution<Position> ComputeSolution(string name, Algorithm algorithm)
         {
 
@@ -116,6 +211,24 @@ namespace Models
             return new Solution<Position>();
         }
 
+        /// <summary>
+        /// Start the game with the given name,number of rows,number of columns and creator.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the game.
+        /// </param>
+        /// <param name="rows">
+        /// Number of rows.
+        /// </param>
+        /// <param name="cols">
+        /// Number of columns.
+        /// </param>
+        /// <param name="creator">
+        /// The creator of this game.
+        /// </param>
+        /// <returns>
+        /// The SearchGame that was started.
+        /// </returns>
         public ISearchGame StartGame(string name, int rows, int cols, IClient creator)
         {
             /*
@@ -155,6 +268,12 @@ namespace Models
             return null;
         }
 
+        /// <summary>
+        /// Get the list of all the games that clients can join.
+        /// </summary>
+        /// <returns>
+        /// The list of the names of the games that we can join.
+        /// </returns>
         public List<string> GetJoinableGamesList()
         {
             IEnumerable<ISearchGame> values = connector.Games;
@@ -174,6 +293,18 @@ namespace Models
             return availableGames;
         }
 
+        /// <summary>
+        /// Let the given player join the game with the given name.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the game that the player wishes to join.
+        /// </param>
+        /// <param name="player">
+        /// The player that sent the Join command.
+        /// </param>
+        /// <returns>
+        /// True if he joined the game, false otherwise.
+        /// </returns>
         public bool Join(string name, IClient player)
         {
             Player p = connector.GetPlayer(player);
@@ -187,8 +318,17 @@ namespace Models
             return false;
         }
 
-        // set "name" to the game name and returns the list of players
-        // Moves the client and returns the game where the player was moved
+
+        /// <summary>
+        /// Set "name" to the game name and returns the list of players
+        /// Moves the client and returns the game where the player was moved
+        /// </summary>
+        /// <param name="move">
+        /// The direction of movement.
+        /// </param>
+        /// <param name="player">
+        /// The player that sent the Play command.
+        /// </param>
         public void Play(Direction move, IClient player)
         {
             Player p = connector.GetPlayer(player);
@@ -196,23 +336,52 @@ namespace Models
             game.MovePlayer(p, move);
         }
 
+        /// <summary>
+        /// Get the player of the given IClient.
+        /// </summary>
+        /// <param name="player">
+        /// The IClient that we are looking for his player.
+        /// </param>
+        /// <returns>
+        /// Returns the player of this IClient by using the connector.
+        /// </returns>
         public Player GetPlayer(IClient player)
         {
             return connector.GetPlayer(player);
         }
 
+        /// <summary>
+        /// Get the game of the given IClient by using the connector.
+        /// </summary>
+        /// <param name="player">
+        /// The player that we are looking for his game.
+        /// </param>
+        /// <returns>
+        /// The player's game.
+        /// </returns>
         public ISearchGame GetGameOf(IClient player)
         {
             return connector.GetGame(player);
         }
 
+        /// <summary>
+        /// Get the game of the given player by using the connector.
+        /// </summary>
+        /// <param name="player">
+        /// The player that we are looking for his game.
+        /// </param>
+        /// <returns>
+        /// This player's game.
+        /// </returns>
         public ISearchGame GetGameOf(Player player)
         {
             return connector.GetGame(player);
         }
 
-        // remove unnecerssay games from the dictionary (games that have ended,
-        // games that weren't active for very long time)
+        /// <summary>
+        ///Remove unnecerssay games from the dictionary (games that have ended,
+        // games that weren't active for very long time).
+        /// </summary>
         public void Cleanup()
         {
             IEnumerable<ISearchGame> games = connector.Games;
@@ -224,13 +393,27 @@ namespace Models
                 }
             }
         }
-
+        /// <summary>
+        /// Close the game with the given name.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the game that will be closed.
+        /// </param>
+        /// <param name="player">
+        /// The client that sent the Close command.
+        /// </param>
         public void Close(string name, IClient player)
         {
-            GetGameByName(name)?.close(connector.GetPlayer(player));
+            GetGameByName(name)?.Close(connector.GetPlayer(player));
             connector.DeleteGame(name);
         }
 
+        /// <summary>
+        /// Remove a client from all of the data in the connector.
+        /// </summary>
+        /// <param name="client">
+        /// The client that we wish to remove.
+        /// </param>
         public void RemoveClient(IClient client)
         {
             Player p = connector.GetPlayer(client);

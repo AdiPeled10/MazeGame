@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 namespace Controllers
 {
+    /// <summary>
+    /// The Converter class will help us handle the conversion between different
+    /// string formats in our application, whether it is the JSON string format or
+    /// any other format that we will use in the future.
+    /// </summary>
     public class Converter
     {
         //// assumption: to != from
@@ -44,6 +49,16 @@ namespace Controllers
         //    return (char) ((5 * y * y + y + x + 97) >> 1);
         //}
 
+        /// <summary>
+        /// Convert a given solution to a SearchGame to a string in the
+        /// JSON format.
+        /// </summary>
+        /// <param name="solution">
+        /// The solution that we wish to convert.
+        /// </param>
+        /// <returns>
+        /// The solution's string representation in JSON.
+        /// </returns>
         public static string ToJSON(Solution<Position> solution)
         {
             int pos = 0;
@@ -101,6 +116,16 @@ namespace Controllers
         //{
         //}
 
+        /// <summary>
+        /// Convert a given string to it's matching Direction.
+        /// </summary>
+        /// <param name="direction">
+        /// <exception>
+        /// In a case where the string doesn't match any direction.
+        /// </exception>
+        /// The string which we will convert.
+        /// </param>
+        /// <returns></returns>
         public static Direction StringToDirection(string direction)
         {
             // Easier to maintain. If Direction will change the code will not.
@@ -112,27 +137,7 @@ namespace Controllers
             {
                 return Direction.Unknown;
             }
-            //switch (direction)
-            //{
-            //    case "up":
-            //        {
-            //            return Direction.Up;
-            //        }
-            //    case "down":
-            //        {
-            //            return Direction.Down;
-            //        }
-            //    case "left":
-            //        {
-            //            return Direction.Left;
-            //        }
-            //    case "right":
-            //        {
-            //            return Direction.Right;
-            //        }
-            //    default:
-            //        return Direction.Unknown;
-            //}
+          
         }
     }
 }

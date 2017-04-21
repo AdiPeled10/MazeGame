@@ -4,15 +4,37 @@ using SearchGames;
 
 namespace Controllers
 {
+    /// <summary>
+    /// Implementation of the Start command which implements the ICommand interface.
+    /// </summary>
     public class StartGameCommand : ICommand
     {
+        /// <summary>
+        /// The model which we will use.
+        /// </summary>
         private IModel model;
 
+        /// <summary>
+        /// Constructor of the Start command which is given the model as an input.
+        /// </summary>
+        /// <param name="model">
+        /// The model which we are going to use.
+        /// </param>
         public StartGameCommand(IModel model)
         {
             this.model = model;
         }
 
+        /// <summary>
+        /// Execution of the Start command based on the given arguments
+        /// and the client that sent it.
+        /// </summary>
+        /// <param name="args">
+        /// The arguments of this command.
+        /// </param>
+        /// <param name="client">
+        /// The client which sent this request.
+        /// </param>
         public void Execute(string[] args, IClient client)
         {
             string name = args[0];

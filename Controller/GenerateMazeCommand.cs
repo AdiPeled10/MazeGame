@@ -4,15 +4,38 @@ using SearchGames; // only here until the client will approve TODO
 
 namespace Controllers
 {
+    /// <summary>
+    /// Implementation of the Generate command which will generate a new maze
+    ///  and implements the ICommand interface.
+    /// </summary>
     class GenerateMazeCommand : ICommand
     {
+        /// <summary>
+        /// The model which we will use.
+        /// </summary>
         private IModel model;
 
+        /// <summary>
+        /// Constructor for the GenerateMazeCommand which gets the model.
+        /// </summary>
+        /// <param name="model">
+        /// The model which we will use.
+        /// </param>
         public GenerateMazeCommand(IModel model)
         {
             this.model = model;
         }
 
+        /// <summary>
+        /// Execute the generate command by creating a new maze based on the given
+        /// arguments.
+        /// </summary>
+        /// <param name="args">
+        /// The arguments of the command.
+        /// </param>
+        /// <param name="client">
+        /// The client that sent the generate request.
+        /// </param>
         public void Execute(string[] args, IClient client)
         {
             string name = args[0];

@@ -4,17 +4,46 @@ using ClientForServer;
 
 namespace Server
 {
-    //internal delegate void SendAlias(string message);
 
+    /// <summary>
+    /// Implementation of the IClient interface in a TcpClient that we will use
+    /// to communicate with the server.
+    /// </summary>
     public class MyTcpClient : IClient
     {
+        /// <summary>
+        /// The TcpClient that we will use.
+        /// </summary>
         private TcpClient client;
+
+        /// <summary>
+        /// The NetWorkStream of communication.
+        /// </summary>
         private NetworkStream stream;
+
+        /// <summary>
+        /// The Reader which we are going to read messages from.
+        /// </summary>
         private StreamReader reader;
+
+        /// <summary>
+        /// The writer which we are going to write messages to.
+        /// </summary>
         private StreamWriter writer;
+
+        /// <summary>
+        /// The hashcode of this client.
+        /// </summary>
         private int hashCode;
 
-        public MyTcpClient(TcpClient client) // TODO fix the hash value
+        /// <summary>
+        /// Constructor of this client by getting the TcpClient.
+        ///  TODO fix the hash value
+        /// </summary>
+        /// <param name="client">
+        /// The TcpClient which represents this client.
+        /// </param>
+        public MyTcpClient(TcpClient client) 
         {
             this.client = client;
             stream = client.GetStream();
@@ -26,6 +55,15 @@ namespace Server
             writer.AutoFlush = true;
         }
 
+        /// <summary>
+        /// Tells us if the client has a request.
+        /// </summary>
+        /// <exception cref="IOException">
+        /// Thrown when the client is disconnected.
+        /// </exception>
+        /// <returns>
+        /// True if he does, false otherwise.
+        /// </returns>
         public bool HasARequest()
         {
             if (client.Connected)
@@ -37,6 +75,12 @@ namespace Server
             throw new IOException("Client is disconnected");
         }
 
+        /// <summary>
+        /// Receive a request from the server.
+        /// </summary>
+        /// <returns>
+        /// The request from the server.
+        /// </returns>
         public string RecvARequest()
         {
             //// TODO find out what happens here when TcpClient is closed
@@ -56,16 +100,31 @@ namespace Server
             return reader.ReadLine();
         }
 
+        /// <summary>
+        /// Send a response to the server. 
+        /// </summary>
+        /// <param name="res">
+        /// The response that was sent.
+        /// </param>
         public void SendResponse(string res)
         {
             writer.WriteLine(res);// + System.Environment.NewLine);
         }
 
+        /// <summary>
+        /// Notify the client with a message.(Because of ICanBeNotified)
+        /// </summary>
+        /// <param name="res">
+        /// Message sent.
+        /// </param>
         public void Notify(string res)// = this.SendResponse;
         {
             writer.WriteLine(res);
         }
 
+        /// <summary>
+        /// Disconnect the client from the server.
+        /// </summary>
         public void Disconnect()
         {
             writer.Close();
@@ -76,6 +135,10 @@ namespace Server
             client.Close();
         }
 
+        /// <summary>
+        /// Override the GetHashCode of object class.
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return hashCode;

@@ -8,8 +8,17 @@ using System.Configuration;
 
 namespace Server
 {
+    /// <summary>
+    /// This is the main program which activates the server.
+    /// </summary>
     class Program
     {
+        /// <summary>
+        /// The main method which turns on all the pieces in the application.
+        /// </summary>
+        /// <param name="args">
+        /// The command line arguments.
+        /// </param>
         static void Main(string[] args)
         {
             // create the server "building blocks"

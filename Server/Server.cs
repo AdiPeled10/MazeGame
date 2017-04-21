@@ -7,19 +7,50 @@ using Views;
 
 namespace Server
 {
+    /// <summary>
+    /// This is the class which implements our Server which handle all of the clients
+    /// and uses the View while handling them.
+    /// </summary>
     public class Server
     {
+        /// <summary>
+        /// The port of this server.
+        /// </summary>
         private int port;
+
+        /// <summary>
+        /// The TcpListener that we will use in order to listen to clients.
+        /// </summary>
         private TcpListener listener;
+
+        /// <summary>
+        /// The view that the server is going to use to handle client requests.
+        /// </summary>
         private IView view;
+        
+        /// <summary>
+        /// Threads to accept clients and service them while letting the main thread run properly.
+        /// </summary>
         private Thread accepter, clientService;
 
+        /// <summary>
+        /// Constructor of the Server class.
+        /// </summary>
+        /// <param name="port">
+        /// The port of the server.
+        /// </param>
+        /// <param name="view">
+        /// The view that the server will use to handle client requests.
+        /// </param>
         public Server(int port, IView view)
         {
             this.port = port;
             this.view = view;
         }
 
+        /// <summary>
+        /// Start the server and start listening to clients.
+        /// </summary>
         public void Start()
         {
             // creates a socket
@@ -40,6 +71,10 @@ namespace Server
             clientService.Start();
         }
 
+        /// <summary>
+        /// Create the thread that will be used to accept
+        /// clients while letting the main thread run.
+        /// </summary>
         private void CreateAcceptingThread()
         {
             // create a thread that will accept new clients
@@ -71,6 +106,9 @@ namespace Server
             accepter = thread;
         }
 
+        /// <summary>
+        /// Create the thread which reads client's requests while letting the main thread to run.
+        /// </summary>
         private void CreateRequestReaderThread()
         {
             // create a thread that will get clients requests and handle them
@@ -93,6 +131,9 @@ namespace Server
             clientService = thread;
         }
 
+        /// <summary>
+        /// Stop the communication of the server.
+        /// </summary>
         public void Stop()
         {
             listener.Stop();

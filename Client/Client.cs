@@ -9,6 +9,9 @@ using System.Collections.Generic;
 
 namespace Client
 {
+    /// <summary>
+    /// This program is the client program that we are going to work with.
+    /// </summary>
     public class Program
     {
         //static void OutputServerResponses(StreamReader reader, Thread creator)
@@ -33,6 +36,12 @@ namespace Client
         //    }
         //}
 
+        /// <summary>
+        /// In this main function we are going to connect to the server.
+        /// </summary>
+        /// <param name="args">
+        /// The command line arguments.
+        /// </param>
         static void Main(string[] args)
         {
             //connect to the server
@@ -97,15 +106,23 @@ namespace Client
             //client.Close();
         }
 
+        /// <summary>
+        ///  * The arguments and the variables are necessary for this to work but aren't the reason it's bad.
+        ///  The function can be easy be turned to "not a function" and then they won't be recreated everytime.
+        ///  The reason it's so bad is the that the reader has internal buffer and the many operation
+        ///  needed to read the data and then restore it.
+        /// </summary>
+        /// <param name="stream">
+        /// The network stream that we will work with.
+        /// </param>
+        /// <param name="reader">
+        /// The StreamReader.
+        /// </param>
+        /// <param name="req">
+        /// The request.
+        /// </param>
         static void ReadOperationThatWorksBadlyAndWhy(NetworkStream stream, StreamReader reader, string req)
         {
-            /**
-             * The arguments and the variables are necessary for this to work but aren't the reason it's bad.
-             * The function can be easy be turned to "not a function" and then they won't be recreated every
-             * time.
-             * The reason it's so bad is the that the reader has internal buffer and the many operation
-             * needed to read the data and then restore it.
-             */
 
             // list for reading the respond
             List<string> lines = new List<string>(16);

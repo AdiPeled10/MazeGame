@@ -249,8 +249,9 @@ namespace Models
             if (connector.ContainsGame(name))
              {
                 g = connector.GetGame(name);
-                // g.NumOfPlayer > 0 always because the server know only multiplayer games
-                // replace the existing game if it has ended or the only player in it in the one who asks to replace it.
+                /* g.NumOfPlayer > 0 always because the server know only multiplayer games
+                replace the existing game if it has ended or the only player in it in the 
+                one who asks to replace it.*/
                 toCreate &= (g.HasEnded() || (g.NumOfPlayer == 1 && g.GetPlayers().Contains(p)));
             }
             if (toCreate)

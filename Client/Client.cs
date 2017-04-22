@@ -71,7 +71,8 @@ namespace Client
                     req = Console.ReadLine();
                     writer.WriteLine(req);
 
-                    Thread.Sleep(20);// a human won't feel this but it helps the server responds to look faster.
+                    // a human won't feel this but it helps the server responds to look faster.
+                    Thread.Sleep(20);
 
                     /*
                      * for now it works because the server works in "question-answer"

@@ -4,9 +4,9 @@ namespace SearchAlgorithmsLib
     /// <summary>
     /// We want our program to be as generic as possible, different Searchers are going to use different
     /// searching algorithms which may use different Data Structures, this interface represents a set of methods
-    /// that are the basic methods of each data structure, all of our Searchers will expect each of these abilities
-    /// from the data structures that they are going to use. By using this interface we can use a Stack by the same code
-    /// which we used to use a Priority Queue.
+    /// that are the basic methods of each data structure, all of our Searchers will expect each 
+    /// of these abilities from the data structures that they are going to use. By using this
+    /// interface we can use a Stack by the same code which we used to use a Priority Queue.
     /// </summary>
     /// <typeparam name="T">
     /// This is the type of the element that the data structure will hold.

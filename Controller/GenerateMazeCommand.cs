@@ -49,7 +49,7 @@ namespace Controllers
             // No need to know the name of the single player game, but while the
             // client application is stupid will know it. Afterward we can replace it with the coe above
             model.Join(name, client);
-            (model.GetGameByName(name) as MazeGame).MaxPlayersAllowed = 1; // only here while the client isn't build.
+            (model.GetGameByName(name) as MazeGame).MaxPlayersAllowed = 1; 
         }
 
     }

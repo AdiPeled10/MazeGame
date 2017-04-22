@@ -4,8 +4,8 @@ using SearchAlgorithmsLib;
 
 namespace Models
 {
-    // TODO save the actual solutions in files(and load it from the file if needed) to prevent the heap/main memory
-    // from growing very large.
+    // TODO save the actual solutions in files(and load it from the file if needed)
+    //to prevent the heap/main memory from growing very large.
     /// <summary>
     /// The SolutionCache is basically a cache that we will use to save solutions to different Search Games
     /// to prevent the case in which we compute the solution to the same SearchGame multiple times.

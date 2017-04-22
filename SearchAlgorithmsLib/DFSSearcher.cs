@@ -61,7 +61,8 @@ namespace SearchAlgorithmsLib
     /// initial state to the goal state, this algorithm uses a stack in it's implementation that's why we will
     /// use the StackAdaptor,during the search we will run through the states by starting at the initial state
     /// of the Searchable and going in depth in the searchable until we get to the goal state,it is not promised
-    /// that we will get the shortest path from the initial state to the goal state by using this specific algorithm.
+    /// that we will get the shortest path from the initial state to the goal state by using this 
+    /// specific algorithm.
     /// </summary>
     /// <typeparam name="T"> 
     /// This is a template to define the type of the element of the states
@@ -73,9 +74,9 @@ namespace SearchAlgorithmsLib
         /// <summary>
         /// This method will run the Search through the Searchable by using the Depth First Search algorithm.
         /// We will start in the initial state of the searchable and start going in depth in the searchable from
-        /// state to state by marking each state that we pass through until we get to the goal state, in the case which
-        /// we get from one to state to a state which is marked, which means we have already been there before we will
-        /// use the StackAdapter to go back to the previous state.
+        /// state to state by marking each state that we pass through until we get to the goal state,
+        /// in the case which we get from one to state to a state which is marked, which means
+        /// we have already been there before we will use the StackAdapter to go back to the previous state.
         /// </summary>
         /// <param name="searchable">
         /// The searchable that we are going to search through.

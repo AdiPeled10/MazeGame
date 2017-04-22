@@ -53,9 +53,11 @@ namespace Controllers
             else
             {
                 if (!ReferenceEquals(model.GetGameByName(name), null))
-                    client.SendResponse("A game with that name already exists and cannot be replaced at this point.");
+                    client.SendResponse(@"A game with that name already exists and 
+                        cannot be replaced at this point.");
                 else
-                    client.SendResponse("You're already a part of a game. Please close that game and try again.");
+                    client.SendResponse(@"You're already a part of a game.
+                        Please close that game and try again.");
             }
         }
     }

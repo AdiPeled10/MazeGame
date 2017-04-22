@@ -82,7 +82,8 @@ namespace Controllers
                  * Set a continuation task to the previous request (it will be executed only when
                  * "previousRequest" is done) and set the previous request as the new continuation task.
                  */
-                clientToLastRequest[client].task = previousRequest.ContinueWith(ParameterWeWontUse => request(),
+                clientToLastRequest[client].task = previousRequest.ContinueWith(
+                    ParameterWeWontUse => request(),
                     clientToLastRequest[client].tokenSource.Token);
             }
             catch (KeyNotFoundException)

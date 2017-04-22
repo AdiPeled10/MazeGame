@@ -74,7 +74,8 @@ namespace SearchAlgorithmsLib
         /// <param name="newValue">
         /// The new element which we are going to replace with the old one.
         /// </param>
-        protected void ReplaceElementInOpenList(DataStructureElementsType value, DataStructureElementsType newValue)
+        protected void ReplaceElementInOpenList(DataStructureElementsType value, 
+            DataStructureElementsType newValue)
         {
             openList.Remove(value);
             openList.Add(newValue);

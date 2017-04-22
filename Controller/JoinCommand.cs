@@ -75,7 +75,8 @@ namespace Controllers
                 }
                 else
                 {
-                    client.SendResponse("Falied to join. You already a part of an existing game.\r\n Please close that game and try again.");
+                    client.SendResponse(@"Falied to join. You already a part of an existing game.
+                        \r\n Please close that game and try again.");
                 }
             }
             catch //(System.NullReferenceException)

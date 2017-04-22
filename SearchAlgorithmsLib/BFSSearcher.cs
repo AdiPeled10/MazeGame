@@ -33,7 +33,8 @@ namespace SearchAlgorithmsLib
             double pathPrice;
             List<State<T>> succerssors;
             State<T> currentStateValue = searchable.GetInitialState(), goal = searchable.GetGoalState();
-            Dictionary<State<T>, double> closed = new Dictionary<State<T>, double>();  // a list of all already visited
+            // a list of all already visited
+            Dictionary<State<T>, double> closed = new Dictionary<State<T>, double>();
             AddToOpenList(new KeyValuePair<double, State<T>>(0, currentStateValue));
             closed.Add(currentStateValue, 0);
             currentStateValue.SetCameFrom(null);

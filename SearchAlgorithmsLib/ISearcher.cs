@@ -4,9 +4,9 @@ namespace SearchAlgorithmsLib
     /// <summary>
     /// This is an interface which holds all the set of abilities that we expect from a Searcher which is
     /// going to search through a Searchable. It holds the Search method which will get the Searchable that we
-    /// plan to search through and returns the Solution to the Searchable. We also want the searchable to tell us
-    /// the number of nodes in the Searchable that it evaluated during the search. That way we can compare between
-    /// different searchers.
+    /// plan to search through and returns the Solution to the Searchable. We also want
+    /// the searchable to tell us the number of nodes in the Searchable that it evaluated during the search. 
+    /// That way we can compare between different searchers.
     /// </summary>
     /// <typeparam name="T">
     /// This template represents the type of the States that the searcher will search though.

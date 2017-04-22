@@ -83,14 +83,15 @@ namespace Controllers
                 };
                 queue.Add(request, client);
             }
-            //else // this is just for the debugging
-            //{
-            //    request = () =>
-            //    {
-            //        client.SendResponse("");
-            //    };
-            //    queue.Add(request, client);
-            //}
+         
+            else 
+            {
+                request = () =>
+                {
+                   client.SendResponse("This command is invalid.");
+               };
+               queue.Add(request, client);
+            }
         }
 
         /// <summary>

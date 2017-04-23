@@ -48,7 +48,16 @@ namespace Controllers
             // TODO - also effected rhe code of model.GenerateNewGame.
             // No need to know the name of the single player game, but while the
             // client application is stupid will know it. Afterward we can replace it with the coe above
-            model.Join(name, client);
+            if (!model.Join(name, client))
+            {
+                if (!ReferenceEquals(null,model.GetGameOf(client)))
+                {
+                    client.SendResponse(@"Deleted game named: " + model.GetGameOf(client).Name
+                   + " to generate game: " + name);
+                    model.DeleteGame(model.GetGameOf(client));
+                    model.Join(name, client);
+                }
+            }
             (model.GetGameByName(name) as MazeGame).MaxPlayersAllowed = 1; 
         }
 

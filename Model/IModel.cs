@@ -165,5 +165,13 @@ namespace Models
         /// The client that we wish to remove.
         /// </param>
         void RemoveClient(IClient client);
+        
+        /// <summary>
+        /// Delete a game from the model.
+        /// </summary>
+        /// <param name="game">
+        /// Game that will be deleted.
+        /// </param>
+        void DeleteGame(ISearchGame game);
     }
 }

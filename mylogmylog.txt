@@ -1,0 +1,288 @@
+* commit ff1bdd1a22c601ca0ce2b7bd3c509bca212c49d0
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sun Apr 23 20:17:29 2017 +0300
+| 
+|     Fixed another logic about generating multiple games from same client.
+| 
+* commit eb6e53f02d545ba1f648c34e8d86d14b123b8477
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sun Apr 23 18:44:41 2017 +0300
+| 
+|     Added documentation for ex1 and deleted code that was used for debugging
+| 
+* commit 3feb61ab20f0f8f5de21b0d2d8b0bc15f7131728
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sun Apr 23 18:24:03 2017 +0300
+| 
+|     Fixed case in the Server when peek method of StreamReader is blocking the code and can't accept requests from second client until the first client gets the request
+| 
+* commit 9bcca9043180890d8a63c6ea9624c63b51b61e52
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sun Apr 23 14:59:18 2017 +0300
+| 
+|     Fixed some bugs.
+| 
+* commit 2b88c41280f9b704fe4c81d2e9cfd16312e8af61
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sun Apr 23 00:30:48 2017 +0300
+| 
+|     Added default case for commands.
+| 
+* commit 8b452bf1c48dc99cd2d1b63b253b45d576e63915
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sat Apr 22 23:05:04 2017 +0300
+| 
+|     Fixed lines which were too long.
+| 
+* commit 00f5a87ecf4de3122cb1c3d3d893e21386110e57
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Fri Apr 21 22:32:45 2017 +0300
+| 
+|     Added complete XML documentation to the entire project based on the format that was given in the exercise.
+| 
+* commit 2d005ead85839473fa1cfa0e42bf272d1b84402b
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Fri Apr 21 15:21:51 2017 +0300
+| 
+|     fixed a bug when a multiplayer game been created but the creator closes his window and then a different client tries to join the game.
+|     Also, changes the reference between the projects so when complinig to release they will use the release version of each other.
+| 
+* commit 91aee7b25d0d875a9bbf698de1d2cab49f6fa95e
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Fri Apr 21 01:31:44 2017 +0300
+| 
+|     bug fixes
+| 
+* commit 835a683973f02d0473760ba2740e48e3f45729ca
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sat Apr 15 19:15:59 2017 +0300
+| 
+|     Divided the project "Server" to projects. Also, I set the dependency*and the building order) of the projects. Only some code at the Server is left.
+| 
+* commit 68ed8ab2c0ea5c3d8489e6e0ed11898248051e27
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sat Apr 15 17:36:45 2017 +0300
+| 
+|     removed an unneccessary file.
+| 
+* commit 453551ea2def9c11a5fbdc41debf316e1c45c4e0
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sat Apr 15 17:35:26 2017 +0300
+| 
+|     Some final changes. Worked on breaking dependancy and make the server more MVC.
+| 
+* commit 36b9dd26635ea2762f68fd5b2d085adb53b8f104
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Fri Apr 14 21:05:00 2017 +0300
+| 
+|     Fixed th BFS.
+|     Improved the State class to be more memory efficient.
+| 
+* commit b52d84597567e654504270a7b113352330be80ea
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Fri Apr 14 19:26:52 2017 +0300
+| 
+|     Fixed some logic problem. still missing a fix on the respond to "Close" and "Play" commands.
+| 
+* commit 3bfa7c2c5f2530d65dbce6c8e044e943b40ded63
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Fri Apr 14 17:43:32 2017 +0300
+| 
+|     Added the Server class.
+| 
+* commit 6f5b76102644828191bdb9a2929de46ba6ddc232
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Fri Apr 14 17:30:28 2017 +0300
+| 
+|     Finished the controller.
+|     Add use of thread pool. The new class "RequestsQueue" makes sure clients request will be done in the order they were requested.
+| 
+* commit 621ef5c141bd53b389d5eefd1caae784de9526e6
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Wed Apr 12 22:05:08 2017 +0300
+| 
+|     Added an important TODO to view.
+| 
+* commit 81807be7d5a6027e91c12b37085e1ad4f9190467
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Wed Apr 12 22:01:25 2017 +0300
+| 
+|     Finished with the Model. Made few fixup(exception instead of null, mapping soultions according to the maze string, etc..). Mostly changed the Connector.
+| 
+* commit 31ae1b07ef696ca95c6336b7cda2ec2d09fc01fb
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Wed Apr 12 00:05:51 2017 +0300
+| 
+|     Added all the commands needed to implement the ICommand design patterns for all the commands we will get from the Client. The Model class doesn't know anything about the Player now and all the handling of the Players is through the Connector class which handles all the logic between IClient and Player and Player and Games, also finished adding all the functionality needed from the Model.
+| 
+* commit e61247a0ecb46da6928a5bba63546c60df16b21d
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Tue Apr 11 12:17:43 2017 +0300
+| 
+|     some changes is Search games and its "friends", also some changes in the Model. Not finished and not ready to use, but has some ground rules. Also made the Model to be entirely based on Search Game and not MazeGame, which will allow the server to easlly support different game and not justr mazes.
+|   
+*   commit 89fde1cc1d45e2884be6d6d7c67a92d3b28572bc
+|\  Merge: 5d47cc7 1138d0f
+| | Author: Adi Peled <adi.peled1210@gmail.com>
+| | Date:   Mon Apr 10 12:57:19 2017 +0300
+| | 
+| |     Merged the master branch(in this case, the view branch) with the controller branch(which actually ended up as the model branch). Now the master branch has a complete view and a partial model(the server is desgined as MVC)
+| | 
+| * commit 1138d0ff9824f4ee6a54f8fa9786ccfa7324c856
+| | Author: Lior <liormoshe0909@gmail.com>
+| | Date:   Sun Apr 9 18:50:24 2017 +0300
+| | 
+| |     Added functionality of the model by using the MazeGame and Player classes to wrap the TcpClient and the Maze.
+| | 
+* | commit 5d47cc76184473c125b7a6e727bbbdf8868339bd
+|/  Author: Adi Peled <adi.peled1210@gmail.com>
+|   Date:   Sun Apr 9 16:32:53 2017 +0300
+|   
+|       Builded a Tcp client and compeleted the View.
+|   
+*   commit 6107087c64da01c6d1707a971adcea7016448dc7
+|\  Merge: e75c2e5 de6d3e1
+| | Author: Lior <liormoshe0909@gmail.com>
+| | Date:   Sun Apr 9 11:09:50 2017 +0300
+| | 
+| |     Fixed Conflicts
+| | 
+| * commit de6d3e1eba5f81b562b4bb70cc159b3b06419d6f
+| | Author: Adi Peled <adi.peled1210@gmail.com>
+| | Date:   Sun Apr 9 13:54:44 2017 +0300
+| | 
+| |     a little fix
+| | 
+| * commit b64a95a638a18e59e9b263e8e05546ce624ab5cb
+| | Author: Adi Peled <adi.peled1210@gmail.com>
+| | Date:   Sun Apr 9 12:52:42 2017 +0300
+| | 
+| |     Some fixup to the viewer.
+| | 
+| * commit 834eb4df506618f629cf37349c9a7751baf445d7
+| | Author: Adi Peled <adi.peled1210@gmail.com>
+| | Date:   Sat Apr 8 19:35:00 2017 +0300
+| | 
+| |     Created the base for the viewer class and probably some ground rules for the other classes.
+| | 
+| * commit 247000985a8e6f1cf1fb467c3fd451100dc83d9d
+| | Author: Adi Peled <adi.peled1210@gmail.com>
+| | Date:   Sat Apr 8 17:45:29 2017 +0300
+| | 
+| |     Potentially a little improve to "MazeToSearchableAdapter".
+| | 
+| * commit 45a086e4887c85e29e92fb7e4c26834636eee470
+| | Author: Adi Peled <adi.peled1210@gmail.com>
+| | Date:   Sat Apr 8 16:42:09 2017 +0300
+| | 
+| |     Removed all unnecessary "using" statements.
+| |     Changesd all(I think) methods name to begin with a capital letter.
+| |     Deleted unnecessary references.
+| |     Changed project setting to prouduce "SearchAlgorithmsLib" as release version and to do so before compiling Ex1.
+| | 
+| * commit 60dcd528f301da2f83fc3fe0c050ce81a30fad9b
+| | Author: Adi Peled <adi.peled1210@gmail.com>
+| | Date:   Fri Apr 7 21:39:58 2017 +0300
+| | 
+| |     Added a method in Ex1 to see the speed diffrences between the best first search and the DFS.
+| | 
+| * commit 3424a616f942c6e774a2cbb2729b44083229b553
+| | Author: Adi Peled <adi.peled1210@gmail.com>
+| | Date:   Fri Apr 7 19:34:08 2017 +0300
+| | 
+| |     Improved the generity of "Searcher" to be able to save code to every searcher that uses a data structure.
+| |     Fixed Best First Search algorithm.
+| |     Added DFS searcher.
+| | 
+| * commit 399f85158731d547b11bac19493cc8a9134f6713
+| | Author: Lior <liormoshe0909@gmail.com>
+| | Date:   Mon Apr 3 17:02:50 2017 +0300
+| | 
+| |     Complete BFS algorithm, added to the BFSSearcher the part where we pass through the successors of each State we will pass through and a function which we will use to Backtrace from the goal state to the initial state.
+| | 
+* | commit e75c2e5b3115147b9ab143705c44e6fd3891bce5
+|/  Author: Lior <liormoshe0909@gmail.com>
+|   Date:   Mon Apr 3 17:02:50 2017 +0300
+|   
+|       Complete BFS algorithm, added to the BFSSearcher the part where we pass through the successors of each State we will pass through and a function which we will use to Backtrace from the goal state to the initial state.
+| 
+* commit 330afb16f3e720f9bf48c1d5bb9d737b6666b557
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Mon Apr 3 11:45:28 2017 +0300
+| 
+|     Added Priority queue and updated part of the best first search algorithm.
+| 
+* commit 4ea8cb64e336f69b5b8c25a3fa2627bcc05b9c6d
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sun Apr 2 21:31:05 2017 +0300
+| 
+|     some cleanup
+| 
+* commit 3d660d1da0fa5830e5d0fa1fb8b510db8353e530
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sun Apr 2 21:23:41 2017 +0300
+| 
+|     a not OOP fix to a not OOP problem.
+| 
+* commit 0092b33f8a6cd2c8e23896dd6aa74531329cd09e
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sun Apr 2 19:07:26 2017 +0300
+| 
+|     .
+| 
+* commit b7db7943782180eab581391a4a0f30152b50422b
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sun Apr 2 19:05:17 2017 +0300
+| 
+|     .
+| 
+* commit 9fed45c7aaaa796101691d236fc9b05caf347855
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sun Apr 2 18:46:34 2017 +0300
+| 
+|     .
+| 
+* commit fa55857aebb9064d08aa998f88909aea255cf333
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sun Apr 2 17:14:10 2017 +0300
+| 
+|     Fixed all the code from Class Libaray "SearchAlgorithmsLib".
+| 
+* commit e23a3b4bbc0b719499a5c3868310cf6a7ca56737
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sun Apr 2 13:04:03 2017 +0300
+| 
+|     some fixup
+| 
+* commit d44d6dba1cf0ce41857bc6aedc0ebfa672a7c70e
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sun Apr 2 12:49:02 2017 +0300
+| 
+|     Created the Class Libaray "SearchAlgorithmsLib" with all the interfaces and class from "AP2 - design".
+|     Code is partial and not function.
+| 
+* commit 51c4796e390e62900842dc74a6c5b4e56e18a69e
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sat Apr 1 21:49:23 2017 +0300
+| 
+|     Added an example 2 lines of how to use the dll.
+|     Btw. dll stands for dynamic link library.
+| 
+* commit baffe5ececd94def8dff24c49e171d0bfb975953
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sat Apr 1 21:44:50 2017 +0300
+| 
+|     Linked the dlls to the project.
+|     Also,
+| 
+* commit 9b334db564d71df1cfeca544e57a2e850f114381
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sat Apr 1 21:36:57 2017 +0300
+| 
+|     Creation of base project
+| 
+* commit beafb7078899742835ce2188530ddb5ffdb669bd
+  Author: AdiPeled10 <Adi.peled1210@gmail.com>
+  Date:   Sat Apr 1 21:07:25 2017 +0300
+  
+      Initial commit

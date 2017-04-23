@@ -141,6 +141,7 @@ namespace Models
             return game;
         }
 
+
         /// <summary>
         /// Get a specific game by it's name.
         /// </summary>
@@ -321,17 +322,26 @@ namespace Models
             {
                 connector.AddClientToGame(myPlayer, name);
                 return game.AddPlayer(myPlayer);
-            } else if (!ReferenceEquals(null,connector.GetGame(myPlayer))) {
+            } /*else if (!ReferenceEquals(null,connector.GetGame(myPlayer))) {
                 player.SendResponse(@"Deleted game named: " + connector.GetGame(myPlayer).Name
                     + " to generate game: " + name);
                 connector.DeleteGame(connector.GetGame(myPlayer));
                 connector.AddClientToGame(myPlayer, name);
                 return game.AddPlayer(myPlayer);
-            }
+            }*/
             return false;
         }
 
-
+        /// <summary>
+        /// Delete a game from the connector.
+        /// </summary>
+        /// <param name="game">
+        /// Game that will be deleted.
+        /// </param>
+        public void DeleteGame(ISearchGame game)
+        {
+            connector.DeleteGame(game);
+        }
         /// <summary>
         /// Set "name" to the game name and returns the list of players
         /// Moves the client and returns the game where the player was moved

@@ -9,14 +9,28 @@ using SearchAlgorithmsLib;
 
 namespace Ex1
 {
+    /// <summary>
+    /// In this program we will compare the two searchers that we wrote for the BFS and
+    /// DFS  algorithm.
+    /// </summary>
     class Program
     {
+        /// <summary>
+        /// The main will run the function that compares both solvers.
+        /// </summary>
+        /// <param name="args">
+        /// Command line arguments.
+        /// </param>
         static void Main(string[] args)
         {
             CompareSolvers();
             //Console.ReadKey();
         }
 
+        /// <summary>
+        /// Compare the solvers we created by using the adapter desing pattern between
+        /// the maze and searchable.
+        /// </summary>
         static void CompareSolvers()
         {
             DFSMazeGenerator dfsMaze = new DFSMazeGenerator();

@@ -82,7 +82,6 @@ namespace Server
                 }
                 catch (IOException e)
                 {
-                    string s = e.ToString();
                     return false;
                 }
                 catch (Exception)

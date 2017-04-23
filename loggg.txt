@@ -1,0 +1,47 @@
+* 9bcca90 : Fixed some bugs.
+* 2b88c41 : Added default case for commands.
+* 8b452bf : Fixed lines which were too long.
+* 00f5a87 : Added complete XML documentation to the entire project based on the format that was given in the exercise.
+* 2d005ea : fixed a bug when a multiplayer game been created but the creator closes his window and then a different client tries to join the game. Also, changes the reference between the projects so when complinig to release they will use the release version of each other.
+* 91aee7b : bug fixes
+* 835a683 : Divided the project "Server" to projects. Also, I set the dependency*and the building order) of the projects. Only some code at the Server is left.
+* 68ed8ab : removed an unneccessary file.
+* 453551e : Some final changes. Worked on breaking dependancy and make the server more MVC.
+* 36b9dd2 : Fixed th BFS. Improved the State class to be more memory efficient.
+* b52d845 : Fixed some logic problem. still missing a fix on the respond to "Close" and "Play" commands.
+* 3bfa7c2 : Added the Server class.
+* 6f5b761 : Finished the controller. Add use of thread pool. The new class "RequestsQueue" makes sure clients request will be done in the order they were requested.
+* 621ef5c : Added an important TODO to view.
+* 81807be : Finished with the Model. Made few fixup(exception instead of null, mapping soultions according to the maze string, etc..). Mostly changed the Connector.
+* 31ae1b0 : Added all the commands needed to implement the ICommand design patterns for all the commands we will get from the Client. The Model class doesn't know anything about the Player now and all the handling of the Players is through the Connector class which handles all the logic between IClient and Player and Player and Games, also finished adding all the functionality needed from the Model.
+* e61247a : some changes is Search games and its "friends", also some changes in the Model. Not finished and not ready to use, but has some ground rules. Also made the Model to be entirely based on Search Game and not MazeGame, which will allow the server to easlly support different game and not justr mazes.
+*   89fde1c : Merged the master branch(in this case, the view branch) with the controller branch(which actually ended up as the model branch). Now the master branch has a complete view and a partial model(the server is desgined as MVC)
+|\  
+| * 1138d0f : Added functionality of the model by using the MazeGame and Player classes to wrap the TcpClient and the Maze.
+* | 5d47cc7 : Builded a Tcp client and compeleted the View.
+|/  
+*   6107087 : Fixed Conflicts
+|\  
+| * de6d3e1 : a little fix
+| * b64a95a : Some fixup to the viewer.
+| * 834eb4d : Created the base for the viewer class and probably some ground rules for the other classes.
+| * 2470009 : Potentially a little improve to "MazeToSearchableAdapter".
+| * 45a086e : Removed all unnecessary "using" statements. Changesd all(I think) methods name to begin with a capital letter. Deleted unnecessary references. Changed project setting to prouduce "SearchAlgorithmsLib" as release version and to do so before compiling Ex1.
+| * 60dcd52 : Added a method in Ex1 to see the speed diffrences between the best first search and the DFS.
+| * 3424a61 : Improved the generity of "Searcher" to be able to save code to every searcher that uses a data structure. Fixed Best First Search algorithm. Added DFS searcher.
+| * 399f851 : Complete BFS algorithm, added to the BFSSearcher the part where we pass through the successors of each State we will pass through and a function which we will use to Backtrace from the goal state to the initial state.
+* | e75c2e5 : Complete BFS algorithm, added to the BFSSearcher the part where we pass through the successors of each State we will pass through and a function which we will use to Backtrace from the goal state to the initial state.
+|/  
+* 330afb1 : Added Priority queue and updated part of the best first search algorithm.
+* 4ea8cb6 : some cleanup
+* 3d660d1 : a not OOP fix to a not OOP problem.
+* 0092b33 : .
+* b7db794 : .
+* 9fed45c : .
+* fa55857 : Fixed all the code from Class Libaray "SearchAlgorithmsLib".
+* e23a3b4 : some fixup
+* d44d6db : Created the Class Libaray "SearchAlgorithmsLib" with all the interfaces and class from "AP2 - design". Code is partial and not function.
+* 51c4796 : Added an example 2 lines of how to use the dll. Btw. dll stands for dynamic link library.
+* baffe5e : Linked the dlls to the project. Also,
+* 9b334db : Creation of base project
+* beafb70 : Initial commit

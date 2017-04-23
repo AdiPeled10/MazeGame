@@ -117,14 +117,22 @@ namespace Views
             {
                 try
                 {
+                 //   if (c == null)
+                //    {
+                  //      Console.WriteLine("ITS NULL");
+                 //   }
                     if (c.HasARequest())
                     {
                         string req = c.RecvARequest(); // should return 1 request
                         this.HandleClientRequest(req, c);
+                    } else
+                    {
+                        // Console.WriteLine("Doesn't req");
                     }
                 }
                 catch (System.IO.IOException) // The client has disconnected
                 {
+                  //  Console.WriteLine("IO");
                     try
                     {
                         con.DisconnectClient(c);

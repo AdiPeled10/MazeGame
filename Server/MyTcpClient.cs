@@ -1,6 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.IO;
 using ClientForServer;
+using System;
 
 namespace Server
 {
@@ -50,6 +51,7 @@ namespace Server
             reader = new StreamReader(stream);
             writer = new StreamWriter(stream);
             hashCode = client.GetHashCode();
+            this.client.Client.Blocking = false;
 
             // set the writer to immediately flush
             writer.AutoFlush = true;
@@ -68,9 +70,25 @@ namespace Server
         {
             if (client.Connected)
             {
-                // stream has internal buffer and may contain many
+                // reader has internal buffer and may contain many
                 // requests while the stream won't.
-                return stream.DataAvailable || reader.Peek() > 0;
+                try
+                {
+                    return stream.DataAvailable || reader.Peek() > 0;
+                }
+                catch (ObjectDisposedException)
+                {
+                    return false;
+                }
+                catch (IOException e)
+                {
+                    string s = e.ToString();
+                    return false;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
             throw new IOException("Client is disconnected");
         }

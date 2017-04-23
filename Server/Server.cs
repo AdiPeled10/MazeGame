@@ -17,7 +17,6 @@ namespace Server
         /// The port of this server.
         /// </summary>
         private int port;
-
         /// <summary>
         /// The TcpListener that we will use in order to listen to clients.
         /// </summary>
@@ -85,6 +84,7 @@ namespace Server
                     try
                     {
                         // accept a client
+                        //Mutex mut = new Mutex();
                         TcpClient client = listener.AcceptTcpClient();
                         Console.WriteLine("Got new connection");
 
@@ -92,7 +92,9 @@ namespace Server
                         MyTcpClient c = new MyTcpClient(client);
 
                         // add it to the view
+                        //mut.WaitOne();
                         view.AddClient(c);
+                      //  mut.ReleaseMutex();
                     }
                     catch (SocketException)
                     {

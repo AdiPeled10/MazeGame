@@ -314,13 +314,19 @@ namespace Models
         /// </returns>
         public bool Join(string name, IClient player)
         {
-            Player p = connector.GetPlayer(player);
+            Player myPlayer = connector.GetPlayer(player);
             ISearchGame game = connector.GetGame(name);
             // if the player isn't a part of an existing game and the game allows a player to join
-            if (ReferenceEquals(null, connector.GetGame(p)) && game.CanAPlayerJoin())
+            if (ReferenceEquals(null, connector.GetGame(myPlayer)) && game.CanAPlayerJoin())
             {
-                connector.AddClientToGame(p, name);
-                return game.AddPlayer(p);
+                connector.AddClientToGame(myPlayer, name);
+                return game.AddPlayer(myPlayer);
+            } else if (!ReferenceEquals(null,connector.GetGame(myPlayer))) {
+                player.SendResponse(@"Deleted game named: " + connector.GetGame(myPlayer).Name
+                    + " to generate game: " + name);
+                connector.DeleteGame(connector.GetGame(myPlayer));
+                connector.AddClientToGame(myPlayer, name);
+                return game.AddPlayer(myPlayer);
             }
             return false;
         }

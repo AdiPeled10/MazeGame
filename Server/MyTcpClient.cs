@@ -103,23 +103,41 @@ namespace Server
         /// <summary>
         /// Send a response to the server. 
         /// </summary>
+        /// <exception cref="IOException">
+        /// The client is already closed,cant write.
+        /// </exception>
         /// <param name="res">
         /// The response that was sent.
         /// </param>
         public void SendResponse(string res)
         {
-            writer.WriteLine(res);// + System.Environment.NewLine);
+            try
+            {
+                writer.WriteLine(res);
+            } catch (IOException)
+            {
+                //The client is already closed.
+            }
         }
 
         /// <summary>
         /// Notify the client with a message.(Because of ICanBeNotified)
         /// </summary>
+        /// <exception cref="IOException">
+        /// When we try to notify a client which is already closed.
+        /// </exception>
         /// <param name="res">
         /// Message sent.
         /// </param>
-        public void Notify(string res)// = this.SendResponse;
+        public void Notify(string res)
         {
-            writer.WriteLine(res);
+            try
+            {
+                writer.WriteLine(res);
+            } catch (IOException )
+            {
+                //In this case the notified client is already closed.
+            }
         }
 
         /// <summary>

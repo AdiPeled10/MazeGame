@@ -98,7 +98,10 @@ namespace Models
         /// <param name="player">
         /// The player which sent the Play command.
         /// </param>
-        void Play(Direction move, IClient player);
+        /// <return>
+        /// True if the direction is legal,false otherwise.
+        /// </return>
+        bool Play(Direction move, IClient player);
 
         /// <summary>
         /// Get the player of this specific IClient.

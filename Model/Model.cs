@@ -258,7 +258,13 @@ namespace Models
             {
                 // delete exitsing games
                 connector.DeleteGame(g);
-                connector.DeleteGame(g1);
+                try
+                {
+                    connector.DeleteGame(g1);
+                } catch(Exception)
+                {
+                    //The game with this name was deleted
+                }
                 // Create a game with this name.
                 ISearchGame game = GenerateNewGame(name, rows, cols);
                 connector.AddGame(game);
@@ -330,11 +336,14 @@ namespace Models
         /// <param name="player">
         /// The player that sent the Play command.
         /// </param>
-        public void Play(Direction move, IClient player)
+        /// <return>
+        /// True if the direction is legal,false otherwise.
+        /// </return>
+        public bool Play(Direction move, IClient player)
         {
             Player p = connector.GetPlayer(player);
             ISearchGame game = connector.GetGame(p);
-            game.MovePlayer(p, move);
+            return game.MovePlayer(p, move);
         }
 
         /// <summary>

@@ -118,9 +118,10 @@ namespace SearchGames
          /// If a move request is invalid, we ignore it. A game is much funer if it doesn't bother you 
          /// everytime you eccidently push the wrong button move forward to a wall.
          /// </summary>
-        public void Move(Direction move, IsLegalPlayerLocation isLegal)
+        public bool Move(Direction move, IsLegalPlayerLocation isLegal)
         {
             // TODO Check if it's like a GUI Up mean -1 Down +1.
+            bool returnValue = false;
             switch (move)
             {
                 case Direction.Up:
@@ -129,10 +130,12 @@ namespace SearchGames
                         if (isLegal(location))
                         {
                             NotifyMeWhenYouMove(format(move));
+                            returnValue = true;
                         }
                         else
                         {
                             location.Row += 1;
+                            returnValue = false;
                         }
                         break;
                     }
@@ -142,10 +145,12 @@ namespace SearchGames
                         if (isLegal(location))
                         {
                             NotifyMeWhenYouMove(format(move));
+                            returnValue = true;
                         }
                         else
                         {
                             location.Row -= 1;
+                            returnValue = false;
                         }
                         break;
                     }
@@ -155,10 +160,12 @@ namespace SearchGames
                         if (isLegal(location))
                         {
                             NotifyMeWhenYouMove(format(move));
+                            returnValue = true;
                         }
                         else
                         {
                             location.Col += 1;
+                            returnValue = false;
                         }
                         break;
                     }
@@ -168,16 +175,19 @@ namespace SearchGames
                         if (isLegal(location))
                         {
                             NotifyMeWhenYouMove(format(move));
+                            returnValue = true;
                         }
                         else
                         {
                             location.Col -= 1;
+                            returnValue = false;
                         }
                         break;
                     }
                 default:
                     break;
             }
+            return returnValue;
         }
         /// <summary>
         /// Overload the Equals method of object for this player class, we will compare

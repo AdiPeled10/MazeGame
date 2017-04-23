@@ -111,7 +111,10 @@ namespace SearchGames
         /// <param name="move">
         /// The direction that the player is going to move.
         /// </param>
-        void MovePlayer(Player player, Direction move);
+        /// <return>
+        /// True if the direction is legal,false otherwise.
+        /// </return>
+        bool MovePlayer(Player player, Direction move);
 
         //We left it here because we may use this in the future.
         //// returns

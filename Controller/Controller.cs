@@ -72,6 +72,7 @@ namespace Controllers
             Action request;
             string[] arr = commandLine.Split(' ');
             string commandKey = arr[0];
+            Console.WriteLine("Got Command " + commandKey);
             // Ignore "faults requests" the player probably pressed/send it by accident.
             if (commands.ContainsKey(commandKey))
             {

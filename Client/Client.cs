@@ -9,9 +9,6 @@ using System.Collections.Generic;
 
 namespace Client
 {
-    /// <summary>
-    /// This program is the client program that we are going to work with.
-    /// </summary>
     public class Program
     {
         //static void OutputServerResponses(StreamReader reader, Thread creator)
@@ -36,12 +33,40 @@ namespace Client
         //    }
         //}
 
-        /// <summary>
-        /// In this main function we are going to connect to the server.
-        /// </summary>
-        /// <param name="args">
-        /// The command line arguments.
-        /// </param>
+        static Thread OutputServerResponses(NetworkStream stream, TcpClient client)
+        {
+            // buffer for the responds
+            int n;
+            char[] buffer = new char[client.ReceiveBufferSize];
+            Thread readData = new Thread(() =>
+            {
+                while (true)
+                {
+                    try
+                    {
+                        buffer[0] = (char)stream.ReadByte();
+                        // keep reading as long as there is data available
+                        for (n = 1; stream.DataAvailable && n < client.ReceiveBufferSize; ++n)
+                        {
+                            buffer[n] = (char)stream.ReadByte();
+                        }
+                        // this also uses a third buffer. But C# is limited
+                        // "pointer-wise" and that's the best I can do.
+                        Console.Write(buffer, 0, n);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("An Exception was caught while reading from the socket");
+                        // close the connection
+                        client.Close();
+                        return;
+                    }
+                }
+            });
+            readData.Start();
+            return readData;
+        }
+
         static void Main(string[] args)
         {
             //connect to the server
@@ -51,12 +76,7 @@ namespace Client
             client.Connect(ep);
             Console.WriteLine("You are connected");
 
-            // buffer for the responds
-            int n;
-            char[] buffer = new char[client.ReceiveBufferSize];
-
             using (NetworkStream stream = client.GetStream())
-            using (StreamReader reader = new StreamReader(stream))
             using (StreamWriter writer = new StreamWriter(stream))
             {
                 // set the writer to immediately flush
@@ -64,15 +84,17 @@ namespace Client
 
                 // get requests and send them to the server
                 string req = "";
-                while (true) 
+
+                Thread outputer = OutputServerResponses(stream, client);
+
+                while (req != null)
                 {
                     // Send data to server
-                    Console.Write("Please enter a command:  ");
+                    //  Console.Write("Please enter a command:  ");
                     req = Console.ReadLine();
                     writer.WriteLine(req);
 
-                    // a human won't feel this but it helps the server responds to look faster.
-                    Thread.Sleep(20);
+                    Thread.Sleep(20);// a human won't feel this but it helps the server responds to look faster.
 
                     /*
                      * for now it works because the server works in "question-answer"
@@ -80,23 +102,25 @@ namespace Client
                      * to the previous. Also, if along other he will get notification
                      * that others have moved, its still okay.
                      */
-                    if (stream.DataAvailable || (!req.StartsWith("play") && !req.StartsWith("close")))
-                    {
-                        do
-                        {
-                            // block untill at least one byte can be read
-                            buffer[0] = (char)stream.ReadByte();
-                            // keep reading as long as there is data available
-                            for (n = 1; stream.DataAvailable && n < client.ReceiveBufferSize; ++n)
-                            {
-                                buffer[n] = (char)stream.ReadByte();
-                            }
-                            // this also uses a third buffer. but C# is limited "pointer-wise" and
-                            // that's the best I can do
-                            Console.Write(buffer, 0, n);
-                        } while (stream.DataAvailable) ;
-                    }
+                    /* if (stream.DataAvailable || (!req.StartsWith("play") && !req.StartsWith("close")))
+                     {
+                         do
+                         {
+                             // block untill at least one byte can be read
+                             buffer[0] = (char)stream.ReadByte();
+                             // keep reading as long as there is data available
+                             for (n = 1; stream.DataAvailable && n < client.ReceiveBufferSize; ++n)
+                             {
+                                 buffer[n] = (char)stream.ReadByte();
+                             }
+                             // this also uses a third buffer. but C# is limited "pointer-wise" and
+                             // that's the best I can do
+                             Console.Write(buffer, 0, n);
+                         } while (stream.DataAvailable);
+                     }*/
+
                 }
+                outputer.Join();
             }
 
             //if (client.Connected)
@@ -107,23 +131,16 @@ namespace Client
             //client.Close();
         }
 
-        /// <summary>
-        ///  * The arguments and the variables are necessary for this to work but aren't the reason it's bad.
-        ///  The function can be easy be turned to "not a function" and then they won't be recreated everytime.
-        ///  The reason it's so bad is the that the reader has internal buffer and the many operation
-        ///  needed to read the data and then restore it.
-        /// </summary>
-        /// <param name="stream">
-        /// The network stream that we will work with.
-        /// </param>
-        /// <param name="reader">
-        /// The StreamReader.
-        /// </param>
-        /// <param name="req">
-        /// The request.
-        /// </param>
+
         static void ReadOperationThatWorksBadlyAndWhy(NetworkStream stream, StreamReader reader, string req)
         {
+            /**
+             * The arguments and the variables are necessary for this to work but aren't the reason it's bad.
+             * The function can be easy be turned to "not a function" and then they won't be recreated every
+             * time.
+             * The reason it's so bad is the that the reader has internal buffer and the many operation
+             * needed to read the data and then restore it.
+             */
 
             // list for reading the respond
             List<string> lines = new List<string>(16);

@@ -184,14 +184,22 @@ namespace SearchGames
         /// <param name="move">
         /// The direction of the movement.
         /// </param>
-        public void MovePlayer(Player player, Direction move)
+        /// <return>
+        /// True if the direction is legal,false otherwise.
+        /// </return>
+        public bool MovePlayer(Player player, Direction move)
         {
             // If the game hasn't ended. This prevents player from keep playing after someone has won.
             if (!HasEnded())
             {
                 //Find the matching player which holds his location and if a player was found, move him.
-                players.Find(player.Equals)?.Move(move, IsLegalMove);
+                if ((bool)players.Find(player.Equals)?.Move(move, IsLegalMove) == false)
+                {
+                    return false;
+                }
+                return true;
             }
+            return false;
         }
 
         /// <summary>

@@ -47,7 +47,12 @@ namespace Controllers
             try
             {
                 // make the move
-                model.Play(Converter.StringToDirection(direction), client);
+                Console.WriteLine("Got direction: " + Converter.StringToDirection(direction));
+                if (!model.Play(Converter.StringToDirection(direction), client))
+                {
+                    //illegal move
+                    client.SendResponse("This move is illegal.");
+                }
 
                 //// create the notification message about the move
                 //JObject playObj = new JObject

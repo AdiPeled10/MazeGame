@@ -27,21 +27,21 @@ namespace GUIClient
 
         public void SinglePlayerClick(object sender,RoutedEventArgs args) 
         {
-            Window popupWindow = new Window();
-            //Set width and height of the window to be medium sized.
-            popupWindow.Width = 400;
-            popupWindow.Height = 400;
-            //Create StackPanel layout to hold Name,Rows,Cols of generated maze.
-            StackPanel myStackPanel = new StackPanel();
-            myStackPanel.Children.Add(new MazeInformationLayout());
-            //myStackPanel.Children.Add(GenerateTextBox("Name:"));
-            //myStackPanel.Children.Add(GenerateTextBox("Number of Rows:"));
-            //myStackPanel.Children.Add(GenerateTextBox("Number of Columns:"));
-            //Add Ok button.
-            myStackPanel.Children.Add(new Button { Width = 40,Content = "OK",
-                Height = 40, Margin = new Thickness(50)});
-            popupWindow.Content = myStackPanel;
-
+            /* Window popupWindow = new Window();
+             //Set width and height of the window to be medium sized.
+             popupWindow.Width = 400;
+             popupWindow.Height = 400;
+             //Create StackPanel layout to hold Name,Rows,Cols of generated maze.
+             StackPanel myStackPanel = new StackPanel();
+             myStackPanel.Children.Add(new MazeInformationLayout());
+             //myStackPanel.Children.Add(GenerateTextBox("Name:"));
+             //myStackPanel.Children.Add(GenerateTextBox("Number of Rows:"));
+             //myStackPanel.Children.Add(GenerateTextBox("Number of Columns:"));
+             //Add Ok button.
+             myStackPanel.Children.Add(new Button { Width = 40,Content = "OK",
+                 Height = 40, Margin = new Thickness(50)});
+             popupWindow.Content = myStackPanel;*/
+            SinglePlayerWindow popupWindow = new SinglePlayerWindow();
             popupWindow.Show();
         }
 

@@ -10,12 +10,12 @@
     <StackPanel>
         
         <StackPanel Orientation="Horizontal" Width="200">
-            <Label Content="Name:" Margin="0,50" Width="58" ></Label>
-            <TextBox x:Name="nameTextBox" Width="134" Height="26" Margin="0,0,50,0" ></TextBox>
+            <Label Content="Name:" Margin="-5,7,10,50" Width="58" ></Label>
+            <TextBox x:Name="nameTextBox" Width="134" Height="26" Margin="0,-45,30,0" ></TextBox>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <Label Content="Number of Rows" Margin="20,0,0,0" Width="100"></Label>
+            <Label Content="Number of Rows" Margin="20,-1,0,0" Width="100"></Label>
             <TextBox x:Name="rowsTextBox" Width="130" ></TextBox>
         </StackPanel>
 

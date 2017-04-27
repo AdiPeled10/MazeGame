@@ -32,12 +32,31 @@ namespace GUIClient
 
         public int Rows
         {
-            get { return Int32.Parse(rowsTextBox.Text); }
+            get
+            {
+                try
+                {
+                    return Int32.Parse(rowsTextBox.Text);
+                } catch(Exception)
+                {
+                    return 0;
+                }
+            }
         }
 
         public int Cols
         {
-            get { return Int32.Parse(columnsTextBox.Text); }
+            get
+            {
+                try
+                {
+                    return Int32.Parse(columnsTextBox.Text);
+                }
+                catch (Exception)
+                {
+                    return 0;
+                }
+            }
         }
     }
 }

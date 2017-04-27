@@ -22,6 +22,16 @@ namespace GUIClient
     {
         private UserControl control;
 
+        public UserControl Control
+        {
+            set
+            {
+                control = value;
+                Content = value;
+            }
+            get { return control; }
+        }
+
         /// <summary>
         /// We want the representation of the maze to be as generic as possible,
         /// that's why the MazeFreePass and MazeObstacle are both user controls that build
@@ -29,11 +39,8 @@ namespace GUIClient
         /// TODO-Maybe because of size limitations we need to add a ViewBox to add boundaries
         /// to the user control.
         /// </summary>
-        /// <param name="myControl"></param>
-        public MazeFreePass(UserControl myControl)
+        public MazeFreePass()
         {
-            control = myControl;
-            InitializeComponent();
         }
 
         /// <summary>
@@ -44,6 +51,12 @@ namespace GUIClient
         public override string ToString()
         {
             return "0";
+        }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            InitializeComponent();
+            base.OnInitialized(e);
         }
     }
 }

@@ -22,12 +22,26 @@ namespace GUIClient
     {
         private UserControl control;
 
-        public MazeObstacle(UserControl myControl)
+        public UserControl Control
         {
-            control = myControl;
-            InitializeComponent();
+            set
+            {
+                control = value;
+                Content = value;
+            }
+            get { return control; }
         }
 
+        public MazeObstacle()
+        {
+        }
+
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            InitializeComponent();
+            base.OnInitialized(e);
+        }
         /// <summary>
         /// In our string representation of the maze an obstacle
         /// is represented by 1.

@@ -111,9 +111,10 @@ namespace GUIClient
                 {
                      if (maze.ToCharArray()[i * Cols + j] == '0')
                     {
-                    current = new Rectangle
-                    {
-                        Width = Height,
+                        current = new Rectangle
+                        {
+                            Width = double.NaN,
+                            Height = Width,
                         Fill = Brushes.Black,
                         Stroke = Brushes.Black
                         };

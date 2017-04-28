@@ -11,16 +11,59 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace GUIClient
 {
     /// <summary>
     /// Interaction logic for SinglePlayerMaze.xaml
     /// </summary>
-    public partial class SinglePlayerMaze : Window
+    public partial class SinglePlayerMaze : Window,INotifyPropertyChanged
     {
         private int rows;
         private int cols;
+        private int realWidth;
+        private int realHeight;
+        private string name;
+
+        public new string Name
+        {
+            get { return name; }
+            set
+            {
+                if (name != value)
+                {
+                    name = value;
+                    NotifyPropertyChanged("Name");
+                }
+            }
+        }
+        public int RealWidth
+        {
+            get { return realWidth; }
+            set
+            {
+                if (realWidth != value)
+                {
+                    realWidth = value;
+                    NotifyPropertyChanged("RealWidth");
+                }
+            }
+        }
+
+        public int RealHeight
+        {
+            get { return realHeight; }
+            set
+            {
+                if (realHeight != value)
+                {
+                    realHeight = value;
+                    NotifyPropertyChanged("RealHeight");
+                }
+            }
+        }
 
         public int Rows
         {
@@ -30,7 +73,26 @@ namespace GUIClient
             }
             set
             {
-                rows = value;
+                if  (rows != value)
+                {
+                    rows = value;
+                    //this.Height = 30 * rows;
+                    /*  double buttonHeight = Height / (rows + 1);
+                      if (buttonHeight < 30)
+                      {
+                          restartButton.Height = buttonHeight;
+                          solveButton.Height = buttonHeight;
+                          mainMenu.Height = buttonHeight;
+                      } else
+                      {
+                          restartButton.Height = 30;
+                          solveButton.Height = 30;
+                          mainMenu.Height = 30;
+                      }*/
+                    // stackPanel.Height = 4;
+                    RealHeight = 30 * rows; 
+                    NotifyPropertyChanged("Rows");
+                }
             }
         }
 
@@ -43,13 +105,29 @@ namespace GUIClient
 
             set
             {
-                cols = value;
+                if (cols != value)
+                {
+                    cols = value;
+                    // this.Width = 30 * Cols;
+                    // stackPanel.Width = Width / (Cols + 1);
+                    RealWidth = 30 * cols;
+                    NotifyPropertyChanged("Cols");
+                }
             }
         }
 
         public SinglePlayerMaze()
         {
             ////InitializeComponent();
+            this.DataContext = this;
+        }
+
+       public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged(string propName)
+        {
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
         protected override void OnInitialized(EventArgs e)
@@ -57,14 +135,17 @@ namespace GUIClient
             InitializeComponent();
             Grid grid = new Grid();
             MazeUserControl maze = new MazeUserControl();
+
             grid.ColumnDefinitions.Add(new ColumnDefinition
             {
                 Width = new GridLength(1, GridUnitType.Star)
             });
+
             grid.RowDefinitions.Add(new RowDefinition
             {
                 Height = new GridLength(1, GridUnitType.Star)
             });
+
             maze.Cols = Cols;
             maze.Rows = Rows;
             grid.Children.Add(maze);
@@ -72,6 +153,7 @@ namespace GUIClient
             Grid.SetColumn(maze, 0);
             dockPanel.Children.Add(grid);
             DockPanel.SetDock(grid, Dock.Top);
+
            // grid.Children.Add(maze);
            // Grid.SetRow(maze,1);
            // Grid.SetColumn(maze, 1);

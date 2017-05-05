@@ -13,8 +13,8 @@
          
         </Button>
         <Button Content="Multi player" Width="100" HorizontalAlignment="Center"
-                VerticalAlignment="Center" Margin ="20" />
-        <Button Content= "Settings" Width="100"  >
+                VerticalAlignment="Center" Margin ="20" Click="MultiPlayerClick" />
+        <Button Content= "Settings" Width="100" Click="SettingsClick"  >
 
         </Button>
         <StackPanel.Background>

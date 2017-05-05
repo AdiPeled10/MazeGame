@@ -60,9 +60,9 @@ namespace GUIClient
                 return;
             }
             SinglePlayerMaze popupMaze = new SinglePlayerMaze();
+            popupMaze.MazeName = mazeInfo.NameBox;
             popupMaze.Rows = mazeInfo.Rows;
             popupMaze.Cols = mazeInfo.Cols;
-            popupMaze.Name = mazeInfo.NameBox;
             popupMaze.Show();
         }
     }

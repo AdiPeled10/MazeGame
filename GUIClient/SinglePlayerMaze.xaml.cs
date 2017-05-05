@@ -25,17 +25,17 @@ namespace GUIClient
         private int cols;
         private int realWidth;
         private int realHeight;
-        private string name;
+        private string mazeName;
 
-        public new string Name
+        public string MazeName
         {
-            get { return name; }
+            get { return mazeName; }
             set
             {
-                if (name != value)
+                if (mazeName != value)
                 {
-                    name = value;
-                    NotifyPropertyChanged("Name");
+                    mazeName = value;
+                    NotifyPropertyChanged("MazeName");
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace GUIClient
             {
                 Height = new GridLength(1, GridUnitType.Star)
             });
-
+            
             maze.Cols = Cols;
             maze.Rows = Rows;
             grid.Children.Add(maze);

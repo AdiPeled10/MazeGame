@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUIClient"
         mc:Ignorable="d"
-        Title="{Binding Path=Title,UpdateSourceTrigger=PropertyChanged}" Height="{Binding Path=RealHeight,UpdateSourceTrigger=PropertyChanged}"
+        Title="{Binding Path=MazeName,UpdateSourceTrigger=PropertyChanged}" 
+        Height="{Binding Path=RealHeight,UpdateSourceTrigger=PropertyChanged}"
                     Width="{Binding Path=RealWidth,UpdateSourceTrigger=PropertyChanged}">
 
         

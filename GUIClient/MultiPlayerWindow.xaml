@@ -5,8 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUIClient"
         mc:Ignorable="d"
-        Title="MultiPlayerWindow" Height="300" Width="300">
-    <Grid>
-        
-    </Grid>
+        Title="MultiPlayerWindow" Height="400" Width="400">
+    <Viewbox>
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                <Label Content="List of games:" HorizontalAlignment="Left" BorderThickness="0" Margin="0,16,0,0"></Label>
+                <ComboBox HorizontalAlignment="Right" Margin="0,24,0,0" Width="300"></ComboBox>
+            </StackPanel>
+            <Button Content="Join Game" Grid.Column="0" Grid.Row="1" Width="60" Margin="0,15,0,0"></Button>
+            <local:MazeInformationLayout Grid.Column="0" Grid.Row="2" Margin="0,12" ></local:MazeInformationLayout>
+            <Button Content="Start Game" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="3"></Button>
+
+        </Grid>
+    </Viewbox>
 </Window>

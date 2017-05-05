@@ -6,22 +6,23 @@
              xmlns:local="clr-namespace:GUIClient"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-   
-    <StackPanel>
-        
-        <StackPanel Orientation="Horizontal" Width="200">
+    <Viewbox>
+        <StackPanel>
+
+            <StackPanel Orientation="Horizontal" Width="200" HorizontalAlignment="Left">
             <Label Content="Name:" Margin="-5,7,10,50" Width="58" ></Label>
             <TextBox x:Name="nameTextBox" Width="134" Height="26" Margin="0,-45,30,0" ></TextBox>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
             <Label Content="Number of Rows" Margin="20,-1,0,0" Width="100"></Label>
             <TextBox x:Name="rowsTextBox" Width="130" ></TextBox>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
             <Label Content= "Number of Columns" Margin="20,50,0,0"></Label>
             <TextBox x:Name="columnsTextBox" Height="26" Margin="5,52,0,0" Width="100"></TextBox>
         </StackPanel>
     </StackPanel>
+    </Viewbox>
 </UserControl>

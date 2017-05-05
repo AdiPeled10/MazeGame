@@ -86,8 +86,7 @@ namespace GUIClient
         public void CreateDynamicGrid()
         {
             Rectangle current;
-
-           
+            
             //Add rows and cols to grid.
             for (int i = 0; i < Rows; i++)
             {
@@ -137,7 +136,8 @@ namespace GUIClient
                 }
             }
             //Content = new Label { Content = "liorrrrrrrrrrrrrr", Margin= new Thickness(50) };
-            Content = grid;
+            border.Child = grid;
+            Content = border;
             //Done drawing everything went fine.
             //InitializeComponent();
         }

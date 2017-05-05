@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ViewModel;
 
 namespace GUIClient
 {
@@ -20,9 +21,12 @@ namespace GUIClient
     /// </summary>
     public partial class MainWindow : Window
     {
+        IViewModel vm;
+
         public MainWindow()
         {
             InitializeComponent();
+            //TODO set data context to be viewmodel all data binding goes through there.
         }
 
         public void SinglePlayerClick(object sender,RoutedEventArgs args) 
@@ -68,12 +72,14 @@ namespace GUIClient
 
         private void MultiPlayerClick(object sender,RoutedEventArgs args)
         {
-           
+            MultiPlayerWindow window = new MultiPlayerWindow();
+            window.Show();
         }
 
         private void SettingsClick(object sender,RoutedEventArgs args)
         {
-
+            SettingsWindow window = new SettingsWindow();
+            window.Show();
         }
 
     }

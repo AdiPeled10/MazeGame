@@ -55,12 +55,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="IViewModel.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="MazeBoard.cs" />
+    <Compile Include="MazeHandler.cs" />
     <Compile Include="MazeLogic.cs" />
     <Compile Include="MazeUserControl.xaml.cs">
       <DependentUpon>MazeUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MazeViewModel.cs" />
     <Compile Include="MultiPlayerMaze.xaml.cs">
       <DependentUpon>MultiPlayerMaze.xaml</DependentUpon>
     </Compile>
@@ -160,12 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ViewModel\ViewModel.csproj">
-      <Project>{853d3ce6-fbee-4db2-a0e3-0b3c3d582584}</Project>
-      <Name>ViewModel</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="player.png" />

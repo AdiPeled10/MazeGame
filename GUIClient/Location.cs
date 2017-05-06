@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GUIClient
+namespace ViewModel
 {
     /// <summary>
     /// This class will help us save locations of rectangles that were drawn on the canvas

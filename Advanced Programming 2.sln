@@ -57,8 +57,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUIClient", "GUIClient\GUIClient.csproj", "{400D2291-F3BE-4B36-8525-E4F16D3F97F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModel", "ViewModel\ViewModel.csproj", "{853D3CE6-FBEE-4DB2-A0E3-0B3C3D582584}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,10 +103,6 @@ Global
 		{400D2291-F3BE-4B36-8525-E4F16D3F97F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{400D2291-F3BE-4B36-8525-E4F16D3F97F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{400D2291-F3BE-4B36-8525-E4F16D3F97F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{853D3CE6-FBEE-4DB2-A0E3-0B3C3D582584}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{853D3CE6-FBEE-4DB2-A0E3-0B3C3D582584}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{853D3CE6-FBEE-4DB2-A0E3-0B3C3D582584}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{853D3CE6-FBEE-4DB2-A0E3-0B3C3D582584}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

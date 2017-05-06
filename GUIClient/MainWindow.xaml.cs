@@ -21,62 +21,29 @@ namespace GUIClient
     /// </summary>
     public partial class MainWindow : Window
     {
-        IViewModel vm;
+        MazeViewModel vm;
 
         public MainWindow()
         {
+            vm = new MazeViewModel();
             InitializeComponent();
             //TODO set data context to be viewmodel all data binding goes through there.
         }
 
         public void SinglePlayerClick(object sender,RoutedEventArgs args) 
         {
-            /* Window popupWindow = new Window();
-             //Set width and height of the window to be medium sized.
-             popupWindow.Width = 400;
-             popupWindow.Height = 400;
-             //Create StackPanel layout to hold Name,Rows,Cols of generated maze.
-             StackPanel myStackPanel = new StackPanel();
-             myStackPanel.Children.Add(new MazeInformationLayout());
-             //myStackPanel.Children.Add(GenerateTextBox("Name:"));
-             //myStackPanel.Children.Add(GenerateTextBox("Number of Rows:"));
-             //myStackPanel.Children.Add(GenerateTextBox("Number of Columns:"));
-             //Add Ok button.
-             myStackPanel.Children.Add(new Button { Width = 40,Content = "OK",
-                 Height = 40, Margin = new Thickness(50)});
-             popupWindow.Content = myStackPanel;*/
-            SinglePlayerWindow popupWindow = new SinglePlayerWindow();
-            popupWindow.Show();
-            this.Close();
-        }
-
-        /// <summary>
-        /// This function will generate a label and a TextBox next to it in
-        /// a StackPanel layout.
-        /// </summary>
-        /// <param name="nameOfField">
-        /// The name of the label.
-        /// </param>
-        /// <returns></returns>
-        private StackPanel GenerateTextBox(string nameOfField)
-        {
-            StackPanel myStackPanel = new StackPanel { Orientation = Orientation.Vertical };
-            myStackPanel.Children.Add(new Label { Content = nameOfField });
-            myStackPanel.Children.Add(new TextBox());
-            return myStackPanel;
+            vm.OpenMenu(this,new SinglePlayerWindow());
+            //this.Close();
         }
 
         private void MultiPlayerClick(object sender,RoutedEventArgs args)
         {
-            MultiPlayerWindow window = new MultiPlayerWindow();
-            window.Show();
+            vm.OpenMenu(this, new MultiPlayerWindow());
         }
 
         private void SettingsClick(object sender,RoutedEventArgs args)
         {
-            SettingsWindow window = new SettingsWindow();
-            window.Show();
-            this.Close();
+            vm.OpenMenu(this, new SettingsWindow());
         }
 
     }

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using ViewModel;
 
 namespace GUIClient
 {
@@ -27,6 +28,7 @@ namespace GUIClient
         private int realHeight;
         private string mazeName;
         private MazeUserControl maze;
+        private MazeViewModel vm;
 
         public string MazeName
         {
@@ -120,6 +122,7 @@ namespace GUIClient
         public SinglePlayerMaze()
         {
             ////InitializeComponent();
+            vm = new MazeViewModel();
             this.DataContext = this;
         }
 
@@ -135,8 +138,9 @@ namespace GUIClient
         {
             InitializeComponent();
             Grid grid = new Grid();
-             maze = new MazeUserControl();
-
+            maze = new MazeUserControl();
+            
+            //Leave drawing of the grid here,irrelevant to view model.
             grid.ColumnDefinitions.Add(new ColumnDefinition
             {
                 Width = new GridLength(1, GridUnitType.Star)
@@ -163,9 +167,17 @@ namespace GUIClient
 
         private void mainMenu_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow window = new MainWindow();
-            window.Show();
-            this.Close();
+            vm.OpenMenu(this, new MainWindow());
+        }
+
+        /// <summary>
+        /// Will be triggered when the restart button is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void restartButton_Click(object sender, RoutedEventArgs e)
+        {
+            maze.Restart();
         }
     }
 }

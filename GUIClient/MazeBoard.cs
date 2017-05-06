@@ -13,18 +13,31 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GUIClient
+namespace ViewModel
 {
     public class MazeBoard
     {
         private Canvas maze;
 
+        private Location startingPosition;
+
         private ImageSource playerLogo;
 
+        /// <summary>
+        /// Save ImageSource,that way we won't need to load the image again and again;
+        /// </summary>
         private MazeLogic logic;
 
+        /// <summary>
+        /// Width of every rectangle of the maze,this will help us in the keydown event
+        /// to calculate the players location after a horizontal movement.
+        /// </summary>
         private double widthPerRect;
 
+        /// <summary>
+        /// Height of every rectangle of the maze,this will help us in the keydown event
+        /// to calculate the players location after a vertical movement.
+        /// </summary>
         private double heightPerRect;
 
         public double WidthPerRect
@@ -110,6 +123,7 @@ namespace GUIClient
 
                         //Save the player's location.
                         logic.PlayerLocation = new Location(currentX, currentY);
+                        startingPosition = logic.PlayerLocation;
                     }
                     Canvas.SetLeft(current, currentX);
                     Canvas.SetTop(current, currentY);
@@ -125,31 +139,36 @@ namespace GUIClient
             Location loc = CalculateLocation(key);
             if (loc == null)
                 return;
-             //Delete player from previous location
-             Rectangle white = new Rectangle
-             {
-                 Width = widthPerRect,
-                 Height = heightPerRect,
-                 Fill = new SolidColorBrush(System.Windows.Media.Colors.White),
-                 Stroke = Brushes.White,
-                 StrokeThickness = 0.05
-             };
-             //Add to canvas and draw it on player logo.
-             Canvas.SetLeft(white, logic.PlayerLocation.X);
-             Canvas.SetTop(white, logic.PlayerLocation.Y);
-             maze.Children.Add(white);
+            ReplacePlayerLocation(loc);
+        }
 
-             //Now draw the player
-             Rectangle playerRect = new Rectangle
-             {
-                 Width = widthPerRect,
-                 Height = heightPerRect,
-                 Fill = new ImageBrush { ImageSource = playerLogo }
-             };
-             Canvas.SetLeft(playerRect, loc.X);
-             Canvas.SetTop(playerRect, loc.Y);
-             logic.PlayerLocation = loc;
-             maze.Children.Add(playerRect);
+        private void ReplacePlayerLocation(Location loc)
+        {
+            //Delete player from previous location
+            Rectangle white = new Rectangle
+            {
+                Width = widthPerRect,
+                Height = heightPerRect,
+                Fill = new SolidColorBrush(System.Windows.Media.Colors.White),
+                Stroke = Brushes.White,
+                StrokeThickness = 0.05
+            };
+            //Add to canvas and draw it on player logo.
+            Canvas.SetLeft(white, logic.PlayerLocation.X);
+            Canvas.SetTop(white, logic.PlayerLocation.Y);
+            maze.Children.Add(white);
+
+            //Now draw the player
+            Rectangle playerRect = new Rectangle
+            {
+                Width = widthPerRect,
+                Height = heightPerRect,
+                Fill = new ImageBrush { ImageSource = playerLogo }
+            };
+            Canvas.SetLeft(playerRect, loc.X);
+            Canvas.SetTop(playerRect, loc.Y);
+            logic.PlayerLocation = loc;
+            maze.Children.Add(playerRect);
         }
 
         private Location CalculateLocation(Key key)
@@ -210,6 +229,14 @@ namespace GUIClient
                     }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Move the player to it's starting position.
+        /// </summary>
+        public void RestartGame()
+        {
+            ReplacePlayerLocation(startingPosition);
         }
 
     }

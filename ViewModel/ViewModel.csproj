@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="INotifyPropertyChanged.cs" />
     <Compile Include="IViewModel.cs" />
     <Compile Include="MazeViewModel.cs" />
     <Compile Include="Program.cs" />

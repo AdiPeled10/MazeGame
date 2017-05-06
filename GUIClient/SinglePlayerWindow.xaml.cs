@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ViewModel;
 
 namespace GUIClient
 {
@@ -20,9 +21,29 @@ namespace GUIClient
     public partial class SinglePlayerWindow : Window
     {
         private TextBlock errorBox;
+
+        private MazeViewModel vm;
+
+        public TextBlock ErrorBox
+        {
+            get { return errorBox; }
+            set { errorBox = value; }
+        }
         
+        public MazeInformationLayout Info
+        {
+            get { return mazeInfo; }
+            set { mazeInfo = value; }
+        }
+
+        public StackPanel Stack
+        {
+            get { return stackPanel; }
+        }
+
         public SinglePlayerWindow()
         {
+            vm = new MazeViewModel();
             InitializeComponent();
 
         }
@@ -34,37 +55,7 @@ namespace GUIClient
         /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //Delete previous error.
-            if (errorBox != null )
-            {
-                stackPanel.Children.Remove(errorBox);
-            }
-
-            string error = "";
-            if (mazeInfo.NameBox.Length == 0)
-            {
-                error = "Please enter a valid name.";
-            } else if (mazeInfo.Rows == 0)
-            {
-                error = "Please enter valid number of rows.";
-            } else if (mazeInfo.Cols == 0)
-            {
-                error = "Please enter a valid number of columns";
-            }
-
-            if (error.Length != 0)
-            {
-                //There was some error.
-                errorBox = new TextBlock { Text = error, Foreground = Brushes.Red };
-                stackPanel.Children.Add(errorBox);
-                return;
-            }
-            SinglePlayerMaze popupMaze = new SinglePlayerMaze();
-            popupMaze.MazeName = mazeInfo.NameBox;
-            popupMaze.Rows = mazeInfo.Rows;
-            popupMaze.Cols = mazeInfo.Cols;
-            popupMaze.Show();
-            this.Close();
+            vm.SinglePlayerOkButton(this);
         }
     }
 }

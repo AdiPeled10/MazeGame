@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GUIClient"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Border Name="border" BorderThickness="4" BorderBrush="Black">
-        <Grid Name="grid"  RenderTransformOrigin="0.504,0.563" Margin="8.4,23.4,7.6,7.6" Background="White">
-       
-    </Grid>
-    </Border>
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="MazeLoaded">
+    <Viewbox>
+        <Border BorderBrush="Black" BorderThickness="3" KeyDown="Border_KeyDown">
+            <Canvas x:Name="myCanvas" Width="300" Height="300"></Canvas>
+        </Border>
+    </Viewbox>
 </UserControl>

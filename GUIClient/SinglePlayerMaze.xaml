@@ -26,7 +26,7 @@
                 <Button Name="solveButton" Content="Solve maze" Grid.Row="0" Grid.Column="1"
                     VerticalAlignment="Top" HorizontalAlignment="Center" Height="12" Margin="15,4,0,0" FontSize="6" />
                 <Button Name="mainMenu" Content="Main menu" Grid.Row="0" Grid.Column="2"
-                    VerticalAlignment="Top" HorizontalAlignment="Right" Height="12" Margin="15,4,20,0" FontSize="6" Width="37" />
+                    VerticalAlignment="Top" HorizontalAlignment="Right" Height="12" Margin="15,4,20,0" FontSize="6" Width="37" Click="mainMenu_Click" />
             </Grid>
         </Viewbox>
     </DockPanel>

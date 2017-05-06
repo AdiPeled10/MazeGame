@@ -47,6 +47,7 @@ namespace GUIClient
              popupWindow.Content = myStackPanel;*/
             SinglePlayerWindow popupWindow = new SinglePlayerWindow();
             popupWindow.Show();
+            this.Close();
         }
 
         /// <summary>
@@ -65,11 +66,6 @@ namespace GUIClient
             return myStackPanel;
         }
 
-        private void OKButtonClick(object sender,RoutedEventArgs args)
-        {
-
-        }
-
         private void MultiPlayerClick(object sender,RoutedEventArgs args)
         {
             MultiPlayerWindow window = new MultiPlayerWindow();
@@ -80,6 +76,7 @@ namespace GUIClient
         {
             SettingsWindow window = new SettingsWindow();
             window.Show();
+            this.Close();
         }
 
     }

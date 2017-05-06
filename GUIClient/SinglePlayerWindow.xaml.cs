@@ -64,6 +64,7 @@ namespace GUIClient
             popupMaze.Rows = mazeInfo.Rows;
             popupMaze.Cols = mazeInfo.Cols;
             popupMaze.Show();
+            this.Close();
         }
     }
 }

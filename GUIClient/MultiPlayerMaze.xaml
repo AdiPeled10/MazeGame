@@ -5,13 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUIClient"
         mc:Ignorable="d"
-        Title="MultiPlayerMaze" Height="1000" Width="1000">
-    <Grid>
+        Title= "{Binding MazeName}" Height="600" Width="1000">
+    <Window.DataContext>
+        <local:MultiPlayerWindow></local:MultiPlayerWindow>
+    </Window.DataContext>
+    <Grid Name="mainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" ></RowDefinition>
-            <RowDefinition Height="*" ></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions></Grid.ColumnDefinitions>
-        
+        <Grid.ColumnDefinitions >
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Button Content="Back to main menu" Grid.Row="0" Grid.Column="0" Width="140" Height="18" Margin="0,19,0,0"></Button>
+
     </Grid>
 </Window>

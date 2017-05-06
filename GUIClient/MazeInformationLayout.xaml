@@ -6,23 +6,31 @@
              xmlns:local="clr-namespace:GUIClient"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Viewbox>
-        <StackPanel>
-
-            <StackPanel Orientation="Horizontal" Width="200" HorizontalAlignment="Left">
-            <Label Content="Name:" Margin="-5,7,10,50" Width="58" ></Label>
-            <TextBox x:Name="nameTextBox" Width="134" Height="26" Margin="0,-45,30,0" ></TextBox>
-        </StackPanel>
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <Label Content="Number of Rows" Margin="20,-1,0,0" Width="100"></Label>
-            <TextBox x:Name="rowsTextBox" Width="130" ></TextBox>
-        </StackPanel>
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <Label Content= "Number of Columns" Margin="20,50,0,0"></Label>
-            <TextBox x:Name="columnsTextBox" Height="26" Margin="5,52,0,0" Width="100"></TextBox>
-        </StackPanel>
-    </StackPanel>
-    </Viewbox>
+    <Grid TextBlock.FontSize="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="Padding" Value="3"/>
+                <Setter Property="Margin" Value="3"/>
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="Padding" Value="3"/>
+                <Setter Property="Margin" Value="3"/>
+            </Style>
+        </Grid.Resources>
+        <TextBlock Grid.Column="0" Grid.Row="0">Maze name:</TextBlock>
+        <TextBox x:Name="nameTextBox" Grid.Row="0" Grid.Column="1" ></TextBox>
+        <TextBlock Grid.Row="1" Grid.Column="0">Maze rows:</TextBlock>
+        <TextBox x:Name="rowsTextBox" Grid.Row="1" Grid.Column="1" ></TextBox>
+        <TextBlock Grid.Row="2" Grid.Column="0">Maze columns:</TextBlock>
+        <TextBox x:Name="columnsTextBox" Grid.Row="2" Grid.Column="1" ></TextBox>
+    </Grid>
 </UserControl>

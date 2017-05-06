@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUIClient"
         mc:Ignorable="d"
-        Title="SinglePlayer" Height="300" Width="300">
+        Title="SinglePlayer" Height="200" Width="300">
     <StackPanel Name="stackPanel">
         <local:MazeInformationLayout x:Name="mazeInfo"></local:MazeInformationLayout>
-        <Button Content="OK" Margin="15" Width=" 60" Click="Button_Click" ></Button>
+        <Button Content="Start Game" Margin="15" Width="70" Click="Button_Click" ></Button>
     </StackPanel>
 </Window>

@@ -26,6 +26,7 @@ namespace GUIClient
         private int realWidth;
         private int realHeight;
         private string mazeName;
+        private MazeUserControl maze;
 
         public string MazeName
         {
@@ -134,7 +135,7 @@ namespace GUIClient
         {
             InitializeComponent();
             Grid grid = new Grid();
-            MazeUserControl maze = new MazeUserControl();
+             maze = new MazeUserControl();
 
             grid.ColumnDefinitions.Add(new ColumnDefinition
             {
@@ -160,5 +161,11 @@ namespace GUIClient
             base.OnInitialized(e);
         }
 
+        private void mainMenu_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow window = new MainWindow();
+            window.Show();
+            this.Close();
+        }
     }
 }

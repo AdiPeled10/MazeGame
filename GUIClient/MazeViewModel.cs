@@ -19,10 +19,8 @@ namespace ViewModel
 {
     public delegate void KeyHandler(Key key);
 
-    public class MazeViewModel : IViewModel,INotifyPropertyChanged
+    public class MazeViewModel : ViewModel,INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         /// <summary>
         /// The number of rows in the maze.
         /// </summary>

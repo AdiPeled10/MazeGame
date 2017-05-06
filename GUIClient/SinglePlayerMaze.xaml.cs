@@ -121,7 +121,7 @@ namespace GUIClient
 
         public SinglePlayerMaze()
         {
-            ////InitializeComponent();
+            //InitializeComponent();
             vm = new SinglePlayerMazeVM();
             this.DataContext = this;
         }
@@ -138,6 +138,7 @@ namespace GUIClient
         {
             InitializeComponent();
             Grid grid = new Grid();
+        
             maze = new MazeUserControl();
             
             //Leave drawing of the grid here,irrelevant to view model.
@@ -181,5 +182,6 @@ namespace GUIClient
         {
             maze.Restart();
         }
+
     }
 }

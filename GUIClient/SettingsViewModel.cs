@@ -13,43 +13,56 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using Model;
 
 namespace ViewModel
 {
-    public class SettingsViewModel : INotifyPropertyChanged
+    public class SettingsViewModel : ViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        private int serverPort;
-
-        private string serverIP;
-
-        private int mazeCols;
-
-        private int mazeRows;
+        private ISettingsModel model;
 
         public int MazeCols
         {
-            get { return mazeCols; }
-            set { mazeCols = value; }
+            get { return model.MazeCols; }
+            set {
+                model.MazeCols = value;
+                NotifyPropertyChanged("MazeCols");
+            }
         }
 
         public int MazeRows
         {
-            get { return mazeRows; }
-            set { mazeRows = value; }
+            get { return model.MazeRows; }
+            set
+            {
+                model.MazeRows = value;
+                NotifyPropertyChanged("MazeRows");
+            }
         }
 
         public int ServerPort
         {
-            get { return serverPort; }
-            set { serverPort = value; }
+            get { return model.ServerPort; }
+            set {
+                model.ServerPort = value;
+                NotifyPropertyChanged("ServerPort");
+            }
         }
 
         public string ServerIP
         {
-            get { return serverIP; }
-            set { serverIP = value; }
+            get { return model.ServerIP; }
+            set
+            {
+                model.ServerIP = value;
+                NotifyPropertyChanged("ServerIP");
+            }
+        }
+
+        public SettingsViewModel(ISettingsModel model)
+        {
+            this.model = model;
         }
 
         /// <summary>
@@ -57,7 +70,7 @@ namespace ViewModel
         /// </summary>
         public void SaveSettings()
         {
-
+            model.SaveSettings();
         }
     }
 }

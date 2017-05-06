@@ -41,6 +41,12 @@ namespace GUIClient
             get { return stackPanel; }
         }
 
+        public string MazeName
+        {
+            get { return mazeInfo.nameTextBox.Text; }
+            set { }
+        }
+
         public SinglePlayerWindow()
         {
             vm = new SinglePlayerWindowVM();
@@ -69,17 +75,9 @@ namespace GUIClient
             string error = "";
             if (mazeInfo.NameBox.Length == 0)
             {
+                //We will require the user to enter a name.
                 error = "Please enter a valid name.";
             }
-            else if (mazeInfo.Rows == 0)
-            {
-                error = "Please enter valid number of rows.";
-            }
-            else if (mazeInfo.Cols == 0)
-            {
-                error = "Please enter a valid number of columns";
-            }
-
             if (error.Length != 0)
             {
                 //There was some error.
@@ -89,8 +87,18 @@ namespace GUIClient
             }
             SinglePlayerMaze popupMaze = new SinglePlayerMaze();
             popupMaze.MazeName = mazeInfo.NameBox;
-            popupMaze.Rows = mazeInfo.Rows;
-            popupMaze.Cols = mazeInfo.Cols;
+            
+            //Check if rows and cols were entered otherwise take default
+            if (mazeInfo.Rows != 0 && mazeInfo.Cols != 0)
+            {
+                popupMaze.Rows = mazeInfo.Rows;
+                popupMaze.Cols = mazeInfo.Cols;
+            } else
+            {
+                //Read from default.
+                popupMaze.Rows = Properties.Settings.Default.MazeRows;
+                popupMaze.Cols = Properties.Settings.Default.MazeCols;
+            }
             popupMaze.Show();
             this.Close();
         }

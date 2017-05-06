@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ViewModel;
+using Model;
 
 namespace GUIClient
 {
@@ -25,7 +26,7 @@ namespace GUIClient
         public SettingsWindow()
         {
             InitializeComponent();
-            vm = new SettingsViewModel();
+            vm = new SettingsViewModel(new ApplicationSettingsModel());
             this.DataContext = vm;
         }
 
@@ -39,6 +40,9 @@ namespace GUIClient
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             vm.SaveSettings();
+            MainWindow window = new MainWindow();
+            window.Show();
+            this.Close();
         }
     }
 }

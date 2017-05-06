@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using ViewModel;
 
 namespace GUIClient
 {
@@ -23,6 +24,7 @@ namespace GUIClient
         private string mazeName;
         private int rows;
         private int cols;
+        private MultiPlayerWindowVM vm;
 
         public string MazeName
         {
@@ -65,6 +67,7 @@ namespace GUIClient
 
         public MultiPlayerWindow()
         {
+            vm = new MultiPlayerWindowVM();
             InitializeComponent();
         }
 
@@ -75,7 +78,7 @@ namespace GUIClient
             MultiPlayerMaze mazeWindow = new MultiPlayerMaze();
             mazeWindow.Rows = 20;
             mazeWindow.Cols = 20;
-            mazeWindow.Show();
+            vm.OpenMenu(this, mazeWindow);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

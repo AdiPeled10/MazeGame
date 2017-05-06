@@ -28,7 +28,7 @@ namespace GUIClient
         private int realHeight;
         private string mazeName;
         private MazeUserControl maze;
-        private MazeViewModel vm;
+        private SinglePlayerMazeVM vm;
 
         public string MazeName
         {
@@ -122,7 +122,7 @@ namespace GUIClient
         public SinglePlayerMaze()
         {
             ////InitializeComponent();
-            vm = new MazeViewModel();
+            vm = new SinglePlayerMazeVM();
             this.DataContext = this;
         }
 

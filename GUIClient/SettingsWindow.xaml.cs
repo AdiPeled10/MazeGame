@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ViewModel;
 
 namespace GUIClient
 {
@@ -19,16 +20,16 @@ namespace GUIClient
     /// </summary>
     public partial class SettingsWindow : Window
     {
+        private SettingsViewModel vm;
         public SettingsWindow()
         {
+            vm = new SettingsViewModel();
             InitializeComponent();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow window = new MainWindow();
-            this.Close();
-            window.Show();
+            vm.OpenMenu(this, new MainWindow());
         }
     }
 }

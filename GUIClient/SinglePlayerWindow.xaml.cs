@@ -22,7 +22,7 @@ namespace GUIClient
     {
         private TextBlock errorBox;
 
-        private MazeViewModel vm;
+        private SinglePlayerWindowVM vm;
 
         public TextBlock ErrorBox
         {
@@ -43,7 +43,7 @@ namespace GUIClient
 
         public SinglePlayerWindow()
         {
-            vm = new MazeViewModel();
+            vm = new SinglePlayerWindowVM();
             InitializeComponent();
 
         }

@@ -17,110 +17,128 @@ using GUIClient;
 
 namespace ViewModel
 {
+    public delegate void KeyHandler(Key key);
+
     public class MazeViewModel : IViewModel,INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private int serverPort;
+        /// <summary>
+        /// The number of rows in the maze.
+        /// </summary>
+        private int rows;
 
-        private int mazeCols;
+        /// <summary>
+        /// The number of columns in the maze.
+        /// </summary>
+        private int cols;
 
-        private int mazeRows;
+        /// <summary>
+        /// String representation of the maze.
+        /// </summary>
+        private string maze;
 
-        private string mazeName;
+        private Dictionary<Key, KeyHandler> keyToHandler;
 
-        private MazeHandler handler;
+        /// <summary>
+        /// The maze board which will manage the logic of drawing and movement on
+        /// the maze.
+        /// </summary>
+        private MazeBoard board;
 
-        public string MazeName
+        /// <summary>
+        /// TODO- Maybe change input to user control instead of canvas-flexibility.
+        /// </summary>
+        /// <param name="control"></param>
+        public MazeViewModel(Canvas control, int rows, int cols)
         {
-            get { return mazeName; }
-            set { mazeName = value; }
+            this.cols = cols;
+            this.rows = rows;
+            GenerateRandomMaze();
+            board = new MazeBoard(control);
+            //Set default keyboards of dictionary.Initialize dictionary.
+            keyToHandler = new Dictionary<Key, KeyHandler>();
+            keyToHandler.Add(Key.Up, board.DrawPlayer);
+            keyToHandler.Add(Key.Down, board.DrawPlayer);
+            keyToHandler.Add(Key.Left, board.DrawPlayer);
+            keyToHandler.Add(Key.Right, board.DrawPlayer);
         }
 
-        public int MazeCols
+        public void AddKey(Key key, KeyHandler handler)
         {
-            get { return mazeCols; }
-            set { mazeCols = value;  }
+            keyToHandler.Add(key, handler);
         }
 
-         public int MazeRows
+        public void RemoveKey(Key key)
         {
-            get { return mazeRows; }
-            set { mazeRows = value; }
+            keyToHandler.Remove(key);
         }
 
-        public int ServerPort
+        public void RestartGame()
         {
-            get { return serverPort; }
-            set { serverPort = value; }
+            board.RestartGame();
         }
 
-        public MazeViewModel()
+        public void KeyPressed(Key key)
         {
+            try
+            {
+                keyToHandler[key](key);
+            }
+            catch (KeyNotFoundException)
+            {
+                Console.Write("Oh snap");
+            }
+
         }
+
+        public void DrawMaze()
+        {
+            board.DrawOnCanvas(maze, rows, cols);
+        }
+
+        /// <summary>
+        /// This is here to help us test the design when the MVVM
+        /// will be ready we will get the maze from the ViewModel.
+        /// TODO- Will be gone when we will get from server.
+        /// </summary>
+        private void GenerateRandomMaze()
+        {
+
+
+            //For now generate the string for the maze here to test the design.
+            //Later we will get it through the ViewModel.
+            int loopVal = rows * cols;
+            string myString = "";
+            Random rand = new Random();
+            int randomNumber = rand.Next(0, loopVal);
+            for (int i = 0; i < loopVal; i++)
+            {
+                if (i != randomNumber)
+                {
+                    if (rand.Next(0, 2) == 0)
+                    {
+                        myString += '0';
+                    }
+                    else
+                    {
+                        myString += '1';
+                    }
+                }
+                else
+                {
+                    myString += '*';
+                }
+
+            }
+            maze = myString;
+        }
+    
 
         public void OpenMenu(Window sender,Window opened)//Window window//)
         {
             opened.Show();
             sender.Close();
         }
-        
-        public void SinglePlayerOkButton(SinglePlayerWindow window)
-        {
-            //Delete previous error.
-            if (window.ErrorBox != null)
-            {
-                window.Stack.Children.Remove(window.ErrorBox);
-            }
-
-            string error = "";
-            if (window.Info.NameBox.Length == 0)
-            {
-                error = "Please enter a valid name.";
-            }
-            else if (window.Info.Rows == 0)
-            {
-                error = "Please enter valid number of rows.";
-            }
-            else if (window.Info.Cols == 0)
-            {
-                error = "Please enter a valid number of columns";
-            }
-
-            if (error.Length != 0)
-            {
-                //There was some error.
-                window.ErrorBox = new TextBlock { Text = error, Foreground = Brushes.Red };
-                window.Stack.Children.Add(window.ErrorBox);
-                return;
-            }
-            SinglePlayerMaze popupMaze = new SinglePlayerMaze();
-            popupMaze.MazeName = window.Info.NameBox;
-            popupMaze.Rows = window.Info.Rows;
-            popupMaze.Cols = window.Info.Cols;
-            popupMaze.Show();
-            window.Close();
-        }
-
-        public void RestartGame()
-        {
-            handler.Restart();
-        }
-
-        public void KeyPressed(Key key)
-        {
-            handler.KeyPressed(key);
-        }
-
-        public void SetHandler(Canvas canvas,int rows,int cols)
-        {
-            handler = new MazeHandler(canvas,rows,cols);
-        }
-
-        public void DrawMaze()
-        {
-            handler.DrawMaze();
-        }
-
     }
 }

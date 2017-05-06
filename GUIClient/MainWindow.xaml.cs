@@ -21,11 +21,11 @@ namespace GUIClient
     /// </summary>
     public partial class MainWindow : Window
     {
-        MazeViewModel vm;
+        MainWindowViewModel vm;
 
         public MainWindow()
         {
-            vm = new MazeViewModel();
+            vm = new MainWindowViewModel();
             InitializeComponent();
             //TODO set data context to be viewmodel all data binding goes through there.
         }

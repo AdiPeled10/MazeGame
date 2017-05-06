@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Runtime.CompilerServices;
+using ViewModel;
 
 namespace GUIClient
 {
@@ -22,6 +23,7 @@ namespace GUIClient
     {
         private int rows;
         private int cols;
+        private MultiPlayerMazeVM vm;
 
         public int Rows
         {
@@ -43,6 +45,7 @@ namespace GUIClient
 
         public MultiPlayerMaze()
         {
+            vm = new MultiPlayerMazeVM();
         }
 
 
@@ -120,6 +123,11 @@ namespace GUIClient
             Content = mainGrid;
 
             base.OnInitialized(e);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            vm.OpenMenu(this, new MainWindow());
         }
     }
 }

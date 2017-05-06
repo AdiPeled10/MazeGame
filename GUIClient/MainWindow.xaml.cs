@@ -32,18 +32,23 @@ namespace GUIClient
 
         public void SinglePlayerClick(object sender,RoutedEventArgs args) 
         {
-            vm.OpenMenu(this,new SinglePlayerWindow());
-            //this.Close();
+            SinglePlayerWindow window = new SinglePlayerWindow();
+            window.Show();
+            this.Close();
         }
 
         private void MultiPlayerClick(object sender,RoutedEventArgs args)
         {
-            vm.OpenMenu(this, new MultiPlayerWindow());
+            MultiPlayerWindow window = new MultiPlayerWindow();
+            window.Show();
+            this.Close();
         }
 
         private void SettingsClick(object sender,RoutedEventArgs args)
         {
-            vm.OpenMenu(this, new SettingsWindow());
+            SettingsWindow window = new SettingsWindow();
+            window.Show();
+            this.Close();
         }
 
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ViewModel
 {
-    public class SinglePlayerMazeVM : WindowViewModel
+    public class SinglePlayerMazeVM
     {
     }
 }

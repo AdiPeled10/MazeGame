@@ -127,7 +127,9 @@ namespace GUIClient
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            vm.OpenMenu(this, new MainWindow());
+            MainWindow window = new MainWindow();
+            window.Show();
+            this.Close();
         }
     }
 }

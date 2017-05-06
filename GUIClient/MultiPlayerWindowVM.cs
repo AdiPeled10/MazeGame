@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 
 namespace ViewModel
 {
-    public class MultiPlayerWindowVM : WindowViewModel
+    public class MultiPlayerWindowVM
     {
     }
 }

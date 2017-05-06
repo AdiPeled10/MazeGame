@@ -167,7 +167,9 @@ namespace GUIClient
 
         private void mainMenu_Click(object sender, RoutedEventArgs e)
         {
-            vm.OpenMenu(this, new MainWindow());
+            MainWindow window = new MainWindow();
+            window.Show();
+            this.Close();
         }
 
         /// <summary>

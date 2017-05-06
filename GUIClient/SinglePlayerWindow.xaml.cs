@@ -50,12 +50,49 @@ namespace GUIClient
 
         /// <summary>
         /// This is the function that will run when the user will click the OK button in this window.
+        /// We don't want the view model to know about wpf at all.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            vm.SinglePlayerOkButton(this);
+            SinglePlayerOkButton();
+        }
+        public void SinglePlayerOkButton()
+        {
+            //Delete previous error.
+            if (errorBox != null)
+            {
+                stackPanel.Children.Remove(errorBox);
+            }
+
+            string error = "";
+            if (mazeInfo.NameBox.Length == 0)
+            {
+                error = "Please enter a valid name.";
+            }
+            else if (mazeInfo.Rows == 0)
+            {
+                error = "Please enter valid number of rows.";
+            }
+            else if (mazeInfo.Cols == 0)
+            {
+                error = "Please enter a valid number of columns";
+            }
+
+            if (error.Length != 0)
+            {
+                //There was some error.
+                errorBox = new TextBlock { Text = error, Foreground = Brushes.Red };
+                stackPanel.Children.Add(errorBox);
+                return;
+            }
+            SinglePlayerMaze popupMaze = new SinglePlayerMaze();
+            popupMaze.MazeName = mazeInfo.NameBox;
+            popupMaze.Rows = mazeInfo.Rows;
+            popupMaze.Cols = mazeInfo.Cols;
+            popupMaze.Show();
+            this.Close();
         }
     }
 }

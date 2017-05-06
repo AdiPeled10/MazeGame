@@ -34,6 +34,11 @@ namespace GUIClient
         /// </summary>
         private int cols;
 
+        /// <summary>
+        /// The maze board which will manage the logic of drawing and movement on
+        /// the maze.
+        /// </summary>
+        private MazeBoard board;
 
         private MazeViewModel vm;
 
@@ -64,8 +69,9 @@ namespace GUIClient
         protected override void OnInitialized(EventArgs e)
         {
             InitializeComponent();
-            vm = new MazeViewModel(myCanvas, rows, cols);
-            vm.DrawMaze();
+            board = new MazeBoard(myCanvas);
+            vm = new MazeViewModel( rows, cols,board);
+            board.DrawOnCanvas(vm.Maze, rows, cols);
             base.OnInitialized(e);
         }
 
@@ -83,7 +89,9 @@ namespace GUIClient
 
         public void Restart()
         {
-            vm.RestartGame();
+            board.RestartGame();
         }
+
+
     }
 }

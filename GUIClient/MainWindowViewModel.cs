@@ -16,7 +16,7 @@ using System.ComponentModel;
 
 namespace ViewModel
 {
-    public class MainWindowViewModel : WindowViewModel
+    public class MainWindowViewModel
     {
     }
 }

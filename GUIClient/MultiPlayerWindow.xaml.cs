@@ -78,7 +78,8 @@ namespace GUIClient
             MultiPlayerMaze mazeWindow = new MultiPlayerMaze();
             mazeWindow.Rows = 20;
             mazeWindow.Cols = 20;
-            vm.OpenMenu(this, mazeWindow);
+            mazeWindow.Show();
+            this.Close();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

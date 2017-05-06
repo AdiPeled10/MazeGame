@@ -16,7 +16,7 @@ using System.ComponentModel;
 
 namespace ViewModel
 {
-    public class MultiPlayerMazeVM : WindowViewModel
+    public class MultiPlayerMazeVM
     {
     }
 }

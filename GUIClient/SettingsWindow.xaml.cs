@@ -21,15 +21,24 @@ namespace GUIClient
     public partial class SettingsWindow : Window
     {
         private SettingsViewModel vm;
+
         public SettingsWindow()
         {
-            vm = new SettingsViewModel();
             InitializeComponent();
+            vm = new SettingsViewModel();
+            this.DataContext = vm;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            vm.OpenMenu(this, new MainWindow());
+            MainWindow window = new MainWindow();
+            window.Show();
+            this.Close();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            vm.SaveSettings();
         }
     }
 }

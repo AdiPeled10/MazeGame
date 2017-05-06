@@ -16,11 +16,13 @@ using System.ComponentModel;
 
 namespace ViewModel
 {
-    public class SettingsViewModel : WindowViewModel,INotifyPropertyChanged
+    public class SettingsViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         private int serverPort;
+
+        private string serverIP;
 
         private int mazeCols;
 
@@ -42,6 +44,20 @@ namespace ViewModel
         {
             get { return serverPort; }
             set { serverPort = value; }
+        }
+
+        public string ServerIP
+        {
+            get { return serverIP; }
+            set { serverIP = value; }
+        }
+
+        /// <summary>
+        /// Save default settings that the user applied.
+        /// </summary>
+        public void SaveSettings()
+        {
+
         }
     }
 }

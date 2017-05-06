@@ -40,22 +40,22 @@ namespace ViewModel
 
         private Dictionary<Key, KeyHandler> keyToHandler;
 
-        /// <summary>
-        /// The maze board which will manage the logic of drawing and movement on
-        /// the maze.
-        /// </summary>
-        private MazeBoard board;
+        public string Maze
+        {
+            get { return maze; }
+            set { maze = value; }
+        }
 
         /// <summary>
         /// TODO- Maybe change input to user control instead of canvas-flexibility.
         /// </summary>
         /// <param name="control"></param>
-        public MazeViewModel(Canvas control, int rows, int cols)
+        public MazeViewModel(int rows, int cols,MazeBoard board)
         {
             this.cols = cols;
             this.rows = rows;
             GenerateRandomMaze();
-            board = new MazeBoard(control);
+           
             //Set default keyboards of dictionary.Initialize dictionary.
             keyToHandler = new Dictionary<Key, KeyHandler>();
             keyToHandler.Add(Key.Up, board.DrawPlayer);
@@ -74,11 +74,6 @@ namespace ViewModel
             keyToHandler.Remove(key);
         }
 
-        public void RestartGame()
-        {
-            board.RestartGame();
-        }
-
         public void KeyPressed(Key key)
         {
             try
@@ -92,10 +87,6 @@ namespace ViewModel
 
         }
 
-        public void DrawMaze()
-        {
-            board.DrawOnCanvas(maze, rows, cols);
-        }
 
         /// <summary>
         /// This is here to help us test the design when the MVVM
@@ -133,12 +124,6 @@ namespace ViewModel
             }
             maze = myString;
         }
-    
-
-        public void OpenMenu(Window sender,Window opened)//Window window//)
-        {
-            opened.Show();
-            sender.Close();
-        }
+   
     }
 }

@@ -19,41 +19,18 @@ namespace ViewModel
 {
     public delegate void KeyHandler(Key key);
 
-    public class MazeViewModel : ViewModel,INotifyPropertyChanged
+    public class MazeViewModel : ViewModel, INotifyPropertyChanged
     {
-        /// <summary>
-        /// The number of rows in the maze.
-        /// </summary>
-        private int rows;
-
-        /// <summary>
-        /// The number of columns in the maze.
-        /// </summary>
-        private int cols;
-
-        /// <summary>
-        /// String representation of the maze.
-        /// </summary>
-        private string maze;
 
         private Dictionary<Key, KeyHandler> keyToHandler;
-
-        public string Maze
-        {
-            get { return maze; }
-            set { maze = value; }
-        }
 
         /// <summary>
         /// TODO- Maybe change input to user control instead of canvas-flexibility.
         /// </summary>
         /// <param name="control"></param>
-        public MazeViewModel(int rows, int cols,MazeBoard board)
+        public MazeViewModel(MazeBoard board)
         {
-            this.cols = cols;
-            this.rows = rows;
-            GenerateRandomMaze();
-           
+
             //Set default keyboards of dictionary.Initialize dictionary.
             keyToHandler = new Dictionary<Key, KeyHandler>();
             keyToHandler.Add(Key.Up, board.DrawPlayer);
@@ -86,42 +63,6 @@ namespace ViewModel
         }
 
 
-        /// <summary>
-        /// This is here to help us test the design when the MVVM
-        /// will be ready we will get the maze from the ViewModel.
-        /// TODO- Will be gone when we will get from server.
-        /// </summary>
-        private void GenerateRandomMaze()
-        {
 
-
-            //For now generate the string for the maze here to test the design.
-            //Later we will get it through the ViewModel.
-            int loopVal = rows * cols;
-            string myString = "";
-            Random rand = new Random();
-            int randomNumber = rand.Next(0, loopVal);
-            for (int i = 0; i < loopVal; i++)
-            {
-                if (i != randomNumber)
-                {
-                    if (rand.Next(0, 2) == 0)
-                    {
-                        myString += '0';
-                    }
-                    else
-                    {
-                        myString += '1';
-                    }
-                }
-                else
-                {
-                    myString += '*';
-                }
-
-            }
-            maze = myString;
-        }
-   
     }
 }

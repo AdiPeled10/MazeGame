@@ -20,15 +20,27 @@ namespace GUIClient
     /// <summary>
     /// Interaction logic for SinglePlayerMaze.xaml
     /// </summary>
-    public partial class SinglePlayerMaze : Window,INotifyPropertyChanged
+    public partial class SinglePlayerMaze : Window
     {
         private int rows;
         private int cols;
         private int realWidth;
         private int realHeight;
         private string mazeName;
-        private MazeUserControl maze;
-        private SinglePlayerMazeVM vm;
+
+       
+
+
+
+        private SinglePlayerVM vm;
+
+        public SinglePlayerVM VM
+        {
+            set {
+                vm = value;
+                DataContext = vm;
+            }
+        }
 
         public string MazeName
         {
@@ -38,7 +50,7 @@ namespace GUIClient
                 if (mazeName != value)
                 {
                     mazeName = value;
-                    NotifyPropertyChanged("MazeName");
+                    //NotifyPropertyChanged("MazeName");
                 }
             }
         }
@@ -50,7 +62,7 @@ namespace GUIClient
                 if (realWidth != value)
                 {
                     realWidth = value;
-                    NotifyPropertyChanged("RealWidth");
+                   // NotifyPropertyChanged("RealWidth");
                 }
             }
         }
@@ -63,7 +75,7 @@ namespace GUIClient
                 if (realHeight != value)
                 {
                     realHeight = value;
-                    NotifyPropertyChanged("RealHeight");
+                   // NotifyPropertyChanged("RealHeight");
                 }
             }
         }
@@ -94,7 +106,7 @@ namespace GUIClient
                       }*/
                     // stackPanel.Height = 4;
                     RealHeight = 30 * rows; 
-                    NotifyPropertyChanged("Rows");
+                    //NotifyPropertyChanged("Rows");
                 }
             }
         }
@@ -114,16 +126,17 @@ namespace GUIClient
                     // this.Width = 30 * Cols;
                     // stackPanel.Width = Width / (Cols + 1);
                     RealWidth = 30 * cols;
-                    NotifyPropertyChanged("Cols");
+                   // NotifyPropertyChanged("Cols");
                 }
             }
         }
 
         public SinglePlayerMaze()
         {
-            //InitializeComponent();
-            vm = new SinglePlayerMazeVM();
-            this.DataContext = this;
+            InitializeComponent();
+            vm = new SinglePlayerVM();
+            DataContext = vm;
+            
         }
 
        public event PropertyChangedEventHandler PropertyChanged;
@@ -134,36 +147,9 @@ namespace GUIClient
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
-        protected override void OnInitialized(EventArgs e)
+        public void Generate()
         {
-            InitializeComponent();
-            Grid grid = new Grid();
-        
-            maze = new MazeUserControl();
-            
-            //Leave drawing of the grid here,irrelevant to view model.
-            grid.ColumnDefinitions.Add(new ColumnDefinition
-            {
-                Width = new GridLength(1, GridUnitType.Star)
-            });
-
-            grid.RowDefinitions.Add(new RowDefinition
-            {
-                Height = new GridLength(1, GridUnitType.Star)
-            });
-            
-            maze.Cols = Cols;
-            maze.Rows = Rows;
-            grid.Children.Add(maze);
-            Grid.SetRow(maze, 0);
-            Grid.SetColumn(maze, 0);
-            dockPanel.Children.Add(grid);
-            DockPanel.SetDock(grid, Dock.Top);
-
-           // grid.Children.Add(maze);
-           // Grid.SetRow(maze,1);
-           // Grid.SetColumn(maze, 1);
-            base.OnInitialized(e);
+            vm.GenerateMaze(MazeName, Rows, Cols);
         }
 
         private void mainMenu_Click(object sender, RoutedEventArgs e)

@@ -22,7 +22,7 @@ namespace GUIClient
     {
         private TextBlock errorBox;
 
-        private SinglePlayerWindowVM vm;
+        ///private SinglePlayerVM singleVM;
 
         public TextBlock ErrorBox
         {
@@ -49,8 +49,8 @@ namespace GUIClient
 
         public SinglePlayerWindow()
         {
-            vm = new SinglePlayerWindowVM();
             InitializeComponent();
+           // singleVM = new SinglePlayerVM();
 
         }
 
@@ -86,6 +86,7 @@ namespace GUIClient
                 return;
             }
             SinglePlayerMaze popupMaze = new SinglePlayerMaze();
+          //  popupMaze.VM = singleVM;
             popupMaze.MazeName = mazeInfo.NameBox;
             
             //Check if rows and cols were entered otherwise take default
@@ -99,6 +100,7 @@ namespace GUIClient
                 popupMaze.Rows = Properties.Settings.Default.MazeRows;
                 popupMaze.Cols = Properties.Settings.Default.MazeCols;
             }
+            popupMaze.Generate();
             popupMaze.Show();
             this.Close();
         }

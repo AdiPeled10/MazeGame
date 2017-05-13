@@ -21,7 +21,27 @@ namespace ViewModel
 
         private Location startingPosition;
 
+        private Location endPosition;
+
         private ImageSource playerLogo;
+
+        private string mazeString;
+
+        public string MazeString
+        {
+            get { return mazeString; }
+            set { mazeString = value; }
+        }
+
+        public Location StartingPosition
+        {
+            set { startingPosition = value; }
+        }
+
+        public Location EndPosition
+        {
+            set { endPosition = value; }
+        }
 
         /// <summary>
         /// Save ImageSource,that way we won't need to load the image again and again;
@@ -61,6 +81,7 @@ namespace ViewModel
         public Canvas Maze
         {
             get { return maze; }
+            set { maze = value; }
         }
 
         public MazeBoard(Canvas canvas)
@@ -69,8 +90,16 @@ namespace ViewModel
             logic = new MazeLogic();
         }
 
+
         public void DrawOnCanvas(string strMaze,int rows,int cols)
         {
+            //FOR NOW FIX LATER.
+            strMaze = mazeString;
+            //REMEMBER TO FIX LATER.
+            if (rows == 0 || cols == 0 || strMaze == null)
+            {
+                return;
+            }
             double heightPerRectangle = maze.Height / rows;
             double widthPerRectangle = maze.Width / cols;
             WidthPerRect = widthPerRectangle;
@@ -83,7 +112,23 @@ namespace ViewModel
                 currentX = 0;
                 for (k = 0; k < cols; k++)
                 {
-                    if (strMaze.ToCharArray()[rows * i + k] == '0')
+                    if (i == startingPosition.X && k == startingPosition.Y)
+                    {
+                        //This is starting position,here comes mario.
+                        //Save image source as private property.
+                        playerLogo = new BitmapImage(new Uri("mario.png", UriKind.Relative));
+                        current = new Rectangle
+                        {
+                            Width = widthPerRectangle,
+                            Height = heightPerRectangle,
+                            Fill = new ImageBrush { ImageSource = playerLogo }
+                        };
+
+                        //Save the player's location.
+                        logic.PlayerLocation = new Location(startingPosition.X * widthPerRectangle,
+                                            startingPosition.Y * heightPerRectangle);
+                    }
+                    else if (strMaze.ToCharArray()[rows * i + k] == '0')
                     {
                         //Draw white rectangle.
                         current = new Rectangle
@@ -96,7 +141,7 @@ namespace ViewModel
                         };
 
                     }
-                    else if (strMaze.ToCharArray()[rows * i + k] == '1')
+                    else 
                     {
                         //Draw black rectangle.
                         logic.AddIllegal(new Location(currentX, currentY));
@@ -108,22 +153,6 @@ namespace ViewModel
                             Stroke = Brushes.White,
                             StrokeThickness = 0.05
                         };
-                    }
-                    else
-                    {
-
-                        //Save image source as private property.
-                        playerLogo = new BitmapImage(new Uri("mario.png", UriKind.Relative));
-                        current = new Rectangle
-                        {
-                            Width = widthPerRectangle,
-                            Height = heightPerRectangle,
-                            Fill = new ImageBrush { ImageSource = playerLogo }
-                        };
-
-                        //Save the player's location.
-                        logic.PlayerLocation = new Location(currentX, currentY);
-                        startingPosition = logic.PlayerLocation;
                     }
                     Canvas.SetLeft(current, currentX);
                     Canvas.SetTop(current, currentY);

@@ -105,10 +105,10 @@ namespace GUIClient
             otherMaze.Margin = otherMargin;
 
             //Set rows and cols of other maze.
-            myMaze.Rows = rows;
-            myMaze.Cols = cols;
-            otherMaze.Rows = rows;
-            otherMaze.Cols = cols;
+            myMaze.MazeRows = rows;
+            myMaze.MazeCols = cols;
+            otherMaze.MazeRows = rows;
+            otherMaze.MazeCols = cols;
             mazes.Children.Add(myMaze);
             Grid.SetRow(myMaze, 1);
             Grid.SetColumn(myMaze, 0);

@@ -4,12 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUIClient"
+        xmlns:vm ="clr-namespace:ViewModel"
         mc:Ignorable="d"
-        Title="{Binding Path=MazeName,UpdateSourceTrigger=PropertyChanged}" 
-        Height="{Binding Path=RealHeight,UpdateSourceTrigger=PropertyChanged}"
-                    Width="{Binding Path=RealWidth,UpdateSourceTrigger=PropertyChanged}">
-
-        
+        Title="{Binding MazeName}"
+        Height="500"
+                    Width="500" >
+    <Window.DataContext>
+        <vm:SinglePlayerVM/>
+    </Window.DataContext>
     <DockPanel Name="dockPanel" Margin="0,0,3.6,1.4">
         <Viewbox VerticalAlignment="Top" Height="Auto" DockPanel.Dock="Top">
             <Grid Name="myGrid" DockPanel.Dock="Top">
@@ -29,6 +31,21 @@
                     VerticalAlignment="Top" HorizontalAlignment="Right" Height="12" Margin="15,4,20,0" FontSize="6" Width="37" Click="mainMenu_Click" />
             </Grid>
         </Viewbox>
+        <Grid DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"> </ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <local:MazeUserControl x:Name="maze" MazeString="{Binding MazeString}"
+                                    MazeCols="{Binding MazeCols}"
+                                   MazeRows="{Binding MazeRows}"
+                                   StartLocation = "{Binding StartLocation}"
+                                   EndLocation="{Binding EndLocation}">
+                
+            </local:MazeUserControl>
+        </Grid>
     </DockPanel>
 
 

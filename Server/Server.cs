@@ -64,9 +64,11 @@ namespace Server
             listener.Start();
 
             // tell the thread to start accepting
+            Console.WriteLine("Started acceptor");
             accepter.Start();
 
             // tell the thread to start handling clients requests
+            Console.WriteLine("Started client service");
             clientService.Start();
         }
 
@@ -120,6 +122,7 @@ namespace Server
                 {
                     try
                     {
+                        //Console.WriteLine("Get client requests.");
                         view.GetClientsRequests();
                     }
                     catch (Exception)

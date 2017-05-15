@@ -58,6 +58,7 @@ namespace ViewModel
             catch (KeyNotFoundException)
             {
                 Console.Write("Oh snap");
+                return;
             }
 
         }

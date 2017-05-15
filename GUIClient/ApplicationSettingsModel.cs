@@ -53,7 +53,9 @@ namespace Model
         public int SearchAlgorithm
         {
             get { return GUIClient.Properties.Settings.Default.SearchAlgorithm; }
-            set { GUIClient.Properties.Settings.Default.SearchAlgorithm = value; }
+            set {
+                GUIClient.Properties.Settings.Default.SearchAlgorithm = value;
+            }
         }
 
         public void SaveSettings() { GUIClient.Properties.Settings.Default.Save(); }

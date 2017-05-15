@@ -21,6 +21,12 @@ namespace ViewModel
 
         private Location endLocation;
 
+        /// <summary>
+        /// Save solution per maze name, it is a dictionary for now in the case
+        /// where there could be several games running at once.
+        /// </summary>
+        private Dictionary<string, string> nameToSolution;
+
         private int mazeRows;
 
         private int mazeCols;
@@ -100,17 +106,30 @@ namespace ViewModel
         public SinglePlayerVM()
         {
             model = new ClientModel();
+            nameToSolution = new Dictionary<string, string>();
             //Add GotMaze to event to notify when maze was generarted.
             model.GeneratedMaze += GotMaze;
             model.MazeLoc += GotLocations;
             model.MazeRowsCols += RowsAndCols;
             model.NotifyName += GetName;
+            model.GotSolution += AddSolution;
         }
 
         public void GenerateMaze(string name,int rows,int cols)
         {
             //Generate maze through the model.
             model.GenerateMaze(name, rows, cols);
+        }
+
+        public void AskForSolution(string name)
+        {
+            //TODO- Fix the way we get the algorithm.
+            model.GetMazeSolution(name);
+        }
+
+        public void CloseConnection()
+        {
+            model.CloseClient();
         }
 
         /// <summary>
@@ -143,6 +162,22 @@ namespace ViewModel
         public void GetName(string name)
         {
             MazeName = name;
+        }
+
+        public void AddSolution(string solution,string name)
+        {
+            nameToSolution[name] = solution;
+        }
+
+        public string GetMazeSolution(string name)
+        {
+            try
+            {
+                return nameToSolution[name];
+            } catch (KeyNotFoundException)
+            {
+                return null;
+            }
         }
     }
 }

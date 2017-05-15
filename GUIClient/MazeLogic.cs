@@ -8,12 +8,26 @@ namespace ViewModel
 {
     public class MazeLogic
     {
-        private List<Location> illegalLocations;
+        private List<int> illegalLocations;
+
+        private Dictionary<int, Location> map;
+
+        private int playerSerialNumber;
+
 
         /// <summary>
         /// Save current location of the player.
         /// </summary>
         private Location playerLocation;
+
+        public int PlayerSerialNumber
+        {
+            get { return playerSerialNumber; }
+            set
+            {
+                playerSerialNumber = value;
+            }
+        }
 
         public Location PlayerLocation
         {
@@ -23,14 +37,25 @@ namespace ViewModel
 
         public MazeLogic()
         {
-            illegalLocations = new List<Location>();
+            illegalLocations = new List<int>();
+            map = new Dictionary<int, Location>();
+        }
+
+        public void AddToMap(int serial,Location loc)
+        {
+            map[serial] = loc;
+        }
+
+        public Location GetLocation(int serial)
+        {
+            return map[serial];
         }
 
         /// <summary>
         /// When drawing a black location we will remember it is illegal
         /// </summary>
         /// <param name="loc"></param>
-        public void AddIllegal(Location loc)
+        public void AddIllegal(int loc)
         {
             illegalLocations.Add(loc);
         }
@@ -44,12 +69,9 @@ namespace ViewModel
         /// <returns>
         /// True if illegal false otherwise.
         /// </returns>
-        public bool IsIllegal(Location loc, double xLimit, double yLimit)
+        public bool IsIllegal(int serialNumber)
         {
-            if (loc.X >= 0 && loc.X <= xLimit
-                && loc.Y >= 0 && loc.Y <= yLimit)
-                return illegalLocations.Contains(loc);
-            return true;
+            return illegalLocations.Contains(serialNumber);
         }
     }
 }

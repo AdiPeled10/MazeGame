@@ -101,6 +101,9 @@ namespace GUIClient
                 popupMaze.Cols = Properties.Settings.Default.MazeCols;
             }
             popupMaze.Generate();
+            popupMaze.GetSolution();
+            //Close connection in single player.
+            popupMaze.CloseConnection();
             popupMaze.Show();
             this.Close();
         }

@@ -20,6 +20,8 @@ namespace GUIClient
     /// <summary>
     /// Interaction logic for SinglePlayerMaze.xaml
     /// </summary>
+
+
     public partial class SinglePlayerMaze : Window
     {
         private int rows;
@@ -152,6 +154,16 @@ namespace GUIClient
             vm.GenerateMaze(MazeName, Rows, Cols);
         }
 
+        public void GetSolution()
+        {
+            vm.AskForSolution(MazeName);
+        }
+
+        public void CloseConnection()
+        {
+            vm.CloseConnection();
+        }
+
         private void mainMenu_Click(object sender, RoutedEventArgs e)
         {
             MainWindow window = new MainWindow();
@@ -167,6 +179,16 @@ namespace GUIClient
         private void restartButton_Click(object sender, RoutedEventArgs e)
         {
             maze.Restart();
+        }
+
+        private void Solve_Click(object sender,RoutedEventArgs e)
+        {
+            //Get solution from view model.
+            string solution = vm.GetMazeSolution(MazeName);
+            if (solution == null)
+                return;
+            //Notify the maze user control.
+            maze.Solve(solution);
         }
 
     }

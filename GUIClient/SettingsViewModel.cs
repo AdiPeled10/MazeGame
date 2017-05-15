@@ -17,9 +17,10 @@ using Model;
 
 namespace ViewModel
 {
+    public enum Algorithm { BFS,DFS};
     public class SettingsViewModel : ViewModel
     {
-
+        
         private ISettingsModel model;
 
         public int MazeCols
@@ -38,6 +39,15 @@ namespace ViewModel
             {
                 model.MazeRows = value;
                 NotifyPropertyChanged("MazeRows");
+            }
+        }
+
+        public int SearchAlgorithm
+        {
+            get { return model.SearchAlgorithm; }
+            set
+            {
+                //switch()
             }
         }
 

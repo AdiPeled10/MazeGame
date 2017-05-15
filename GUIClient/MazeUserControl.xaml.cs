@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 using ViewModel;
 
 
@@ -21,19 +22,72 @@ namespace GUIClient
     /// <summary>
     /// Interaction logic for MazeUserControl.xaml
     /// </summary>
-    public partial class MazeUserControl : UserControl
+    public partial class MazeUserControl : UserControl,INotifyPropertyChanged
     {
 
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        public void NotifyPropertyChanged(string propName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
 
+        /// <summary>
+        /// Message for mudal window.
+        /// </summary>
+        private string mudalMessage;
 
+        private string mudalFirstButton;
+
+        private string mudalSecondButton;
+
+        public string MudalMessage
+        {
+            get { return mudalMessage; }
+            set
+            {
+                if (mudalMessage != value)
+                {
+                    mudalMessage = value;
+                    NotifyPropertyChanged("MudalMessage");
+                }
+            }
+        }
+
+        public string MudalFirstButton
+        {
+            get { return mudalFirstButton; }
+            set
+            {
+                if (mudalFirstButton != value)
+                {
+                    mudalFirstButton = value;
+                    NotifyPropertyChanged("MudalFirstButton");
+                }
+            }
+        }
+
+        public string MudalSecondButton
+        {
+            get { return mudalSecondButton; }
+            set
+            {
+                if (mudalSecondButton != value)
+                {
+                    mudalSecondButton = value;
+                    NotifyPropertyChanged("MudalSecondButton");
+                }
+            }
+        }
 
         public int MazeCols
         {
             get { return (int)GetValue(MazeColsProperty); }
             set {
                 SetValue(MazeColsProperty, value);
-                board.DrawOnCanvas(MazeString, MazeRows, MazeCols);
+                //Set value in MazeBoard.
+                board.Cols = value;
+                //board.DrawOnCanvas(MazeString);
             }
         }
 
@@ -45,7 +99,7 @@ namespace GUIClient
         private static void UpdatedCols(DependencyObject d,DependencyPropertyChangedEventArgs args)
         {
             MazeUserControl maze = (MazeUserControl)d;
-            maze.MazeRows = (int)args.NewValue;
+            maze.MazeCols = (int)args.NewValue;
         }
 
 
@@ -54,7 +108,8 @@ namespace GUIClient
             get { return (int)GetValue(MazeRowsProperty); }
             set {
                 SetValue(MazeRowsProperty, value);
-                board.DrawOnCanvas(MazeString, MazeRows, MazeCols);
+                board.Rows = value;
+                //board.DrawOnCanvas(MazeString);
             }
         }
 
@@ -80,7 +135,7 @@ namespace GUIClient
                 {
                     //Set maze string in board.
                     board.MazeString = value;
-                    board.DrawOnCanvas(value, MazeRows, MazeCols);
+                    board.DrawOnCanvas(value);
                 } catch(NullReferenceException) { }
             }
         }
@@ -143,7 +198,7 @@ namespace GUIClient
         // Using a DependencyProperty as the backing store for EndLocation.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty EndLocationProperty =
             DependencyProperty.Register("EndLocation", typeof(Location), 
-                typeof(MazeUserControl));
+                typeof(MazeUserControl),new UIPropertyMetadata(UpdateEnd));
 
         private static void UpdateEnd(DependencyObject d,DependencyPropertyChangedEventArgs args)
         {
@@ -159,23 +214,30 @@ namespace GUIClient
         private MazeBoard board;
 
         private MazeViewModel vm;
-
-
-        
-
        
-
         public MazeUserControl()
         {
             InitializeComponent();
             board = new MazeBoard(myCanvas);
+            //Add game ended function to event.
+            board.GameDone += GameEnded;
             vm = new MazeViewModel(board);
+        }
+
+        private void GameEnded(string message,string firstButton,string secondButton)
+        {
+            MudalWindow window = new MudalWindow();
+            //Set data context.
+            window.DataContext = this;
+            MudalMessage = message;
+            MudalFirstButton = firstButton;
+            MudalSecondButton = secondButton;
+            window.Show();
         }
 
 
         private void Border_KeyDown(object sender, KeyEventArgs e)
         {
-            board.Maze = myCanvas;
             vm.KeyPressed(e.Key);
         }
 
@@ -189,6 +251,11 @@ namespace GUIClient
         public void Restart()
         {
             board.RestartGame();
+        }
+
+        public void Solve(string solution)
+        {
+            board.AnimateSolution(solution);
         }
 
 

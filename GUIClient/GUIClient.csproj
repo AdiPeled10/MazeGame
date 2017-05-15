@@ -72,10 +72,14 @@
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MazeBoard.cs" />
     <Compile Include="MazeLogic.cs" />
+    <Compile Include="MazeSizeConverter.cs" />
     <Compile Include="MazeUserControl.xaml.cs">
       <DependentUpon>MazeUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MazeViewModel.cs" />
+    <Compile Include="MudalWindow.xaml.cs">
+      <DependentUpon>MudalWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MultiPlayerMaze.xaml.cs">
       <DependentUpon>MultiPlayerMaze.xaml</DependentUpon>
     </Compile>
@@ -123,6 +127,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MazeUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MudalWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

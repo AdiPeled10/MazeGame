@@ -7,11 +7,19 @@
         xmlns:vm ="clr-namespace:ViewModel"
         mc:Ignorable="d"
         Title="{Binding MazeName}"
-        Height="500"
-                    Width="500" >
+       >
     <Window.DataContext>
         <vm:SinglePlayerVM/>
     </Window.DataContext>
+    <Window.Resources>
+        <local:MazeSizeConverter x:Key="converter"/>
+    </Window.Resources>
+    <Window.Height>
+        <Binding Path="MazeRows" Converter= "{StaticResource converter}"/>
+    </Window.Height>
+    <Window.Width>
+        <Binding Path="MazeCols" Converter="{StaticResource converter}"/>
+    </Window.Width>
     <DockPanel Name="dockPanel" Margin="0,0,3.6,1.4">
         <Viewbox VerticalAlignment="Top" Height="Auto" DockPanel.Dock="Top">
             <Grid Name="myGrid" DockPanel.Dock="Top">
@@ -26,7 +34,7 @@
                 <Button Name="restartButton" Content="Restart game" Grid.Row="0" Grid.Column="0"
                     VerticalAlignment="Top" HorizontalAlignment="Left" Height="12" Margin="20,4,0,0" Width="40" FontSize="6" Click="restartButton_Click" />
                 <Button Name="solveButton" Content="Solve maze" Grid.Row="0" Grid.Column="1"
-                    VerticalAlignment="Top" HorizontalAlignment="Center" Height="12" Margin="15,4,0,0" FontSize="6" />
+                    VerticalAlignment="Top" HorizontalAlignment="Center" Height="12" Margin="15,4,0,0" FontSize="6"  Click="Solve_Click"/>
                 <Button Name="mainMenu" Content="Main menu" Grid.Row="0" Grid.Column="2"
                     VerticalAlignment="Top" HorizontalAlignment="Right" Height="12" Margin="15,4,20,0" FontSize="6" Width="37" Click="mainMenu_Click" />
             </Grid>

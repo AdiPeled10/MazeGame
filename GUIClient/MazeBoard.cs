@@ -12,11 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace ViewModel
 {
+    public delegate void Ended(string message, string firstButton, string secondButton);
+
     public class MazeBoard
     {
+        public event Ended GameDone;
+
         private Canvas maze;
 
         private Location startingPosition;
@@ -26,6 +32,22 @@ namespace ViewModel
         private ImageSource playerLogo;
 
         private string mazeString;
+
+        private int rows;
+
+        private int cols;
+
+        public int Rows
+        {
+            get { return rows; }
+            set { rows = value; }
+        }
+
+        public int Cols
+        {
+            get { return cols; }
+            set { cols = value; }
+        }
 
         public string MazeString
         {
@@ -91,7 +113,7 @@ namespace ViewModel
         }
 
 
-        public void DrawOnCanvas(string strMaze,int rows,int cols)
+        public void DrawOnCanvas(string strMaze)
         {
             //FOR NOW FIX LATER.
             strMaze = mazeString;
@@ -106,7 +128,7 @@ namespace ViewModel
             HeightPerRect = heightPerRectangle;
             Rectangle current;
             double currentX = 0, currentY = 0;
-            int k = 0;
+            int k = 0,serialNumber = 1;
             for (int i = 0; i < rows; i++)
             {
                 currentX = 0;
@@ -125,10 +147,22 @@ namespace ViewModel
                         };
 
                         //Save the player's location.
-                        logic.PlayerLocation = new Location(startingPosition.X * widthPerRectangle,
-                                            startingPosition.Y * heightPerRectangle);
-                    }
-                    else if (strMaze.ToCharArray()[rows * i + k] == '0')
+                        //Set starting location in correct coordinates.
+                        startingPosition = new Location(currentX, currentY);
+                        logic.PlayerLocation = startingPosition;
+                        //Set serial number of player,sometimes comparing double doesn't work
+                        logic.PlayerSerialNumber = serialNumber;
+                    } else if (i == endPosition.X && k == endPosition.Y)
+                    {
+                        ImageSource goal = new BitmapImage(new Uri("goal.png", UriKind.RelativeOrAbsolute));
+                        current = new Rectangle
+                        {
+                            Width = widthPerRectangle,
+                            Height = heightPerRectangle,
+                            Fill = new ImageBrush { ImageSource = goal }
+                        };
+                        endPosition = new Location(currentX, currentY);
+                    } else if (strMaze.ToCharArray()[rows * i + k] == '0')
                     {
                         //Draw white rectangle.
                         current = new Rectangle
@@ -143,8 +177,8 @@ namespace ViewModel
                     }
                     else 
                     {
-                        //Draw black rectangle.
-                        logic.AddIllegal(new Location(currentX, currentY));
+                        //Draw black rectangle.Illegal location.
+                        logic.AddIllegal(serialNumber);
                         current = new Rectangle
                         {
                             Width = widthPerRectangle,
@@ -156,10 +190,14 @@ namespace ViewModel
                     }
                     Canvas.SetLeft(current, currentX);
                     Canvas.SetTop(current, currentY);
+                    //Add location to the map.
+                    logic.AddToMap(serialNumber, new Location(currentX, currentY));
                     maze.Children.Add(current);
                     currentX += widthPerRectangle;
+                    serialNumber++;
                 }
                 currentY += heightPerRectangle;
+                
             }
         }
 
@@ -168,10 +206,16 @@ namespace ViewModel
             Location loc = CalculateLocation(key);
             if (loc == null)
                 return;
-            ReplacePlayerLocation(loc);
+            if (ReplacePlayerLocation(loc))
+                GameDone("Congrats you won!", "Back to main menu", "Close game");
         }
 
-        private void ReplacePlayerLocation(Location loc)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="loc"></param>
+        /// <returns bool>True if player got to goal,false otherwise</returns>
+        private bool ReplacePlayerLocation(Location loc)
         {
             //Delete player from previous location
             Rectangle white = new Rectangle
@@ -198,6 +242,10 @@ namespace ViewModel
             Canvas.SetTop(playerRect, loc.Y);
             logic.PlayerLocation = loc;
             maze.Children.Add(playerRect);
+            //Return true if player got to the end of the maze.
+            if (loc.Equals(endPosition))
+                return true;
+            return false;
         }
 
         private Location CalculateLocation(Key key)
@@ -209,11 +257,17 @@ namespace ViewModel
             {
                 case Key.Up:
                     {
-                        newLocation = new Location(logic.PlayerLocation.X,
-                           logic.PlayerLocation.Y - heightPerRect);
-                        if (!logic.IsIllegal(newLocation, xLimit, yLimit))
+                        if (logic.PlayerSerialNumber - cols < 0)
+                        {
+                            //Out of bounds.
+                            return null;
+                        }
+                        newLocation = logic.GetLocation(logic.PlayerSerialNumber - cols);
+                        if (!logic.IsIllegal(
+                            logic.PlayerSerialNumber - cols))
                         {
                             //Location is llegal.
+                            logic.PlayerSerialNumber = logic.PlayerSerialNumber - cols;
                             return newLocation;
                         }
                         break;
@@ -221,21 +275,34 @@ namespace ViewModel
 
                 case Key.Down:
                     {
-                        newLocation = new Location(logic.PlayerLocation.X,
-                           logic.PlayerLocation.Y + heightPerRect);
-                        if (!logic.IsIllegal(newLocation, xLimit, yLimit))
+                        if (logic.PlayerSerialNumber + cols > rows * cols)
                         {
-                           return newLocation;
+                            //Out of bounds
+                            return null;
+                        }
+
+                        newLocation = logic.GetLocation(logic.PlayerSerialNumber + cols);
+                        if (!logic.IsIllegal(
+                            logic.PlayerSerialNumber + cols))
+                        {
+                            logic.PlayerSerialNumber = logic.PlayerSerialNumber + cols;
+                            return newLocation;
                         }
                         break;
                     }
 
                 case Key.Left:
                     {
-                        newLocation = new Location(logic.PlayerLocation.X - widthPerRect,
-                            logic.PlayerLocation.Y);
-                        if (!logic.IsIllegal(newLocation, xLimit, yLimit))
+                        if (logic.PlayerSerialNumber - 1 < 0)
                         {
+                            //Out of bounds.
+                            return null;
+                        }
+                        newLocation = logic.GetLocation(logic.PlayerSerialNumber - 1);
+                        if (!logic.IsIllegal(
+                               logic.PlayerSerialNumber - 1))
+                        {
+                            logic.PlayerSerialNumber = logic.PlayerSerialNumber - 1;
                             return newLocation;
                         }
                         break;
@@ -243,10 +310,16 @@ namespace ViewModel
 
                 case Key.Right:
                     {
-                        newLocation = new Location(logic.PlayerLocation.X + widthPerRect,
-                            logic.PlayerLocation.Y);
-                        if (!logic.IsIllegal(newLocation, xLimit, yLimit))
+                       if (logic.PlayerSerialNumber % cols == 0 )
                         {
+                            //We are at the end of the row,out of bounds.
+                            return null;
+                        }
+                        newLocation = logic.GetLocation(logic.PlayerSerialNumber + 1);
+                        if (!logic.IsIllegal(
+                            logic.PlayerSerialNumber + 1))
+                        {
+                            logic.PlayerSerialNumber = logic.PlayerSerialNumber + 1;
                             return newLocation;
                         }
                         break;
@@ -266,6 +339,76 @@ namespace ViewModel
         public void RestartGame()
         {
             ReplacePlayerLocation(startingPosition);
+        }
+
+        public void AnimateSolution(string solution)
+        {
+            //TODO- Check if this can be done only when player wasn't moved at all.
+            char[] arr = solution.ToCharArray();
+            char currentChar;
+            int length = arr.Length;
+            List<int> animationSerialNumbers = new List<int>();
+            //Save current serial number and add it as first element of list.
+            int currentSerial = logic.PlayerSerialNumber;
+            for (int i = 0;i < length; i++)
+            {
+                currentChar = arr[i];
+                switch (currentChar)
+                {
+                    case '0':
+                        {
+                            //Go left.
+                            currentSerial -= 1;
+                            animationSerialNumbers.Add(currentSerial);
+                            break;
+                        }
+                    case '1':
+                        {
+                            //Go right.
+                            currentSerial += 1;
+                            animationSerialNumbers.Add(currentSerial);
+                            break;
+                        }
+                    case '2':
+                        {
+                            //Go up.
+                            currentSerial -= cols;
+                            animationSerialNumbers.Add(currentSerial);
+                            break;
+                        }
+                    case '3':
+                        {
+                            //Go down.
+                            currentSerial += cols;
+                            animationSerialNumbers.Add(currentSerial);
+                            break;
+                        }
+                    default:
+                        {
+                            //Do nothing.
+                            break;
+                        }
+                }
+            }
+
+            //Now create the animation.
+            SolutionAnimation(animationSerialNumbers);
+        }
+
+        public void SolutionAnimation(List<int> serialNumbers)
+        {
+            int length = serialNumbers.Count;
+            Activate(0, serialNumbers,length);
+        }
+        public async void Activate(int index, List<int> serialNumbers, int length)
+        {
+            Location current;
+            await Task.Delay(700);
+            current = logic.GetLocation(serialNumbers[index]);
+            //Move the player to this location.
+            ReplacePlayerLocation(current);
+            if (index < length - 1)
+                Activate(index + 1, serialNumbers, length);
         }
 
     }

@@ -25,6 +25,7 @@ namespace GUIClient
         private int cols;
         private MultiPlayerMazeVM vm;
 
+
         public int Rows
         {
             get { return rows; }

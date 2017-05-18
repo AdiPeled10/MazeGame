@@ -130,6 +130,7 @@ namespace Server
         {
             try
             {
+                Console.WriteLine("Response " + res);
                 writer.WriteLine(res);
             } catch (IOException)
             {

@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using ViewModel;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.IO;
 
 namespace GUIClient
@@ -20,6 +21,8 @@ namespace GUIClient
     public delegate void Name(string name);
 
     public delegate void MazeSolution(string solution,string name);
+
+    public delegate void GotList(List<string> games);
 
     public class ClientModel
     {
@@ -36,6 +39,8 @@ namespace GUIClient
 
         public event Name NotifyName;
 
+        public event GotList NotifyList;
+
         public ClientModel()
         {
             //Create EndPoint based on default settings.
@@ -47,12 +52,19 @@ namespace GUIClient
             //Connect our TcpClient to the EndPoint.
             client.Connect(ep);
             //Ended initiation of the client.
+            client.ReceiveBufferSize *= 16;
         }
 
-        public void GenerateMaze(string name, int rows, int cols)
+        /// <summary>
+        /// We get command name because generate and start commands are practically the same.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="rows"></param>
+        /// <param name="cols"></param>
+        public void GenerateMaze(string command,string name, int rows, int cols)
         {
             //Send the request.
-            string request = "generate " + name + " " + rows.ToString() + " " + cols.ToString();
+            string request = command + " " + name + " " + rows.ToString() + " " + cols.ToString();
             SendMessage(request);
 
             //Get the response.
@@ -91,6 +103,7 @@ namespace GUIClient
 
         public string GetResponse()
         {
+            System.Threading.Thread.Sleep(50);
             NetworkStream stream = client.GetStream();
             byte[] bytesToRead = new byte[client.ReceiveBufferSize];
             int bytesRead = stream.Read(bytesToRead, 0, client.ReceiveBufferSize);
@@ -148,6 +161,22 @@ namespace GUIClient
                 //Case where a field in jobject doesn't appear.
             }
         }
+
+        public void ListGames()
+        {
+            //Ask server for list of joinable games.
+            SendMessage("list");
+
+            //Get server's response.
+            string response = GetResponse();
+
+            //Analyze server response to build list.
+            List<string> games = JsonConvert.DeserializeObject<List<string>>(response);
+            //Notify this list of games.
+            NotifyList(games);
+
+        }
+
         public void GetSolutionToMaze(string name, int algorithm) { }
 
 

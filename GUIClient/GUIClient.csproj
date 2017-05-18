@@ -67,6 +67,7 @@
     </ApplicationDefinition>
     <Compile Include="ApplicationSettingsModel.cs" />
     <Compile Include="ClientModel.cs" />
+    <Compile Include="GameViewModel.cs" />
     <Compile Include="ISettingsModel.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="MainWindowViewModel.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="MultiPlayerMaze.xaml.cs">
       <DependentUpon>MultiPlayerMaze.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MultiPlayerMazeVM.cs" />
+    <Compile Include="MultiPlayerVM.cs" />
     <Compile Include="MultiPlayerWindow.xaml.cs">
       <DependentUpon>MultiPlayerWindow.xaml</DependentUpon>
     </Compile>

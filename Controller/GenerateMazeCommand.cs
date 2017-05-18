@@ -38,6 +38,7 @@ namespace Controllers
         /// </param>
         public void Execute(string[] args, IClient client)
         {
+            System.Console.WriteLine("Exec");
             string name = args[0];
             int rows = int.Parse(args[1]);
             int cols = int.Parse(args[2]);

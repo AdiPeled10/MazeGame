@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.ComponentModel;
 using ViewModel;
 
@@ -24,8 +19,17 @@ namespace GUIClient
         private string mazeName;
         private int rows;
         private int cols;
-        private MultiPlayerWindowVM vm;
 
+        /// <summary>
+        /// View model of the multi player game.
+        /// </summary>
+        private MultiPlayerVM vm;
+
+
+
+        /// <summary>
+        /// String that represents name of the maze.
+        /// </summary>
         public string MazeName
         {
             get { return mazeName; }
@@ -65,19 +69,34 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// Constructor of multi player window.
+        /// </summary>
         public MultiPlayerWindow()
         {
-            vm = new MultiPlayerWindowVM();
             InitializeComponent();
+            vm = new MultiPlayerVM();
+            vm.notifyConnection += OpponentConnected;
+            DataContext = vm;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        /// <summary>
+        /// Event which will occur when  start game button will be clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Start_Click(object sender, RoutedEventArgs e)
         {
-            //Open multi player maze.
-            MazeName = maze.nameTextBox.Text;
+
+            //Start game via the view model.
+            waitingBlock.Text = "Waiting for opponent...";
+            vm.GenerateMaze(maze.NameBox, maze.Rows, maze.Cols);
+        }
+
+        public void OpponentConnected()
+        {
             MultiPlayerMaze mazeWindow = new MultiPlayerMaze();
-            mazeWindow.Rows = 20;
-            mazeWindow.Cols = 20;
             mazeWindow.Show();
             this.Close();
         }

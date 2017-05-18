@@ -62,6 +62,7 @@ namespace Views
         /// <param name="c"></param>
         public void SendServerResponseTo(string res, IClient c)
         {
+            Console.WriteLine("Sending response " + res);
             c.SendResponse(res);
         }
 
@@ -83,7 +84,13 @@ namespace Views
         /// </summary>
         public void GetClientsRequests()
         {
-            Clients(); 
+            try
+            {
+                Clients();
+            } catch (NullReferenceException)
+            {
+                //No clients
+            } 
         }
 
         /// <summary>

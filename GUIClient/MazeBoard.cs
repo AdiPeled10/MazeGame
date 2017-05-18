@@ -400,6 +400,7 @@ namespace ViewModel
             int length = serialNumbers.Count;
             Activate(0, serialNumbers,length);
         }
+
         public async void Activate(int index, List<int> serialNumbers, int length)
         {
             Location current;

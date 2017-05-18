@@ -16,15 +16,20 @@
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
                 <Label Content="List of games:" HorizontalAlignment="Left" BorderThickness="0" Margin="0,16,0,0"></Label>
-                <ComboBox HorizontalAlignment="Right" Margin="0,24,0,0" Width="300"></ComboBox>
+                <ComboBox Name="comboBox" HorizontalAlignment="Right" Margin="0,24,0,0" Width="300">
+                    <ComboBox.ItemsSource>
+                        <Binding Path="JoinableGames"></Binding>
+                    </ComboBox.ItemsSource>
+                </ComboBox>
             </StackPanel>
             <Button Content="Join Game" Grid.Column="0" Grid.Row="1" Width="60" Margin="0,15,0,0"></Button>
             <local:MazeInformationLayout x:Name ="maze" Grid.Column="0" Grid.Row="2" Margin="0,12" ></local:MazeInformationLayout>
-            <Button Content="Start Game" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="3" Click="Button_Click" Height="19" Margin="160,0.4,160.2,-0.2" VerticalAlignment="Top"></Button>
-
+            <Button Content="Start Game" HorizontalAlignment="Center" Grid.Column="0" Grid.Row="3" Click="Start_Click" Height="19" Margin="160,0,160.2,-0.2" VerticalAlignment="Bottom"></Button>
+            <TextBlock Name="waitingBlock" Foreground="Red" Grid.Row="4"></TextBlock>
         </Grid>
     </Viewbox>
 </Window>

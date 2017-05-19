@@ -14,10 +14,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using ViewModel;
-
+using System.Windows.Threading;
 
 namespace GUIClient
 {
+
+    public delegate void GameOver();
 
     /// <summary>
     /// Interaction logic for MazeUserControl.xaml
@@ -26,6 +28,11 @@ namespace GUIClient
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Event that notifies that game is done.
+        /// </summary>
+        public event GameOver Done;
 
         public void NotifyPropertyChanged(string propName)
         {
@@ -87,7 +94,7 @@ namespace GUIClient
                 SetValue(MazeColsProperty, value);
                 //Set value in MazeBoard.
                 board.Cols = value;
-                //board.DrawOnCanvas(MazeString);
+                board.DrawOnCanvas(MazeString);
             }
         }
 
@@ -109,7 +116,7 @@ namespace GUIClient
             set {
                 SetValue(MazeRowsProperty, value);
                 board.Rows = value;
-                //board.DrawOnCanvas(MazeString);
+                board.DrawOnCanvas(MazeString);
             }
         }
 
@@ -162,6 +169,7 @@ namespace GUIClient
                 try
                 {
                     board.StartingPosition = value;
+                    board.DrawOnCanvas(MazeString);
                 } catch(NullReferenceException) { }
             }
         }
@@ -188,10 +196,24 @@ namespace GUIClient
                 try
                 {
                     board.EndPosition = value;
+                    board.DrawOnCanvas(MazeString);
                 }
                 catch (NullReferenceException)
                 {
                 }
+            }
+        }
+
+        //Tells if it's my maze or the other player's maze.
+        private bool isMine = true;
+
+        public bool IsMine
+        {
+            get { return isMine; }
+            set
+            {
+                isMine = value;
+                board.IsMine = value;
             }
         }
 
@@ -205,6 +227,8 @@ namespace GUIClient
             MazeUserControl maze = (MazeUserControl)d;
             maze.EndLocation = (Location)args.NewValue;
         }
+
+
 
 
         /// <summary>
@@ -232,6 +256,25 @@ namespace GUIClient
             MudalMessage = message;
             MudalFirstButton = firstButton;
             MudalSecondButton = secondButton;
+            //Set methods that will run for each button.
+            window.OnFirstButton = new RoutedEventHandler((object sender,RoutedEventArgs args) =>
+            {
+                //Return to main menu.
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Show();
+                //Close mudal window.
+                window.Close();
+            });
+
+            window.OnSecondButton = new RoutedEventHandler((object sender, RoutedEventArgs args)=>
+            {
+                //Close the window.
+                window.Close();
+            });
+            try
+            {
+                Done();
+            } catch (NullReferenceException) { }
             window.Show();
         }
 
@@ -245,17 +288,83 @@ namespace GUIClient
         private void MazeLoaded(object sender,RoutedEventArgs e)
         {
             var window = Window.GetWindow(this);
-            window.KeyDown += Border_KeyDown;
+            //Add only if it's my window.
+            if (IsMine)
+                window.KeyDown += Border_KeyDown;
         }
 
+        /// <summary>
+        /// Restart the game.
+        /// </summary>
         public void Restart()
         {
-            board.RestartGame();
+            MudalWindow win = new MudalWindow();
+            win.DataContext = this;
+            MudalMessage = "Are you sure?";
+            MudalFirstButton = "Continue";
+            MudalSecondButton = "Cancel";
+            win.OnFirstButton = new RoutedEventHandler((object sender,RoutedEventArgs args) => 
+            {
+                board.RestartGame();
+                win.Close();
+            });
+            
+            //Don't do anything if cancel is chosen.
+            win.OnSecondButton = new RoutedEventHandler((object sender,RoutedEventArgs args)=> {
+                win.Close();
+            });
+            win.Show();
         }
 
+        /// <summary>
+        /// Activate animation that solves the maze.
+        /// </summary>
+        /// <param name="solution"></param>
         public void Solve(string solution)
         {
-            board.AnimateSolution(solution);
+            MudalWindow win = new MudalWindow();
+            win.DataContext = this;
+            MudalMessage = "Are you sure?";
+            MudalFirstButton = "Continue";
+            MudalSecondButton = "Cancel";
+            win.OnFirstButton = new RoutedEventHandler((object sender, RoutedEventArgs args) =>
+            {
+                //Return to start point of maze.
+                board.RestartGame();
+                board.AnimateSolution(solution);
+                win.Close();
+            });
+
+            //Don't do anything if cancel is chosen.
+            win.OnSecondButton = new RoutedEventHandler((object sender, RoutedEventArgs args) => {
+                win.Close();
+            });
+            win.Show();
+        }
+
+        /// <summary>
+        /// Move player in given direction,used in multiplayer.
+        /// </summary>
+        /// <param name="direction"></param>
+        public void MovePlayer(string direction)
+        {
+            //Convert string to key.
+            try
+            {
+                Application.Current.Dispatcher.BeginInvoke(
+                   DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        KeyConverter k = new KeyConverter();
+                        Key myKey = (Key)k.ConvertFromString(direction);
+                        vm.KeyPressed(myKey);
+                    }
+                    ));
+            } catch (Exception)
+            {
+
+            }
+
         }
 
 

@@ -32,7 +32,10 @@ namespace ViewModel
         public Location PlayerLocation
         {
             get { return playerLocation; }
-            set { playerLocation = value; }
+            set {
+                playerLocation = value;
+               
+            }
         }
 
         public MazeLogic()

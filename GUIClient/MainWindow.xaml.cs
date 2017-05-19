@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Reflection;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -46,9 +47,12 @@ namespace GUIClient
 
         private void SettingsClick(object sender,RoutedEventArgs args)
         {
-            SettingsWindow window = new SettingsWindow();
-            window.Show();
-            this.Close();
+            try
+            {
+                SettingsWindow window = new SettingsWindow();
+                window.Show();
+                this.Close();
+            } catch (TargetInvocationException) { }
         }
 
     }

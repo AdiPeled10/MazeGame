@@ -6,11 +6,8 @@
         xmlns:local="clr-namespace:GUIClient"
         xmlns:vm ="clr-namespace:ViewModel"
         mc:Ignorable="d"
-        Title="{Binding MazeName}"
+        Title="{Binding Path = MazeName}"
        >
-    <Window.DataContext>
-        <vm:SinglePlayerVM/>
-    </Window.DataContext>
     <Window.Resources>
         <local:MazeSizeConverter x:Key="converter"/>
     </Window.Resources>
@@ -44,17 +41,17 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"> </ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <local:MazeUserControl x:Name="maze" MazeString="{Binding MazeString}"
+            <local:MazeUserControl x:Name="maze" MazeString="{Binding MazeString}" IsMine="True"
                                     MazeCols="{Binding MazeCols}"
                                    MazeRows="{Binding MazeRows}"
                                    StartLocation = "{Binding StartLocation}"
-                                   EndLocation="{Binding EndLocation}">
-                
-            </local:MazeUserControl>
+                                   EndLocation="{Binding EndLocation}" 
+                                   />
         </Grid>
     </DockPanel>
-
-
 </Window>
+
+
+

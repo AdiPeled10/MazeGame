@@ -114,7 +114,7 @@ namespace SearchGames
         /// <return>
         /// True if the direction is legal,false otherwise.
         /// </return>
-        bool MovePlayer(Player player, Direction move);
+        bool MovePlayer(Player player, Direction move,string isExit);
 
         //We left it here because we may use this in the future.
         //// returns

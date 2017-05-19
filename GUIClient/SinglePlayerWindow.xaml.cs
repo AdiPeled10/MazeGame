@@ -86,7 +86,16 @@ namespace GUIClient
                 return;
             }
             SinglePlayerMaze popupMaze = new SinglePlayerMaze();
-          //  popupMaze.VM = singleVM;
+            popupMaze.VM = new SinglePlayerVM();
+
+            //Check if there was a disconnection.
+
+            if (!popupMaze.Connected)
+            {
+                //There is a disconnection close and return.
+                popupMaze.Close();
+                return;
+            }
             popupMaze.MazeName = mazeInfo.NameBox;
             
             //Check if rows and cols were entered otherwise take default

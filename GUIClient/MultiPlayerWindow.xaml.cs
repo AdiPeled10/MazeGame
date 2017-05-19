@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.ComponentModel;
+using System.Windows.Threading;
 using ViewModel;
 
 namespace GUIClient
@@ -14,7 +14,7 @@ namespace GUIClient
     /// <summary>
     /// Interaction logic for MultiPlayerWindow.xaml
     /// </summary>
-    public partial class MultiPlayerWindow : Window,INotifyPropertyChanged
+    public partial class MultiPlayerWindow : Window
     {
         private string mazeName;
         private int rows;
@@ -25,7 +25,10 @@ namespace GUIClient
         /// </summary>
         private MultiPlayerVM vm;
 
-
+        /// <summary>
+        ///  True if we can connect to the server false otherwise.
+        /// </summary>
+        private bool connected = true;
 
         /// <summary>
         /// String that represents name of the maze.
@@ -38,7 +41,7 @@ namespace GUIClient
                 if (mazeName != value)
                 {
                     mazeName = value;
-                    NotifyPropertyChanged("MazeName");
+                    
                 }
             }
         }
@@ -51,7 +54,7 @@ namespace GUIClient
                 if (rows != value)
                 {
                     rows = value;
-                    NotifyPropertyChanged("Rows");
+                    
                 }
             }
         }
@@ -64,10 +67,17 @@ namespace GUIClient
                 if (cols != value)
                 {
                     cols = value;
-                    NotifyPropertyChanged("Cols");
+                    
                 }
             }
         }
+
+
+
+
+
+
+
 
         /// <summary>
         /// Constructor of multi player window.
@@ -76,8 +86,15 @@ namespace GUIClient
         {
             InitializeComponent();
             vm = new MultiPlayerVM();
-            vm.notifyConnection += OpponentConnected;
+            vm.NotifyConnection += OpponentConnected;
+            vm.CantFindServer += () =>
+            {
+                CantConnect win = new CantConnect();
+                win.Show();
+                connected = false;
+            };
             DataContext = vm;
+            vm.Connect();
         }
 
 
@@ -90,23 +107,46 @@ namespace GUIClient
         {
 
             //Start game via the view model.
+            
+            if (!connected)
+            {
+                //Cant connect to server.
+                return;
+            }
+
             waitingBlock.Text = "Waiting for opponent...";
             vm.GenerateMaze(maze.NameBox, maze.Rows, maze.Cols);
         }
 
         public void OpponentConnected()
         {
-            MultiPlayerMaze mazeWindow = new MultiPlayerMaze();
-            mazeWindow.Show();
-            this.Close();
+            Application.Current.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Background,
+                     new Action(() => {
+                        
+                         MultiPlayerMaze mazeWindow = new MultiPlayerMaze();
+                         //Pass on the view model.
+                         mazeWindow.VM = vm;
+                         mazeWindow.Show();
+                         this.Close();
+                     }));
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+      
 
-        public void NotifyPropertyChanged(string propName)
+        private void JoinClick(object sender, RoutedEventArgs e)
         {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
+            vm.JoinGame(comboBox.Text);
         }
+
+        /// <summary>
+        /// Each time drop down is clicked ask for list from server.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DropDownHandler(object sender,EventArgs e)
+        {
+            vm.ListCommand();
+        } 
     }
 }

@@ -13,8 +13,9 @@ namespace ViewModel
     public delegate void NotifyPlayerConnected();
 
     //Use to create event to notify that other player disconnected.
-    public delegate void NotifyPlayerDisconnected();
+    public delegate void Parameterless();
 
+    public delegate void OpponentMoved(string direction);
 
     public class MultiPlayerVM : GameViewModel
     {
@@ -23,7 +24,24 @@ namespace ViewModel
         /// List of games we can join.
         /// </summary>
         private ObservableCollection<string> joinableGames = new ObservableCollection<string>();
+
+        public event OpponentMoved Movement;
+
+
+        private string directionVM;
+
+
         
+        public string DirectionVM
+        {
+            get { return directionVM; }
+            set
+            {
+                directionVM = value;
+                Movement(value);
+            }
+        }
+
         /// <summary>
         /// Property for list of joinable games.
         /// </summary>
@@ -40,7 +58,7 @@ namespace ViewModel
         /// <summary>
         /// For thread which will ask server for list of games every 20 seconds.
         /// </summary>
-        private bool stop = false;
+        private bool shouldStop = false;
 
         /// <summary>
         /// Event to notify that a player got conencted.
@@ -50,20 +68,47 @@ namespace ViewModel
         /// <summary>
         /// Event to notify that player got disconnected.
         /// </summary>
-        public event NotifyPlayerDisconnected NotifyDisconnection;
+        public event Parameterless NotifyDisconnection;
+
+        
 
         /// <summary>
         /// Default Constructor.
         /// </summary>
-        public MultiPlayerVM()
+        public MultiPlayerVM() : base()
         {
             //Create the model that we will use to communicate with server.
-            model = new ClientModel();
             
+            model.NotifyList += UpdateList;
+            model.NotifyDirection += UpdateOpponentDirection;
+            model.Disconnection += NoOpponent;
             //Open thread that listens to list of joinable games.
-            SendListThread();
+            //SendListThread();
         }
 
+        public void ListCommand()
+        {
+            model.ListGames();
+        }
+
+        public void NoConnection()
+        {
+
+        }
+
+        public void Disconnected()
+        {
+            //Send exit message.
+            model.PlayMove("exit");
+        }
+
+        /// <summary>
+        /// Activates when the opponent got disconnected.
+        /// </summary>
+        public void NoOpponent()
+        {
+            NotifyDisconnection();
+        }
         /// <summary>
         /// Start new multiplayer game.
         /// </summary>
@@ -78,22 +123,28 @@ namespace ViewModel
              * in async thread to not cause the UI to freeze and we will wait to be notified
              * by the event in client model.(Our code is event driven).
              */
-            Thread thread = new Thread(() =>
-            {
-                model.GenerateMaze("start", name, rows, cols);
-                //Notify listeners that opponent got connected.
-                NotifyConnection();
-            });
-
+            shouldStop = true; 
+           
+            ThreadStart starter = ()=> { model.StartGame(name, rows, cols); };
+            //Add callback
+            starter += () => { NotifyConnection(); };
+            Thread thread = new Thread(starter) { IsBackground = true };
+            thread.SetApartmentState(ApartmentState.STA);
             //Start thread.
             thread.Start();
         }
 
+
+
+
+        /// <summary>
+        /// Send list commands to the server.
+        /// </summary>
         private void SendListThread()
         {
             Thread thread = new Thread(() =>
             {
-                while (!stop)
+                while (!shouldStop)
                 {
                     //Update list of games.
                     GetListOfGames();
@@ -101,7 +152,10 @@ namespace ViewModel
                     Thread.Sleep(5000);
                 }
             });
+            thread.Start();
         }
+
+        
 
         /// <summary>
         /// Get list of available games and notify the view.
@@ -121,7 +175,48 @@ namespace ViewModel
         /// <param name="name">Name of game we will join.</param>
         public void JoinGame(string name)
         {
+            //Stop asking for list.
+            shouldStop = true;
+            model.JoinGame(name);
+            //Connection immediatly cause we join.
+            NotifyConnection();
+        }
 
+        public void UpdateList(List<string> games)
+        {
+            //Update games
+            JoinableGames = new ObservableCollection<string>(games);
+        }
+
+        public void UpdateOpponentDirection(string direction)
+        {
+            DirectionVM = direction;
+        }
+
+        /// <summary>
+        /// Send play to server in given direction.
+        /// </summary>
+        /// <param name="direction"></param>
+        public void PlayInDirection(string direction)
+        {
+            model.PlayMove(direction);
+        }
+
+        /// <summary>
+        /// Run thread that will listen to directions of opponent.
+        /// </summary>
+        public void ListenToOpponent()
+        {
+            model.GetOpponentMoves();
+        }
+
+        /// <summary>
+        /// Close the client and stop all the threads.
+        /// </summary>
+        public void GameOver()
+        {
+            model.Stop = true;
+            model.CloseClient();
         }
     }
 }

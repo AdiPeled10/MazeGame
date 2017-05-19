@@ -4,11 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUIClient"
-        mc:Ignorable="d"
-        Title= "{Binding MazeName}" Height="600" Width="1000">
-    <Window.DataContext>
-        <local:MultiPlayerWindow></local:MultiPlayerWindow>
-    </Window.DataContext>
+        xmlns:vm ="clr-namespace:ViewModel"
+    mc:Ignorable="d"
+        Title= "{Binding MazeName}" Height="600" Width="1000" >
     <Grid Name="mainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" ></RowDefinition>
@@ -18,6 +16,33 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Button Content="Back to main menu" Grid.Row="0" Grid.Column="0" Width="140" Height="18" Margin="0,19,0,0" Click="Button_Click"></Button>
+        <Grid Name="myGrid" Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Name="myBox" Text="My Board" Foreground="Blue"></TextBox>
+            <TextBox Name="otherBox" Text="Other Board" Foreground="Green" Grid.Column="1"></TextBox>
+            <local:MazeUserControl x:Name="myMaze" IsMine="True" MazeString="{Binding MazeString}"
+                                    MazeCols="{Binding MazeCols}"
+                                   MazeRows="{Binding MazeRows}"
+                                   StartLocation = "{Binding StartLocation}" 
+                                   EndLocation="{Binding EndLocation}" Grid.Row="1" Margin="10,0,20,0"/>
+            <local:MazeUserControl x:Name="otherMaze" IsMine="false" MazeString="{Binding MazeString}"
+                                    MazeCols="{Binding MazeCols}" 
+                                   MazeRows="{Binding MazeRows}"
+                                   StartLocation = "{Binding StartLocation}"
+                                   EndLocation="{Binding EndLocation}"
+                                   
+                                   Grid.Row="1" Grid.Column="1"
+                                   Margin="10,0,20,0"/>
+
+        </Grid>
     </Grid>
 </Window>

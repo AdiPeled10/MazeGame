@@ -23,6 +23,7 @@ namespace ViewModel
         
         private ISettingsModel model;
 
+
         public int MazeCols
         {
             get { return model.MazeCols; }

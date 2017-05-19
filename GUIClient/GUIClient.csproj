@@ -66,6 +66,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ApplicationSettingsModel.cs" />
+    <Compile Include="CantConnect.xaml.cs">
+      <DependentUpon>CantConnect.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ClientModel.cs" />
     <Compile Include="GameViewModel.cs" />
     <Compile Include="ISettingsModel.cs" />
@@ -103,6 +106,10 @@
     </Compile>
     <Compile Include="SinglePlayerWindowVM.cs" />
     <Compile Include="ViewModel.cs" />
+    <Page Include="CantConnect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

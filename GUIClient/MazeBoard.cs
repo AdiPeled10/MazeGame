@@ -25,7 +25,15 @@ namespace ViewModel
 
         private Canvas maze;
 
+        /// <summary>
+        /// The location that the player started in.
+        /// </summary>
         private Location startingPosition;
+
+        /// <summary>
+        /// Serial number of starting location,we only need this specific serial number.
+        /// </summary>
+        private int startSerialNumber;
 
         private Location endPosition;
 
@@ -112,13 +120,27 @@ namespace ViewModel
             logic = new MazeLogic();
         }
 
+        /// <summary>
+        /// True if it's my maze false if it's enemy maze.
+        /// </summary>
+        private bool isMine;
+
+        public bool IsMine
+        {
+            get { return isMine; }
+            set
+            {
+                isMine = value;
+            }
+        }
 
         public void DrawOnCanvas(string strMaze)
         {
             //FOR NOW FIX LATER.
             strMaze = mazeString;
             //REMEMBER TO FIX LATER.
-            if (rows == 0 || cols == 0 || strMaze == null)
+            if (rows == 0 || cols == 0 || strMaze == null || startingPosition == null
+                    || endPosition == null)
             {
                 return;
             }
@@ -138,7 +160,10 @@ namespace ViewModel
                     {
                         //This is starting position,here comes mario.
                         //Save image source as private property.
-                        playerLogo = new BitmapImage(new Uri("mario.png", UriKind.Relative));
+                        if (isMine)
+                            playerLogo = new BitmapImage(new Uri("mario.png", UriKind.Relative));
+                        else
+                            playerLogo = new BitmapImage(new Uri("luigi.png", UriKind.Relative));
                         current = new Rectangle
                         {
                             Width = widthPerRectangle,
@@ -152,6 +177,7 @@ namespace ViewModel
                         logic.PlayerLocation = startingPosition;
                         //Set serial number of player,sometimes comparing double doesn't work
                         logic.PlayerSerialNumber = serialNumber;
+                        startSerialNumber = serialNumber;
                     } else if (i == endPosition.X && k == endPosition.Y)
                     {
                         ImageSource goal = new BitmapImage(new Uri("goal.png", UriKind.RelativeOrAbsolute));
@@ -207,8 +233,19 @@ namespace ViewModel
             if (loc == null)
                 return;
             if (ReplacePlayerLocation(loc))
-                GameDone("Congrats you won!", "Back to main menu", "Close game");
+            {
+                if (isMine)
+                    GameDone("Congrats you won!", "Back to main menu", "Close game");
+                else
+                    GameDone("You lost.Good luck next time.", "Back to main menu", "Close game");
+
+                
+
+                //Update view that game is over and update view model.
+
+            }
         }
+
 
         /// <summary>
         /// 
@@ -339,6 +376,7 @@ namespace ViewModel
         public void RestartGame()
         {
             ReplacePlayerLocation(startingPosition);
+            logic.PlayerSerialNumber = startSerialNumber;
         }
 
         public void AnimateSolution(string solution)

@@ -48,10 +48,18 @@ namespace Controllers
             {
                 // make the move
                 Console.WriteLine("Got direction: " + Converter.StringToDirection(direction));
-                if (!model.Play(Converter.StringToDirection(direction), client))
+                if (!model.Play(Converter.StringToDirection(direction), client,direction) && 
+                    direction.ToLower() != "exit")
                 {
                     //illegal move
                     client.SendResponse("This move is illegal.");
+                }
+
+                if (direction.ToLower() == "exit")
+                {
+                    //Send exit message to other player.
+                    Console.WriteLine("Sending exit.");
+                    client.SendResponse("exit");
                 }
 
                 //// create the notification message about the move

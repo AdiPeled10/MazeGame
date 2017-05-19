@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:GUIClient"
         mc:Ignorable="d"
         Title="SettingsWindow" Height="250" Width="350">
-
     <Grid>
         <Grid.Resources>
             <Style TargetType="TextBlock">

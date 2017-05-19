@@ -56,6 +56,11 @@ namespace Controllers
                         game.MakePlayersNotifyEachOtherAboutTheirMoves((move) =>
                         {
                             // create the notification message about the move
+                            if (move.ToString().ToLower() == "exit")
+                            {
+                                //Exit message.
+                                return "exit";
+                            }
                             JObject playObj = new JObject
                             {
                                 ["Name"] = game.Name,

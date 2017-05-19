@@ -187,13 +187,13 @@ namespace SearchGames
         /// <return>
         /// True if the direction is legal,false otherwise.
         /// </return>
-        public bool MovePlayer(Player player, Direction move)
+        public bool MovePlayer(Player player, Direction move,string isExit)
         {
             // If the game hasn't ended. This prevents player from keep playing after someone has won.
             if (!HasEnded())
             {
                 //Find the matching player which holds his location and if a player was found, move him.
-                if ((bool)players.Find(player.Equals)?.Move(move, IsLegalMove) == false)
+                if ((bool)players.Find(player.Equals)?.Move(move, IsLegalMove, isExit) == false)
                 {
                     return false;
                 }

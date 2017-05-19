@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using ViewModel;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Threading;
 using System.IO;
 
 namespace GUIClient
@@ -24,9 +25,18 @@ namespace GUIClient
 
     public delegate void GotList(List<string> games);
 
+    public delegate void GotDirection(string direction);
+
+    public delegate void OpponentLeft();
+
+
     public class ClientModel
     {
         TcpClient client;
+
+        public event OpponentLeft Disconnection;
+
+        public event Parameterless WhereIsServer;
 
         //Event to notify listeners that we have the solution to the maze.
         public event MazeSolution GotSolution;
@@ -41,18 +51,48 @@ namespace GUIClient
 
         public event GotList NotifyList;
 
+        private List<string> validDirections;
+
+        /// <summary>
+        /// Event to notify of opponent movement.
+        /// </summary>
+        public event GotDirection NotifyDirection;
+
+        private bool stop = false;
+
+        public bool Stop
+        {
+            set { stop = value; }
+            get { return stop; }
+        }
+
         public ClientModel()
+        {
+            client = new TcpClient();
+           
+        }
+
+        /// <summary>
+        /// Connect to server.
+        /// </summary>
+        public void Connect()
         {
             //Create EndPoint based on default settings.
             string adr = GUIClient.Properties.Settings.Default.ServerIP == "" ?
                         "127.0.0.1" : GUIClient.Properties.Settings.Default.ServerIP;
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse(adr),
                GUIClient.Properties.Settings.Default.ServerPort);
-            client = new TcpClient();
-            //Connect our TcpClient to the EndPoint.
-            client.Connect(ep);
+            try
+            {
+                client.Connect(ep);
+            }
+            catch (Exception)
+            {
+                //Can't connect to server.
+                WhereIsServer();
+            }
             //Ended initiation of the client.
-            client.ReceiveBufferSize *= 16;
+            client.ReceiveBufferSize *= 2;
         }
 
         /// <summary>
@@ -67,9 +107,31 @@ namespace GUIClient
             string request = command + " " + name + " " + rows.ToString() + " " + cols.ToString();
             SendMessage(request);
 
-            //Get the response.
+            System.Threading.Thread.Sleep(200);
             string response = GetResponse();
             MazeFromJSON(response);
+        }
+
+        /// <summary>
+        /// Different from generate because we will get the response only when the
+        /// opponent connects.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="rows"></param>
+        /// <param name="cols"></param>
+        public void StartGame(string name,int rows,int cols)
+        {
+            //Send the request.
+            string request = "start " + name + " " + rows.ToString() + " " + cols.ToString();
+            SendMessage(request);
+
+            //Loop until the json parsing worked and we got full string.
+            while (!stop)
+            {
+
+                string response = GetResponse();
+                MazeFromJSON(response);
+            }
         }
 
         /// <summary>
@@ -103,12 +165,15 @@ namespace GUIClient
 
         public string GetResponse()
         {
-            System.Threading.Thread.Sleep(50);
-            NetworkStream stream = client.GetStream();
-            byte[] bytesToRead = new byte[client.ReceiveBufferSize];
-            int bytesRead = stream.Read(bytesToRead, 0, client.ReceiveBufferSize);
-            string response = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
-            return response;
+            try
+            {
+                NetworkStream stream = client.GetStream();
+                byte[] bytesToRead = new byte[client.ReceiveBufferSize];
+                int bytesRead = stream.Read(bytesToRead, 0, client.ReceiveBufferSize);
+                string response = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
+                Console.WriteLine("Got response " + response);
+                return response;
+            } catch (Exception ) { return ""; }
         }
 
         /// <summary>
@@ -136,9 +201,10 @@ namespace GUIClient
 
         public void MazeFromJSON(string json)
         {
-            JObject obj = JObject.Parse(json);
             try
             {
+                JObject obj = JObject.Parse(json);
+                stop = true;
                 Location start = new Location((int)obj["Start"]["Row"],
                                                 (int)obj["Start"]["Col"]);
                 Location end = new Location((int)obj["End"]["Row"],
@@ -159,6 +225,7 @@ namespace GUIClient
             } catch (Exception)
             {
                 //Case where a field in jobject doesn't appear.
+                //Case of start where response isn't full until opponent connects.
             }
         }
 
@@ -177,7 +244,72 @@ namespace GUIClient
 
         }
 
-        public void GetSolutionToMaze(string name, int algorithm) { }
+        /// <summary>
+        /// TODO - Maybe save some code later.
+        /// </summary>
+        /// <param name="name"></param>
+        public void JoinGame(string name)
+        {
+            string message = "join " + name;
+            SendMessage(message);
+
+            //Receive response.
+            string response = GetResponse();
+            MazeFromJSON(response);
+        }
+
+        public void PlayMove(string direction)
+        {
+            //Build string for command and send it.
+            string message = "play " + direction;
+            SendMessage(message);
+        }
+
+        /// <summary>
+        /// Listen to moves of opponent. We will get response for every play that he
+        /// sends to the server.
+        /// </summary>
+        public void GetOpponentMoves()
+        {
+            stop = false;
+            string response;
+            JObject obj = null;
+            validDirections = new List<string>();
+            validDirections.Add("left");
+            validDirections.Add("right");
+            validDirections.Add("down");
+            validDirections.Add("up");
+            //Loop until we got a valid move and notify.
+            while(!stop)
+            {
+                Console.WriteLine("LOOP");
+                response = GetResponse();
+                if (response.ToLower() == "exit\r\n" || response.ToLower().Equals("exit"))
+                {
+                    //Opponent left the game.
+                    Disconnection();
+                    break;
+                }
+                    try
+                    {
+                    //Task myTask = new Task(() =>
+                    //{
+                        obj = JObject.Parse(response);
+                        //Notify of direction.
+                        if (validDirections.Contains((string)obj["Direction"].ToString().ToLower()))
+                            NotifyDirection((string)obj["Direction"]);
+
+                    //});
+                    //myTask.Start();
+                }
+                    catch (Exception)
+                    {
+                        //Exception during parsing of json.
+                    }
+                //Deserialize to jobject.
+                
+            }
+        }
 
 
     }

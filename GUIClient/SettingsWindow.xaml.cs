@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Reflection;
 using ViewModel;
 using Model;
 
@@ -23,12 +24,25 @@ namespace GUIClient
     {
         private SettingsViewModel vm;
 
+        public SettingsViewModel VM
+        {
+            get { return vm; }
+            set { vm = value; }
+        }
+
         public SettingsWindow()
         {
             InitializeComponent();
             vm = new SettingsViewModel(new ApplicationSettingsModel());
-            this.DataContext = vm;
+            try
+            {
+                DataContext = vm;
+            } catch (TargetInvocationException)
+            {
+
+            }
         }
+
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {

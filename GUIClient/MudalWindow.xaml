@@ -16,8 +16,8 @@
         </Grid.ColumnDefinitions>
         <TextBlock Text="{Binding MudalMessage}" HorizontalAlignment="Center" Width="200" FontSize="20" Height="80" Grid.Row="0" Grid.Column="0"> </TextBlock>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-            <Button Content="{Binding MudalFirstButton}" Margin="30,0,0,70" Height="28" Width="120"></Button>
-            <Button Content="{Binding MudalSecondButton}" Margin="30,0,0,90" Width="80" Height="28" VerticalAlignment="Bottom"/>
+            <Button Name="firstButton" Content="{Binding MudalFirstButton}" Margin="30,0,0,70" Height="28" Width="120"></Button>
+            <Button Name="secondButton" Content="{Binding MudalSecondButton}" Margin="30,0,0,90" Width="80" Height="28" VerticalAlignment="Bottom"/>
         </StackPanel>
     </Grid>
 </Window>

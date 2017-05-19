@@ -101,7 +101,7 @@ namespace Models
         /// <return>
         /// True if the direction is legal,false otherwise.
         /// </return>
-        bool Play(Direction move, IClient player);
+        bool Play(Direction move, IClient player,string isExit);
 
         /// <summary>
         /// Get the player of this specific IClient.

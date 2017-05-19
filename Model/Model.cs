@@ -355,11 +355,11 @@ namespace Models
         /// <return>
         /// True if the direction is legal,false otherwise.
         /// </return>
-        public bool Play(Direction move, IClient player)
+        public bool Play(Direction move, IClient player,string isExit)
         {
             Player p = connector.GetPlayer(player);
             ISearchGame game = connector.GetGame(p);
-            return game.MovePlayer(p, move);
+            return game.MovePlayer(p, move, isExit);
         }
 
         /// <summary>

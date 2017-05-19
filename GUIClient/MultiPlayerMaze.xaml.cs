@@ -13,6 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Runtime.CompilerServices;
 using ViewModel;
+using System.Threading;
+using System.Windows.Threading;
+using System.Diagnostics;
 
 namespace GUIClient
 {
@@ -23,7 +26,20 @@ namespace GUIClient
     {
         private int rows;
         private int cols;
-        private MultiPlayerMazeVM vm;
+        private MultiPlayerVM vm;
+
+
+        public MultiPlayerVM VM
+        {
+            get { return vm; }
+            set
+            {
+                vm = value;
+                DataContext = vm;
+                vm.Movement += otherMaze.MovePlayer;
+                vm.NotifyDisconnection += OpponentDisconnected;
+            }
+        }
 
 
         public int Rows
@@ -44,93 +60,99 @@ namespace GUIClient
             }
         }
 
+
+        
+
+
         public MultiPlayerMaze()
         {
-            vm = new MultiPlayerMazeVM();
-        }
-
-
-        protected override void OnInitialized(EventArgs e)
-        {
             InitializeComponent();
-            Grid mazes = new Grid();
-            mazes.RowDefinitions.Add(new RowDefinition
-            {
-                Height = new GridLength(1, GridUnitType.Auto)
-            });
+            myMaze.Done += GameDone;
+            otherMaze.Done += GameDone;
+            KeyDown += SendPlay; 
+            ListenToOpponentMoves();
 
-            mazes.RowDefinitions.Add(new RowDefinition
-            {
-                Height = new GridLength(1, GridUnitType.Auto)
-            });
-
-            mazes.ColumnDefinitions.Add(new ColumnDefinition
-            {
-                Width = new GridLength(1, GridUnitType.Star)
-            });
-            mazes.ColumnDefinitions.Add(new ColumnDefinition
-            {
-                Width = new GridLength(1, GridUnitType.Star)
-            });
-
-            TextBox myBox = new TextBox
-            {
-                Text = "My board",
-                Foreground = new SolidColorBrush(System.Windows.Media.Colors.Blue)
-            };
-            TextBox otherBox = new TextBox
-            {
-                Text = "Other player's board",
-                Foreground = new SolidColorBrush(System.Windows.Media.Colors.Green)
-            };
-            mazes.Children.Add(myBox);
-            Grid.SetRow(myBox, 0);
-            Grid.SetColumn(myBox, 0);
-
-            mazes.Children.Add(otherBox);
-            Grid.SetRow(otherBox, 0);
-            Grid.SetColumn(otherBox, 1);
-
-            MazeUserControl myMaze = new MazeUserControl();
-            //Set margin of the my maze.
-            Thickness margin = myMaze.Margin;
-            margin.Left = 10;
-            margin.Right = 20;
-            myMaze.Margin = margin;
-            
-            MazeUserControl otherMaze = new MazeUserControl();
-            //Set the margin of other maze.
-            Thickness otherMargin = otherMaze.Margin;
-            otherMargin.Left = 10;
-            otherMargin.Right = 20;
-            otherMaze.Margin = otherMargin;
-
-            //Set rows and cols of other maze.
-            myMaze.MazeRows = rows;
-            myMaze.MazeCols = cols;
-            otherMaze.MazeRows = rows;
-            otherMaze.MazeCols = cols;
-            mazes.Children.Add(myMaze);
-            Grid.SetRow(myMaze, 1);
-            Grid.SetColumn(myMaze, 0);
-            mazes.Children.Add(otherMaze);
-            Grid.SetRow(otherMaze, 1);
-            Grid.SetColumn(otherMaze, 1);
-
-            mainGrid.Children.Add(mazes);
-            Grid.SetRow(mazes, 1);
-            Grid.SetColumn(mazes, 0);
-
-            Content = mainGrid;
-
-            base.OnInitialized(e);
         }
 
+        public void OpponentDisconnected()
+        {
+            Application.Current.Dispatcher.BeginInvoke(
+                   DispatcherPriority.Background,
+                    new Action(() => {
+                        otherBox.Text = "Your opponent has left the game.";
+                        otherBox.Foreground = new SolidColorBrush(System.Windows.Media.Colors.Red);
+                        }));
+        }
+
+        /// <summary>
+        /// Check if window was closed through the code with Close method or from
+        /// UI if it's from the code it's fine otherwise opponent left the game,send
+        /// correct message to server.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            bool wasCodeClosed = new StackTrace().GetFrames().FirstOrDefault(x => x.GetMethod() == typeof(Window).GetMethod("Close")) != null;
+            if (!wasCodeClosed)
+            {
+                // Closed some other way.Send exit.
+                vm.Disconnected();
+            }
+
+            base.OnClosing(e);
+        }
+
+        /// <summary>
+        /// Notify the view model that the game is over.
+        /// </summary>
+        public void GameDone()
+        {
+            vm.GameOver();
+            this.Close();
+        }
+
+        public void ListenToOpponentMoves()
+        {
+            Thread thread = new Thread(() => { vm.ListenToOpponent(); });
+            Application.Current.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Background,
+                     new Action(() => { thread.Start(); }));
+        }
+
+        /// <summary>
+        /// Activated when user clicks back to main menu,we will send a message to the server
+        /// that notifies that we need to notify the other player of disconnection.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            //Notify that player got disconnected.
+            vm.Disconnected();
             MainWindow window = new MainWindow();
             window.Show();
             this.Close();
+        }
+
+        private void SendPlay(object sender, KeyEventArgs e)
+        {
+            //Send to view model.
+            string strKey = e.Key.ToString().ToLower();
+            switch (strKey)
+            {
+                case "up":
+                case "down":
+                case "left":
+                case "right":
+                    {
+                        vm.PlayInDirection(strKey);
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
         }
     }
 }

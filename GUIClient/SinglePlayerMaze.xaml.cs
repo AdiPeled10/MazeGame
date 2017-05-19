@@ -30,7 +30,10 @@ namespace GUIClient
         private int realHeight;
         private string mazeName;
 
-       
+        /// <summary>
+        /// Set to false if connection failed,true otherwise.
+        /// </summary>
+        private bool connected = true;
 
 
 
@@ -41,7 +44,20 @@ namespace GUIClient
             set {
                 vm = value;
                 DataContext = vm;
+                vm.CantFindServer += () =>
+                {
+                    CantConnect win = new CantConnect();
+                    win.Show();
+                    connected = false;
+                };
+                vm.Connect();
+                
             }
+        }
+
+        public bool Connected
+        {
+            get { return connected; }
         }
 
         public string MazeName
@@ -136,8 +152,7 @@ namespace GUIClient
         public SinglePlayerMaze()
         {
             InitializeComponent();
-            vm = new SinglePlayerVM();
-            DataContext = vm;
+            maze.Done += GameDone;
             
         }
 
@@ -154,6 +169,11 @@ namespace GUIClient
             vm.GenerateMaze(MazeName, Rows, Cols);
         }
 
+        public void GameDone()
+        {
+            this.Close();
+        }
+
         public void GetSolution()
         {
             vm.AskForSolution(MazeName);
@@ -166,9 +186,24 @@ namespace GUIClient
 
         private void mainMenu_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow window = new MainWindow();
-            window.Show();
-            this.Close();
+            MudalWindow win = new MudalWindow();
+            win.DataContext = maze;
+            maze.MudalMessage = "Are you sure?";
+            maze.MudalFirstButton = "Continue";
+            maze.MudalSecondButton = "Cancel";
+            win.OnFirstButton = new RoutedEventHandler((object send, RoutedEventArgs args) =>
+            {
+                MainWindow window = new MainWindow();
+                window.Show();
+                this.Close();
+                win.Close();
+            });
+
+            //Don't do anything if cancel is chosen.
+            win.OnSecondButton = new RoutedEventHandler((object send, RoutedEventArgs args) => {
+                win.Close();
+            });
+            win.Show();
         }
 
         /// <summary>

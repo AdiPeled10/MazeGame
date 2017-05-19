@@ -15,6 +15,11 @@ namespace ViewModel
         protected ClientModel model;
 
         /// <summary>
+        /// Will be activated when client cant connect to server.
+        /// </summary>
+        public event Parameterless CantFindServer;
+
+        /// <summary>
         /// String representation of the maze.
         /// </summary>
         protected string mazeString;
@@ -101,12 +106,23 @@ namespace ViewModel
 
         public GameViewModel()
         {
+            
             model = new ClientModel();
             //Add GotMaze to event to notify when maze was generarted.
             model.GeneratedMaze += GotMaze;
+            //Add to event when client cant connect to server.
             model.MazeLoc += GotLocations;
+            model.WhereIsServer += () => { CantFindServer(); };
             model.MazeRowsCols += RowsAndCols;
             model.NotifyName += GetName;
+        }
+        
+        /// <summary>
+        /// Connect to server.
+        /// </summary>
+        public void Connect()
+        {
+            model.Connect();
         }
 
         public abstract void GenerateMaze(string name, int rows, int cols);
@@ -142,5 +158,8 @@ namespace ViewModel
         {
             MazeName = name;
         }
+
+    
+    
     }
 }

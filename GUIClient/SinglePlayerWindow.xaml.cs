@@ -51,7 +51,6 @@ namespace GUIClient
         {
             InitializeComponent();
            // singleVM = new SinglePlayerVM();
-
         }
 
         /// <summary>
@@ -64,6 +63,7 @@ namespace GUIClient
         {
             SinglePlayerOkButton();
         }
+
         public void SinglePlayerOkButton()
         {
             //Delete previous error.
@@ -99,16 +99,24 @@ namespace GUIClient
             popupMaze.MazeName = mazeInfo.NameBox;
             
             //Check if rows and cols were entered otherwise take default
-            if (mazeInfo.Rows != 0 && mazeInfo.Cols != 0)
+            if (mazeInfo.Rows > 0)
             {
                 popupMaze.Rows = mazeInfo.Rows;
-                popupMaze.Cols = mazeInfo.Cols;
             } else
             {
                 //Read from default.
                 popupMaze.Rows = Properties.Settings.Default.MazeRows;
+            }
+            if (mazeInfo.Cols > 0)
+            {
+                popupMaze.Cols = mazeInfo.Cols;
+            }
+            else
+            {
+                //Read from default.
                 popupMaze.Cols = Properties.Settings.Default.MazeCols;
             }
+
             popupMaze.Generate();
             popupMaze.GetSolution();
             //Close connection in single player.

@@ -72,7 +72,6 @@ namespace Controllers
             Action request;
             string[] arr = commandLine.Split(' ');
             string commandKey = arr[0];
-            Console.WriteLine("Got Command " + commandKey);
             // Ignore "faults requests" the player probably pressed/send it by accident.
             if (commands.ContainsKey(commandKey))
             {
@@ -105,7 +104,8 @@ namespace Controllers
         public void DisconnectClient(IClient client)
         {
             // get the game
-            ISearchGame game = model.GetGameOf(client);
+            //ISearchGame game = model.GetGameOf(client);
+            Console.WriteLine("Disconnecting a client"); // TODO
 
             // remove all the client requeses
             queue.Remove(client);

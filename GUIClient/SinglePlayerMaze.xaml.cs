@@ -35,8 +35,6 @@ namespace GUIClient
         /// </summary>
         private bool connected = true;
 
-
-
         private SinglePlayerVM vm;
 
         public SinglePlayerVM VM
@@ -72,6 +70,7 @@ namespace GUIClient
                 }
             }
         }
+
         public int RealWidth
         {
             get { return realWidth; }
@@ -153,10 +152,9 @@ namespace GUIClient
         {
             InitializeComponent();
             maze.Done += GameDone;
-            
         }
 
-       public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string propName)
         {
@@ -176,7 +174,11 @@ namespace GUIClient
 
         public void GetSolution()
         {
-            vm.AskForSolution(MazeName);
+            //int start_x = (int)vm.StartLocation.X, start_y = (int)vm.StartLocation.Y;
+            //int end_x = (int)vm.EndLocation.X, end_y = (int)vm.EndLocation.Y;
+            //vm.AskForSolution(rows + "," + cols + "," + start_x + "," + start_y + "," +
+            //    end_x + "," + end_y + "," + vm.MazeString);
+            vm.AskForSolution(vm.MazeName);
         }
 
         public void CloseConnection()

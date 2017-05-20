@@ -60,10 +60,6 @@ namespace GUIClient
             }
         }
 
-
-        
-
-
         public MultiPlayerMaze()
         {
             InitializeComponent();
@@ -71,7 +67,6 @@ namespace GUIClient
             otherMaze.Done += GameDone;
             KeyDown += SendPlay; 
             ListenToOpponentMoves();
-
         }
 
         public void OpponentDisconnected()
@@ -93,13 +88,13 @@ namespace GUIClient
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             bool wasCodeClosed = new StackTrace().GetFrames().FirstOrDefault(x => x.GetMethod() == typeof(Window).GetMethod("Close")) != null;
+            vm.Disconnected();
+            base.OnClosing(e);
             if (!wasCodeClosed)
             {
-                // Closed some other way.Send exit.
-                vm.Disconnected();
+                // without the program doesn't really exit.
+                Environment.Exit(0);
             }
-
-            base.OnClosing(e);
         }
 
         /// <summary>

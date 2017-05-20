@@ -7,16 +7,12 @@
         mc:Ignorable="d"
         Title="MazeGame" Height="350" Width="525">
     <StackPanel Name="stackPanel">
-        <Button Name="singleButton" Content="SinglePlayer" Width="100" HorizontalAlignment="Center"
-                VerticalAlignment="Center" Margin="20" Click="SinglePlayerClick" >
-            
-         
-        </Button>
+        <Image Source="Images\logo.jpg" HorizontalAlignment="Left" Width="130" />
+        <Button Name="singleButton" Content="Single player" Width="100" HorizontalAlignment="Center"
+                VerticalAlignment="Center" Click="SinglePlayerClick" />
         <Button Content="Multi player" Width="100" HorizontalAlignment="Center"
                 VerticalAlignment="Center" Margin ="20" Click="MultiPlayerClick" />
-        <Button Content= "Settings" Width="100" Click="SettingsClick"  >
-
-        </Button>
+        <Button Content= "Settings" Width="100" Click="SettingsClick"  />
         <StackPanel.Background>
             <SolidColorBrush Color="Aqua"></SolidColorBrush>
         </StackPanel.Background>

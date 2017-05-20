@@ -158,8 +158,5 @@ namespace ViewModel
         {
             MazeName = name;
         }
-
-    
-    
     }
 }

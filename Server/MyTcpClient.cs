@@ -76,18 +76,18 @@ namespace Server
                 {
                     return stream.DataAvailable || reader.Peek() > 0;
                 }
-                catch (ObjectDisposedException)
+                //catch (ObjectDisposedException)
+                //{
+                //    return false;
+                //}
+                catch (IOException)
                 {
                     return false;
                 }
-                catch (IOException e)
-                {
-                    return false;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
+                //catch (Exception)
+                //{
+                //    return false;
+                //}
             }
             throw new IOException("Client is disconnected");
         }
@@ -100,20 +100,6 @@ namespace Server
         /// </returns>
         public string RecvARequest()
         {
-            //// TODO find out what happens here when TcpClient is closed
-            //// TODO make sure thw second "ReadToEnd" will work
-            //string req;
-            //if (requestCache.Count !=0)
-            //{
-            //    req = requestCache[0];
-            //    requestCache.RemoveAt(0);
-            //}
-            //else
-            //{
-            //    string[] reqs = reader.ReadToEnd().Split('\n');
-            //    req = reqs[0];
-            //    requestCache = reqs.Skip(1).ToList();
-            //}
             return reader.ReadLine();
         }
 
@@ -130,7 +116,6 @@ namespace Server
         {
             try
             {
-                Console.WriteLine("Response " + res);
                 writer.WriteLine(res);
             } catch (IOException)
             {

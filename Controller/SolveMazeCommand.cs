@@ -51,6 +51,7 @@ namespace Controllers
                 ["NodesEvaluated"] = solution.NodesEvaluated
             };
             client.SendResponse(solveObj.ToString());
+            client.Disconnect();
         }
     }
 }

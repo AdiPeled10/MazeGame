@@ -21,14 +21,13 @@ namespace GUIClient
 
     public delegate void Name(string name);
 
-    public delegate void MazeSolution(string solution,string name);
+    public delegate void MazeSolution(string solution, string name);
 
     public delegate void GotList(List<string> games);
 
     public delegate void GotDirection(string direction);
 
     public delegate void OpponentLeft();
-
 
     public class ClientModel
     {
@@ -69,7 +68,6 @@ namespace GUIClient
         public ClientModel()
         {
             client = new TcpClient();
-           
         }
 
         /// <summary>
@@ -101,7 +99,7 @@ namespace GUIClient
         /// <param name="name"></param>
         /// <param name="rows"></param>
         /// <param name="cols"></param>
-        public void GenerateMaze(string command,string name, int rows, int cols)
+        public void GenerateMaze(string command, string name, int rows, int cols)
         {
             //Send the request.
             string request = command + " " + name + " " + rows.ToString() + " " + cols.ToString();
@@ -126,10 +124,11 @@ namespace GUIClient
             SendMessage(request);
 
             //Loop until the json parsing worked and we got full string.
+            string response = "";
             while (!stop)
             {
-
-                string response = GetResponse();
+                System.Threading.Thread.Sleep(200);
+                response += GetResponse();
                 MazeFromJSON(response);
             }
         }
@@ -141,17 +140,14 @@ namespace GUIClient
         /// <param name="name"></param>
         public void GetMazeSolution(string name)
         {
-            //int algorithm = GUIClient.Properties.Settings.Default.SearchAlgorithm;
-            //TODO- fix save of search algorithm in settings.
-            int algorithm = 1;
-            string request = "solve" + " " + name + " " + algorithm.ToString();
+            int algorithm = Properties.Settings.Default.SearchAlgorithm;
+            string request = "solve " + name + " " + algorithm.ToString();
             //Send the request.
             SendMessage(request);
 
             //Wait for response.
             string response = GetResponse();
             SolutionFromJson(response);
-
         }
 
         public void SendMessage(string message)
@@ -179,8 +175,9 @@ namespace GUIClient
         /// <summary>
         /// Close the connection with the server.
         /// </summary>
-        public void CloseClient()
+        public void CloseClient(string name)
         {
+            SendMessage("close " + name);
             client.Close();
         }
 
@@ -254,6 +251,7 @@ namespace GUIClient
             SendMessage(message);
 
             //Receive response.
+            System.Threading.Thread.Sleep(500);
             string response = GetResponse();
             MazeFromJSON(response);
         }
@@ -310,7 +308,6 @@ namespace GUIClient
                 
             }
         }
-
 
     }
 }

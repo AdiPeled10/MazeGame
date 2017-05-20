@@ -46,20 +46,17 @@ namespace Controllers
 
             try
             {
+                if (direction.ToLower() == "exit")
+                {
+                    client.Disconnect();
+                    return;
+                }
+
                 // make the move
-                Console.WriteLine("Got direction: " + Converter.StringToDirection(direction));
-                if (!model.Play(Converter.StringToDirection(direction), client,direction) && 
-                    direction.ToLower() != "exit")
+                if (!model.Play(Converter.StringToDirection(direction), client,direction))
                 {
                     //illegal move
                     client.SendResponse("This move is illegal.");
-                }
-
-                if (direction.ToLower() == "exit")
-                {
-                    //Send exit message to other player.
-                    Console.WriteLine("Sending exit.");
-                    client.SendResponse("exit");
                 }
 
                 //// create the notification message about the move
@@ -94,7 +91,7 @@ namespace Controllers
             }
             catch (NullReferenceException)
             {
-                client.SendResponse("Player doesn't belog to a game.");
+                client.SendResponse("Player doesn't belong to a game.");
             }
         }
     }

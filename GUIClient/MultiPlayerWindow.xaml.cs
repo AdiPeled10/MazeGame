@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 using ViewModel;
+using System.Diagnostics;
 
 namespace GUIClient
 {
@@ -72,13 +73,6 @@ namespace GUIClient
             }
         }
 
-
-
-
-
-
-
-
         /// <summary>
         /// Constructor of multi player window.
         /// </summary>
@@ -97,7 +91,6 @@ namespace GUIClient
             vm.Connect();
         }
 
-
         /// <summary>
         /// Event which will occur when  start game button will be clicked.
         /// </summary>
@@ -105,17 +98,44 @@ namespace GUIClient
         /// <param name="e"></param>
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-
             //Start game via the view model.
-            
+            int cols, rows;
             if (!connected)
             {
                 //Cant connect to server.
                 return;
             }
 
+            if (maze.NameBox.Length == 0)
+            {
+                //We will require the user to enter a name.
+                grid.Children.Add(new TextBlock { Text = "Please enter a valid name.",
+                    Foreground = System.Windows.Media.Brushes.Red });
+                return;
+            }
+
+            //Check if rows and cols were entered otherwise take default
+            if (maze.Rows > 0)
+            {
+                rows = maze.Rows;
+            }
+            else
+            {
+                //Read from default.
+                rows = Properties.Settings.Default.MazeRows;
+            }
+            if (maze.Cols > 0)
+            {
+                cols = maze.Cols;
+            }
+            else
+            {
+                //Read from default.
+                cols = Properties.Settings.Default.MazeCols;
+            }
+
             waitingBlock.Text = "Waiting for opponent...";
-            vm.GenerateMaze(maze.NameBox, maze.Rows, maze.Cols);
+            vm.GenerateMaze(maze.NameBox, rows, cols);
         }
 
         public void OpponentConnected()
@@ -132,11 +152,10 @@ namespace GUIClient
                      }));
         }
 
-      
-
         private void JoinClick(object sender, RoutedEventArgs e)
         {
-            vm.JoinGame(comboBox.Text);
+            if (comboBox.Text.Length > 0)
+                vm.JoinGame(comboBox.Text);
         }
 
         /// <summary>
@@ -147,6 +166,23 @@ namespace GUIClient
         private void DropDownHandler(object sender,EventArgs e)
         {
             vm.ListCommand();
-        } 
+        }
+
+        /// <summary>
+        /// Check if window was closed through the code with Close method or from
+        /// UI if it's from the code it's fine otherwise opponent left the game,send
+        /// correct message to server.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            bool wasCodeClosed = new StackTrace().GetFrames().FirstOrDefault(x => x.GetMethod() == typeof(Window).GetMethod("Close")) != null;
+            if (!wasCodeClosed)
+            {
+                // Closed some other way.Send exit.
+                vm.Disconnected();
+            }
+            base.OnClosing(e);
+        }
     }
 }

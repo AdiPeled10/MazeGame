@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MultiPlayerWindow" Height="400" Width="400">
     <Viewbox>
-        <Grid >
+        <Grid x:Name="grid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>

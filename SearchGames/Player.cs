@@ -120,10 +120,9 @@ namespace SearchGames
          /// </summary>
         public bool Move(Direction move, IsLegalPlayerLocation isLegal,string isExit)
         {
-            // TODO Check if it's like a GUI Up mean -1 Down +1.
             if (isExit == "exit")
             {
-                Console.WriteLine("SENDING EXIT THROUGH PLAYER/");
+                //Console.WriteLine("SENDING EXIT THROUGH PLAYER");
                 NotifyMeWhenYouMove("exit");
             }
             bool returnValue = false;

@@ -141,7 +141,6 @@ namespace Models
             return game;
         }
 
-
         /// <summary>
         /// Get a specific game by it's name.
         /// </summary>
@@ -419,6 +418,7 @@ namespace Models
                 }
             }
         }
+
         /// <summary>
         /// Close the game with the given name.
         /// </summary>

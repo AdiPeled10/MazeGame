@@ -254,12 +254,19 @@ namespace Models
         {
             if (!ReferenceEquals(name, null))
             {
-                IEnumerable<Player> players = nameToGame[name].GetPlayers();
-                nameToGame.Remove(name);
-                foreach (Player myPlayer in players)
+                try
                 {
-                    playerToGame[myPlayer] = null;
-                    // clientToPlayer.Remove(myPlayer.Client);
+                    IEnumerable<Player> players = nameToGame[name].GetPlayers();
+                    nameToGame.Remove(name);
+                    foreach (Player myPlayer in players)
+                    {
+                        playerToGame[myPlayer] = null;
+                        // clientToPlayer.Remove(myPlayer.Client);
+                    }
+                }
+                catch
+                {
+                    // the game was already closed
                 }
             }
         }

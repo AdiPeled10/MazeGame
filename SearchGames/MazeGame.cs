@@ -40,9 +40,8 @@ namespace SearchGames
 
         /// <summary>
         /// The max number of players allowed in this game.
-        /// TODO only not const until the client will handle single player.
         /// </summary>
-        public int MaxPlayersAllowed = 2;
+        public int MaxPlayersAllowed = 2;  // TODO make const when single player logic will be fixed
 
         /// <summary>
         /// A member that tells us if this game has ended.
@@ -138,9 +137,12 @@ namespace SearchGames
             // support "removing without ending the game if the game hasn't started"
             // TODO verify if a safety check of "does the player play in this game" is required.
             this.players.Remove(player);
-            winner = players[0];
-            // notify the other clients that a player has left the game in the future.
-            winner.NotifyAChangeInTheGame("The other player has forfiet.");
+            if (this.players.Count > 0)
+            {
+                winner = players[0];
+                // notify the other clients that a player has left the game in the future.
+                winner.NotifyAChangeInTheGame("The other player has forfiet.");
+            }
             hasEnded = true;
         }
 
@@ -193,11 +195,8 @@ namespace SearchGames
             if (!HasEnded())
             {
                 //Find the matching player which holds his location and if a player was found, move him.
-                if ((bool)players.Find(player.Equals)?.Move(move, IsLegalMove, isExit) == false)
-                {
-                    return false;
-                }
-                return true;
+                player = players.Find(player.Equals);
+                return null != player && player.Move(move, IsLegalMove, isExit);
             }
             return false;
         }
@@ -357,7 +356,7 @@ namespace SearchGames
         /// Static method to convert back to Maze game from the JSON format.
         /// </summary>
         /// <param name="str">
-        /// The name of the MazeGame.
+        /// The JSON of the MazeGame.
         /// </param>
         /// <returns>
         /// The MazeGame that we have created.
@@ -366,6 +365,37 @@ namespace SearchGames
         {
             Maze maze = Maze.FromJSON(str);
             return new MazeGame(maze.Name, maze);
+        }
+
+        /// <summary>
+        /// Static method to convert a Maze game string to an anonymous MazeGame.
+        /// </summary>
+        /// <param name="str">
+        /// A string at the format "rows,cols,x_start,y_start,x_end,y_end,ToString()" of the MazeGame.
+        /// </param>
+        /// <returns>
+        /// The MazeGame that we have created.
+        /// </returns>
+        public static MazeGame FromString(string str)
+        {
+            string[] components = str.Split(',');
+            int rows = int.Parse(components[0]), cols = int.Parse(components[1]);
+            Maze maze = new Maze(rows, cols);
+            maze.InitialPos = new Position(int.Parse(components[2]), int.Parse(components[3]));
+            maze.GoalPos = new Position(int.Parse(components[4]), int.Parse(components[5]));
+            str = components[6];
+            int index = 0, j;
+            for (int i = 0; i < rows; ++i)
+            {
+                for (j = 0; j < cols; ++j, ++index)
+                {
+                    if (str[index] == '0')
+                        maze[i, j] = CellType.Free;
+                    else
+                        maze[i, j] = CellType.Wall;
+                }
+            }
+            return new MazeGame("", maze);
         }
 
         /// <summary>

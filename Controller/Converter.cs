@@ -111,11 +111,6 @@ namespace Controllers
             return new string(str);
         }
 
-        //TODO decide if to return a solution or just directions and use in client
-        //public static Solution<Position> FromJSON(string str)
-        //{
-        //}
-
         /// <summary>
         /// Convert a given string to it's matching Direction.
         /// </summary>

@@ -37,6 +37,7 @@ namespace Controllers
         {
             // close the game
             model.Close(args[0], client);
+            client.Disconnect();
         }
     }
 }

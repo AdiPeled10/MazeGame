@@ -131,7 +131,6 @@ namespace Views
                     if (c.HasARequest())
                     {
                         string req = c.RecvARequest(); // should return 1 request
-                        Console.WriteLine("Got request " + req);
                         this.HandleClientRequest(req, c);
                     } else
                     {

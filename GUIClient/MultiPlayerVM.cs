@@ -216,7 +216,7 @@ namespace ViewModel
         public void GameOver()
         {
             model.Stop = true;
-            model.CloseClient();
+            model.CloseClient(mazeName);
         }
     }
 }

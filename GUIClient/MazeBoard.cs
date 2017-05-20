@@ -161,9 +161,9 @@ namespace ViewModel
                         //This is starting position,here comes mario.
                         //Save image source as private property.
                         if (isMine)
-                            playerLogo = new BitmapImage(new Uri("mario.png", UriKind.Relative));
+                            playerLogo = new BitmapImage(new Uri("Images\\mario.png", UriKind.Relative));
                         else
-                            playerLogo = new BitmapImage(new Uri("luigi.png", UriKind.Relative));
+                            playerLogo = new BitmapImage(new Uri("Images\\luigi.png", UriKind.Relative));
                         current = new Rectangle
                         {
                             Width = widthPerRectangle,
@@ -180,7 +180,7 @@ namespace ViewModel
                         startSerialNumber = serialNumber;
                     } else if (i == endPosition.X && k == endPosition.Y)
                     {
-                        ImageSource goal = new BitmapImage(new Uri("goal.png", UriKind.RelativeOrAbsolute));
+                        ImageSource goal = new BitmapImage(new Uri("Images\\goal.png", UriKind.RelativeOrAbsolute));
                         current = new Rectangle
                         {
                             Width = widthPerRectangle,
@@ -237,7 +237,7 @@ namespace ViewModel
                 if (isMine)
                     GameDone("Congrats you won!", "Back to main menu", "Close game");
                 else
-                    GameDone("You lost.Good luck next time.", "Back to main menu", "Close game");
+                    GameDone("You lost.\n Good luck next time.", "Back to main menu", "Close game");
 
                 
 
@@ -377,6 +377,16 @@ namespace ViewModel
         {
             ReplacePlayerLocation(startingPosition);
             logic.PlayerSerialNumber = startSerialNumber;
+            ImageSource goal = new BitmapImage(new Uri("Images\\goal.png", UriKind.RelativeOrAbsolute));
+            Rectangle goalRec = new Rectangle
+            {
+                Height = maze.Height / rows,
+                Width = maze.Width / cols,
+                Fill = new ImageBrush { ImageSource = goal }
+            };
+            Canvas.SetLeft(goalRec, endPosition.X);
+            Canvas.SetTop(goalRec, endPosition.Y);
+            maze.Children.Add(goalRec);
         }
 
         public void AnimateSolution(string solution)
@@ -436,18 +446,19 @@ namespace ViewModel
         public void SolutionAnimation(List<int> serialNumbers)
         {
             int length = serialNumbers.Count;
-            Activate(0, serialNumbers,length);
+            Activate(serialNumbers,length);
         }
 
-        public async void Activate(int index, List<int> serialNumbers, int length)
+        public async void Activate(List<int> serialNumbers, int length)
         {
             Location current;
-            await Task.Delay(700);
-            current = logic.GetLocation(serialNumbers[index]);
-            //Move the player to this location.
-            ReplacePlayerLocation(current);
-            if (index < length - 1)
-                Activate(index + 1, serialNumbers, length);
+            foreach(int num in serialNumbers)
+            {
+                await Task.Delay(200);
+                current = logic.GetLocation(num);
+                //Move the player to this location.
+                ReplacePlayerLocation(current);
+            }
         }
 
     }

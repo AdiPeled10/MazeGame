@@ -38,7 +38,6 @@ namespace Controllers
         /// </param>
         public void Execute(string[] args, IClient client)
         {
-            System.Console.WriteLine("Exec");
             string name = args[0];
             int rows = int.Parse(args[1]);
             int cols = int.Parse(args[2]);
@@ -46,12 +45,12 @@ namespace Controllers
             // Return JSON format of this maze.
             client.SendResponse(model.GenerateNewGame(name, rows, cols).ToJSON());
 
-            // TODO - also effected rhe code of model.GenerateNewGame.
+            // TODO - also effected the code of model.GenerateNewGame.
             // No need to know the name of the single player game, but while the
             // client application is stupid will know it. Afterward we can replace it with the coe above
             if (!model.Join(name, client))
             {
-                if (!ReferenceEquals(null,model.GetGameOf(client)))
+                if (!ReferenceEquals(null, model.GetGameOf(client)))
                 {
                     client.SendResponse(@"Deleted game named: " + model.GetGameOf(client).Name
                    + " to generate game: " + name);
@@ -59,7 +58,7 @@ namespace Controllers
                     model.Join(name, client);
                 }
             }
-            (model.GetGameByName(name) as MazeGame).MaxPlayersAllowed = 1; 
+            (model.GetGameByName(name) as MazeGame).MaxPlayersAllowed = 1;
         }
 
     }

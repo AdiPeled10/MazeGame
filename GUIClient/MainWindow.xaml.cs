@@ -54,6 +54,5 @@ namespace GUIClient
                 this.Close();
             } catch (TargetInvocationException) { }
         }
-
     }
 }

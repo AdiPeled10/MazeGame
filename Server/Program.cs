@@ -24,7 +24,7 @@ namespace Server
             // create the server "building blocks"
             MazeGameGenerator generator = new MazeGameGenerator(new DFSMazeGenerator());
             RequestsQueue queue = new RequestsQueue();
-            Model model = new Model(generator, MazeGame.FromJSON);
+            Model model = new Model(generator, MazeGame.FromString);
             Controller controller = new Controller(model, queue);
             View view = new View(controller);
             Server server = new Server(int.Parse(ConfigurationManager.AppSettings["Port"]), view);

@@ -73,7 +73,6 @@
     <Compile Include="GameViewModel.cs" />
     <Compile Include="ISettingsModel.cs" />
     <Compile Include="Location.cs" />
-    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MazeBoard.cs" />
     <Compile Include="MazeLogic.cs" />
     <Compile Include="MazeSizeConverter.cs" />
@@ -91,7 +90,6 @@
     <Compile Include="MultiPlayerWindow.xaml.cs">
       <DependentUpon>MultiPlayerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MultiPlayerWindowVM.cs" />
     <Compile Include="SettingsViewModel.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -104,7 +102,6 @@
     <Compile Include="SinglePlayerWindow.xaml.cs">
       <DependentUpon>SinglePlayerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SinglePlayerWindowVM.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="CantConnect.xaml">
       <SubType>Designer</SubType>

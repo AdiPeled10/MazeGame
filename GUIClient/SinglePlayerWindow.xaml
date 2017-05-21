@@ -8,6 +8,6 @@
         Title="SinglePlayer" Height="230" Width="300">
     <StackPanel Name="stackPanel">
         <local:MazeInformationLayout x:Name="mazeInfo"></local:MazeInformationLayout>
-        <Button Content="Start Game" Margin="15" Width="70" Click="Button_Click" ></Button>
+        <Button Content="Start Game" Margin="15" Width="70" Click="ButtonClick" ></Button>
     </StackPanel>
 </Window>

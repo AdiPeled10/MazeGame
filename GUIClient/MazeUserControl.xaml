@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Viewbox>
-        <Border BorderBrush="Black" BorderThickness="3" KeyDown="Border_KeyDown" Loaded="MazeLoaded">
+        <Border BorderBrush="Black" BorderThickness="3" KeyDown="BorderKeyDown" Loaded="MazeLoaded">
             <Canvas x:Name="myCanvas" Width="300" Height="300"></Canvas>
         </Border>
     </Viewbox>

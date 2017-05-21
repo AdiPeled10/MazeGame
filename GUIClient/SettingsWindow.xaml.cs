@@ -22,14 +22,25 @@ namespace GUIClient
     /// </summary>
     public partial class SettingsWindow : Window
     {
+        /// <summary>
+        /// The ViewModel. This class sets the "setting" of "vm".
+        /// </summary>
         private SettingsViewModel vm;
 
+        /// <summary>
+        /// VM property.
+        /// Get or set "vm" member.
+        /// </summary>
         public SettingsViewModel VM
         {
             get { return vm; }
             set { vm = value; }
         }
 
+        /// <summary>
+        /// Constructor.
+        /// Creares "vm" as SettingViewModel.
+        /// </summary>
         public SettingsWindow()
         {
             InitializeComponent();
@@ -43,15 +54,27 @@ namespace GUIClient
             }
         }
 
-
-        private void Cancel_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Handles the event of the user clicking the cancel button.
+        /// It closes this window and opens the main window(MainWindow).
+        /// </summary>
+        /// <param name="sender"> Meaningles. </param>
+        /// <param name="e"> Meaningles. </param>
+        private void CancelClick(object sender, RoutedEventArgs e)
         {
             MainWindow window = new MainWindow();
             window.Show();
             this.Close();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Handles the event of the user clicking the "save setting" button.
+        /// It saves the setting, closes this window and opens the main
+        /// window(MainWindow).
+        /// </summary>
+        /// <param name="sender"> Meaningles. </param>
+        /// <param name="e"> Meaningles. </param>
+        private void ButtonClick(object sender, RoutedEventArgs e)
         {
             vm.SaveSettings();
             MainWindow window = new MainWindow();

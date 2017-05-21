@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Runtime.CompilerServices;
 using ViewModel;
 using System.Threading;
 using System.Windows.Threading;
@@ -24,11 +15,25 @@ namespace GUIClient
     /// </summary>
     public partial class MultiPlayerMaze : Window
     {
+        /// <summary>
+        /// Number of rows in the maze.
+        /// </summary>
         private int rows;
+
+        /// <summary>
+        /// Number of cols in the maze.
+        /// </summary>
         private int cols;
+
+        /// <summary>
+        /// The ViewModel. This class uses it as a "Model" .
+        /// </summary>
         private MultiPlayerVM vm;
 
-
+        /// <summary>
+        /// VM property.
+        /// Get or set "vm" member.
+        /// </summary>
         public MultiPlayerVM VM
         {
             get { return vm; }
@@ -41,7 +46,10 @@ namespace GUIClient
             }
         }
 
-
+        /// <summary>
+        /// Rows property.
+        /// Get or set "rows" member.
+        /// </summary>
         public int Rows
         {
             get { return rows; }
@@ -51,6 +59,10 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// Cols property.
+        /// Get or set "cols" member.
+        /// </summary>
         public int Cols
         {
             get { return cols; }
@@ -60,6 +72,10 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// Constructor.
+        /// Calls "ListenToOpponentMoves" in the end.
+        /// </summary>
         public MultiPlayerMaze()
         {
             InitializeComponent();
@@ -69,6 +85,10 @@ namespace GUIClient
             ListenToOpponentMoves();
         }
 
+        /// <summary>
+        /// Shows on screen a message that says that the other player have left the game.
+        /// This used when the other player disconnected while the game is still on.
+        /// </summary>
         public void OpponentDisconnected()
         {
             Application.Current.Dispatcher.BeginInvoke(
@@ -106,6 +126,9 @@ namespace GUIClient
             this.Close();
         }
 
+        /// <summary>
+        /// Begins a new thread that reads the opponent moves and show them on the screen.
+        /// </summary>
         public void ListenToOpponentMoves()
         {
             Thread thread = new Thread(() => { vm.ListenToOpponent(); });
@@ -129,6 +152,11 @@ namespace GUIClient
             this.Close();
         }
 
+        /// <summary>
+        /// Moves the player in the direction specified in "e.Key"(id it can).
+        /// </summary>
+        /// <param name="sender"> meaningless. </param>
+        /// <param name="e"> e.Key is the direction to move toward. </param>
         private void SendPlay(object sender, KeyEventArgs e)
         {
             //Send to view model.

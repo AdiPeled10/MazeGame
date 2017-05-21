@@ -1,54 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.ComponentModel;
-using GUIClient;
 
 namespace ViewModel
 {
+    /// <summary>
+    /// Delegate that is activated when a key is pressed.
+    /// </summary>
+    /// <param name="key"> Key object </param>
     public delegate void KeyHandler(Key key);
 
     public class MazeViewModel : ViewModel, INotifyPropertyChanged
     {
-
+        /// <summary>
+        /// A dictionary that connects a key to his handler.
+        /// </summary>
         private Dictionary<Key, KeyHandler> keyToHandler;
 
         /// <summary>
-        /// TODO- Maybe change input to user control instead of canvas-flexibility.
+        /// Constructor.
+        /// Initialize "keyToHandler" member.
         /// </summary>
-        /// <param name="control"></param>
+        /// <param name="board"> MazeBoard object. </param>
         public MazeViewModel(MazeBoard board)
         {
-
             //Set default keyboards of dictionary.Initialize dictionary.
-            keyToHandler = new Dictionary<Key, KeyHandler>();
-            keyToHandler.Add(Key.Up, board.DrawPlayer);
-            keyToHandler.Add(Key.Down, board.DrawPlayer);
-            keyToHandler.Add(Key.Left, board.DrawPlayer);
-            keyToHandler.Add(Key.Right, board.DrawPlayer);
+            keyToHandler = new Dictionary<Key, KeyHandler>()
+            {
+                { Key.Up, board.DrawPlayer },
+                { Key.Down, board.DrawPlayer },
+                { Key.Left, board.DrawPlayer },
+                { Key.Right, board.DrawPlayer }
+            };
         }
 
+        /// <summary>
+        /// Adds a handler to the given key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="handler"></param>
         public void AddKey(Key key, KeyHandler handler)
         {
             keyToHandler.Add(key, handler);
         }
 
+        /// <summary>
+        /// Removes "key" from "keyToHandler".
+        /// </summary>
+        /// <param name="key"></param>
         public void RemoveKey(Key key)
         {
             keyToHandler.Remove(key);
         }
 
+        /// <summary>
+        /// Calls the handler of "key" as set in "keyToHandler".
+        /// </summary>
+        /// <param name="key"></param>
         public void KeyPressed(Key key)
         {
             try
@@ -62,8 +71,5 @@ namespace ViewModel
             }
 
         }
-
-
-
     }
 }

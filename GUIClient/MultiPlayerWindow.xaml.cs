@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Threading;
 using ViewModel;
 using System.Diagnostics;
@@ -17,8 +13,19 @@ namespace GUIClient
     /// </summary>
     public partial class MultiPlayerWindow : Window
     {
+        /// <summary>
+        /// The current maze name.
+        /// </summary>
         private string mazeName;
+
+        /// <summary>
+        /// The current maze number of rows.
+        /// </summary>
         private int rows;
+
+        /// <summary>
+        /// The current maze number of columns.
+        /// </summary>
         private int cols;
 
         /// <summary>
@@ -47,6 +54,10 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// Rows property.
+        /// Get or set "rows" member.
+        /// </summary>
         public int Rows
         {
             get { return rows; }
@@ -55,11 +66,14 @@ namespace GUIClient
                 if (rows != value)
                 {
                     rows = value;
-                    
                 }
             }
         }
 
+        /// <summary>
+        /// Cols property.
+        /// Get or set "cols" member.
+        /// </summary>
         public int Cols
         {
             get { return cols; }
@@ -68,7 +82,6 @@ namespace GUIClient
                 if (cols != value)
                 {
                     cols = value;
-                    
                 }
             }
         }
@@ -138,20 +151,27 @@ namespace GUIClient
             vm.GenerateMaze(maze.NameBox, rows, cols);
         }
 
+        /// <summary>
+        /// Opens a window that shows the game.
+        /// </summary>
         public void OpponentConnected()
         {
             Application.Current.Dispatcher.BeginInvoke(
                     DispatcherPriority.Background,
                      new Action(() => {
-                        
-                         MultiPlayerMaze mazeWindow = new MultiPlayerMaze();
-                         //Pass on the view model.
-                         mazeWindow.VM = vm;
+                         MultiPlayerMaze mazeWindow = new MultiPlayerMaze()
+                         {
+                             //Pass on the view model.
+                             VM = vm
+                         };
                          mazeWindow.Show();
                          this.Close();
                      }));
         }
 
+        /// <summary>
+        /// Joins the selected joinable multi player game.
+        /// </summary>
         private void JoinClick(object sender, RoutedEventArgs e)
         {
             if (comboBox.Text.Length > 0)

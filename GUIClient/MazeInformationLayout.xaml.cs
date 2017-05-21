@@ -1,17 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GUIClient
 {
@@ -20,16 +8,27 @@ namespace GUIClient
     /// </summary>
     public partial class MazeInformationLayout : UserControl
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MazeInformationLayout()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// NameBox property.
+        /// Returns the text in "nameTextBox" member(in the xaml).
+        /// </summary>
         public string NameBox
         {
             get { return nameTextBox.Text; }
         }
 
+        /// <summary>
+        /// Rows property.
+        /// Returns the text in "rowsTextBox" member(in the xaml) as int(or 0 if parsing fails).
+        /// </summary>
         public int Rows
         {
             get
@@ -44,6 +43,10 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// Cols property.
+        /// Returns the text in "columnsTextBox" member(in the xaml) as int(or 0 if parsing fails).
+        /// </summary>
         public int Cols
         {
             get

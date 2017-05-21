@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using ViewModel;
 
 namespace GUIClient
@@ -20,37 +10,56 @@ namespace GUIClient
     /// </summary>
     public partial class SinglePlayerWindow : Window
     {
+        /// <summary>
+        /// A box that her job is to show errors if there are any.
+        /// </summary>
         private TextBlock errorBox;
 
-        ///private SinglePlayerVM singleVM;
-
+        /// <summary>
+        /// ErrorBox property.
+        /// Get or set the "errorBox" member.
+        /// </summary>
         public TextBlock ErrorBox
         {
             get { return errorBox; }
             set { errorBox = value; }
         }
-        
+
+        /// <summary>
+        /// Info property
+        /// Get or set "mazeInfo" member
+        /// </summary>
         public MazeInformationLayout Info
         {
             get { return mazeInfo; }
             set { mazeInfo = value; }
         }
 
+        /// <summary>
+        /// Stack property.
+        /// Get "stackPanel" member
+        /// </summary>
         public StackPanel Stack
         {
             get { return stackPanel; }
         }
 
+        /// <summary>
+        /// MazeName property.
+        /// Get "mazeInfo.nameTextBox.Text" member
+        /// </summary>
         public string MazeName
         {
             get { return mazeInfo.nameTextBox.Text; }
             set { }
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SinglePlayerWindow()
         {
             InitializeComponent();
-           // singleVM = new SinglePlayerVM();
         }
 
         /// <summary>
@@ -59,11 +68,17 @@ namespace GUIClient
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonClick(object sender, RoutedEventArgs e)
         {
             SinglePlayerOkButton();
         }
 
+        /// <summary>
+        /// Generate a new maze.
+        /// This function generate a new maze game and its solution with the given
+        /// parameters in the window boxes or from the default setting(if the fitting
+        /// box is empty). If the name box is empty an error message apears.
+        /// </summary>
         public void SinglePlayerOkButton()
         {
             //Delete previous error.

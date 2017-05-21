@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GUIClient;
-using ViewModel;
-
+﻿
 namespace Model
 {
     /// <summary>
@@ -58,6 +51,9 @@ namespace Model
             }
         }
 
+        /// <summary>
+        /// Saves the current setting as the default setting.
+        /// </summary>
         public void SaveSettings() { GUIClient.Properties.Settings.Default.Save(); }
     }
 }

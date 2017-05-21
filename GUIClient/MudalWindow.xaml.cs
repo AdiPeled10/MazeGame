@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace GUIClient
 {
-
     /// <summary>
     /// Interaction logic for MudalWindow.xaml
     /// </summary>
@@ -30,6 +17,10 @@ namespace GUIClient
         /// </summary>
         private RoutedEventHandler onSecondButton;
 
+        /// <summary>
+        /// OnFirstButton property.
+        /// Set "value" as "onFirstButton" and as a listener to firstButton.Click.
+        /// </summary>
         public RoutedEventHandler OnFirstButton
         {
             set
@@ -39,6 +30,10 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// OnFirstButton property.
+        /// Set "value" as "onSecondButton" and as a listener to secondButton.Click.
+        /// </summary>
         public RoutedEventHandler OnSecondButton
         {
             set
@@ -48,6 +43,9 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MudalWindow()
         {
             InitializeComponent();

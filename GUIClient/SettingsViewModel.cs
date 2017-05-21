@@ -1,29 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.ComponentModel;
-using Model;
+﻿using Model;
 
 namespace ViewModel
 {
-    public enum Algorithm { BFS,DFS};
+    /// <summary>
+    /// Enum for the search algorithms(for solutions).
+    /// </summary>
+    public enum Algorithm {BFS, DFS};
+
+    /// <summary>
+    /// This class contains default values to fields. They are used when
+    /// they aren't given by the user.
+    /// </summary>
     public class SettingsViewModel : ViewModel
     {
-        
+        /// <summary>
+        /// The model is used to be notified when a setting is changed.
+        /// </summary>
         private ISettingsModel model;
 
-
+        /// <summary>
+        /// MazeCols propery.
+        /// Gets\sets the default numbers of columns in a maze.
+        /// If set, also calls "NotifyPropertyChanged".
+        /// </summary>
         public int MazeCols
         {
             get { return model.MazeCols; }
@@ -33,6 +32,11 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// MazeRows propery.
+        /// Gets\sets the default numbers of rows in a maze.
+        /// If set, also calls "NotifyPropertyChanged".
+        /// </summary>
         public int MazeRows
         {
             get { return model.MazeRows; }
@@ -43,15 +47,29 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// SearchAlgorithm propery.
+        /// Gets\sets the default search algorithm when solving a maze.
+        /// If set, also calls "NotifyPropertyChanged".
+        /// </summary>
         public int SearchAlgorithm
         {
             get { return model.SearchAlgorithm; }
             set
             {
-                //switch()
+                if (value == (int)Algorithm.BFS || value == (int)Algorithm.DFS)
+                {
+                    model.SearchAlgorithm = value;
+                    NotifyPropertyChanged("SearchAlgorithm");
+                }
             }
         }
 
+        /// <summary>
+        /// ServerPort propery.
+        /// Gets\sets the default server port.
+        /// If set, also calls "NotifyPropertyChanged".
+        /// </summary>
         public int ServerPort
         {
             get { return model.ServerPort; }
@@ -61,6 +79,11 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// ServerIP propery.
+        /// Gets\sets the default server IP.
+        /// If set, also calls "NotifyPropertyChanged".
+        /// </summary>
         public string ServerIP
         {
             get { return model.ServerIP; }
@@ -71,6 +94,10 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="model"></param>
         public SettingsViewModel(ISettingsModel model)
         {
             this.model = model;

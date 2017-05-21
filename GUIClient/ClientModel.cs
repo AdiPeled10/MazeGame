@@ -1,55 +1,143 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using ViewModel;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using System.Threading;
 using System.IO;
 
 namespace GUIClient
 {
+    /// <summary>
+    /// A delegate that notify listeners everytimes a certain string has changed.
+    /// </summary>
+    /// <param name="str">
+    /// The new string.
+    /// </param>
     public delegate void GotString(string str);
 
+    /// <summary>
+    /// A delegate that pass the listeners start location and end location.
+    /// </summary>
+    /// <param name="start">
+    /// Location class type object.
+    /// </param>
+    /// <param name="end">
+    /// Location class type object.
+    /// </param>
     public delegate void Locations(Location start, Location end);
 
+    /// <summary>
+    /// A delegate that pass the listeners the measurment of a maze.
+    /// </summary>
+    /// <param name="rows">
+    /// An int type, the number of rows in the maze.
+    /// </param>
+    /// <param name="cols">
+    /// An int type, the number of cols in the maze.
+    /// </param>
     public delegate void MazeSize(int rows, int cols);
 
+    /// <summary>
+    /// A delegate that notify listeners everytimes a certain string has changed.
+    /// </summary>
+    /// <param name="name">
+    /// The new string.
+    /// </param>
     public delegate void Name(string name);
 
+    /// <summary>
+    /// A delegate that give listeners a string representation a maze solution and that maze name.
+    /// </summary>
+    /// <param name="solution">
+    /// The serialized solution string.
+    /// </param>
+    /// <param name="name">
+    /// The maze name.
+    /// </param>
     public delegate void MazeSolution(string solution, string name);
 
+    /// <summary>
+    /// A delegate that give listeners a list of strings(games names).
+    /// </summary>
+    /// <param name="games">
+    /// The list of strings.
+    /// </param>
     public delegate void GotList(List<string> games);
 
+    /// <summary>
+    /// A delegate that notify listeners everytimes owner gets a new string "direction".
+    /// </summary>
+    /// <param name="direction">
+    /// The new string.
+    /// </param>
     public delegate void GotDirection(string direction);
 
+    /// <summary>
+    /// A delegate that notify listeners when something spesific has changed and
+    /// its value doesn't matter or was known (like bollean value the was initially
+    /// knowon and no has changed).
+    /// </summary>
     public delegate void OpponentLeft();
 
+    /// <summary>
+    /// A local model in the client side. Incharge of direct communication with
+    /// the server and notify handlers on the server responds.
+    /// </summary>
     public class ClientModel
     {
+        /// <summary>
+        /// A refrence to a TCP socket that will be used to communication with the server.
+        /// </summary>
         TcpClient client;
 
+        /// <summary>
+        /// A delegate that notify listeners when the some other player who was part of the game
+        /// has disconnected while the game is still active.
+        /// </summary>
         public event OpponentLeft Disconnection;
 
+        /// <summary>
+        /// A delegate that notify listeners if the ClientModel failed to connect to the server.
+        /// </summary>
         public event Parameterless WhereIsServer;
 
-        //Event to notify listeners that we have the solution to the maze.
+        /// <summary>
+        /// Event to notify listeners that we have the solution to the maze.
+        /// </summary>
         public event MazeSolution GotSolution;
-        
+
+        /// <summary>
+        /// Event to notify listeners that we have a string of a new maze(a sequance of 0,1
+        /// where 1 represents a wall and 0 reprenets a free pass).
+        /// </summary>
         public event GotString GeneratedMaze;
 
+        /// <summary>
+        /// Event to give the listeners the start and end locations of a new maze that has arrived.
+        /// </summary>
         public event Locations MazeLoc;
 
+        /// <summary>
+        /// Event that passes the listeners the measurment of a new maze.
+        /// </summary>
         public event MazeSize MazeRowsCols;
 
+        /// <summary>
+        /// Event that passes the listeners the name of a new maze.
+        /// </summary>
         public event Name NotifyName;
 
+        /// <summary>
+        /// Event that passes the listeners a names list of joinable multiplayer games.
+        /// </summary>
         public event GotList NotifyList;
 
+        /// <summary>
+        /// A list valid moves in the game.
+        /// </summary>
         private List<string> validDirections;
 
         /// <summary>
@@ -57,21 +145,37 @@ namespace GUIClient
         /// </summary>
         public event GotDirection NotifyDirection;
 
+        /// <summary>
+        /// A boolean value that is false when the class need to stop getting other player movements,
+        /// and is true otherwise.
+        /// </summary>
         private bool stop = false;
 
+        /// <summary>
+        /// Stop property.
+        /// </summary>
+        /// <value>
+        /// True or False. 
+        /// False when the class need to stop getting other player movements,
+        /// and is true otherwise.
+        /// </value>
         public bool Stop
         {
             set { stop = value; }
             get { return stop; }
         }
 
+        /// <summary>
+        /// The class constructor.
+        /// Opens a new TCP socket.
+        /// </summary>
         public ClientModel()
         {
             client = new TcpClient();
         }
 
         /// <summary>
-        /// Connect to server.
+        /// Connect to the server.
         /// </summary>
         public void Connect()
         {
@@ -94,6 +198,7 @@ namespace GUIClient
         }
 
         /// <summary>
+        /// Asking the server to generate a new Maze  and send it to us. Then, calling MazeFromJSON.
         /// We get command name because generate and start commands are practically the same.
         /// </summary>
         /// <param name="name"></param>
@@ -146,10 +251,18 @@ namespace GUIClient
             SendMessage(request);
 
             //Wait for response.
-            string response = GetResponse();
+            string response = "";
+            do
+            {
+                response += GetResponse();
+            } while (!response.EndsWith("}\r\n"));
             SolutionFromJson(response);
         }
 
+        /// <summary>
+        /// Sends a message to the server.
+        /// </summary>
+        /// <param name="message"> The message to be sent to the server </param>
         public void SendMessage(string message)
         {
             NetworkStream stream = client.GetStream();
@@ -159,6 +272,10 @@ namespace GUIClient
             writer.WriteLine(message);
         }
 
+        /// <summary>
+        /// Gets a responed from the server.
+        /// </summary>
+        /// <returns> The server respond </returns>
         public string GetResponse()
         {
             try
@@ -167,7 +284,6 @@ namespace GUIClient
                 byte[] bytesToRead = new byte[client.ReceiveBufferSize];
                 int bytesRead = stream.Read(bytesToRead, 0, client.ReceiveBufferSize);
                 string response = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
-                Console.WriteLine("Got response " + response);
                 return response;
             } catch (Exception ) { return ""; }
         }
@@ -181,6 +297,11 @@ namespace GUIClient
             client.Close();
         }
 
+        /// <summary>
+        /// analize the JSON and calls "GotSolution" event with the solution string
+        /// and the name of the maze it solves.
+        /// </summary>
+        /// <param name="json"> A JSON of a solution. </param>
         public void SolutionFromJson(string json)
         {
             JObject obj = JObject.Parse(json);
@@ -189,13 +310,18 @@ namespace GUIClient
                 //Extract maze solution.
                 string solution = (string)obj["Solution"];
                 string name = (string)obj["Name"];
-                GotSolution(solution,name);
+                GotSolution(solution, name);
             } catch( Exception)
             {
                 //Case in which this field doesn't appear.
             }
         }
 
+        /// <summary>
+        /// Creates a maze from the giving JSON of a maze.
+        /// It also calls all maze associated events(except "GotSolution").
+        /// </summary>
+        /// <param name="json"> A JSON of a maze. </param>
         public void MazeFromJSON(string json)
         {
             try
@@ -226,6 +352,9 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// Gets a list of names of joinable multiplayer games and pass it to "GotList" listeners.
+        /// </summary>
         public void ListGames()
         {
             //Ask server for list of joinable games.
@@ -242,9 +371,9 @@ namespace GUIClient
         }
 
         /// <summary>
-        /// TODO - Maybe save some code later.
+        /// Joins the user to a multiplayer game named as the value of "name".
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name"> Name of a joinable multiplayer game. </param>
         public void JoinGame(string name)
         {
             string message = "join " + name;
@@ -256,6 +385,10 @@ namespace GUIClient
             MazeFromJSON(response);
         }
 
+        /// <summary>
+        /// Tells the server that the user moved in direction "direction".
+        /// </summary>
+        /// <param name="direction"> The direction that the user moved. </param>
         public void PlayMove(string direction)
         {
             //Build string for command and send it.
@@ -280,7 +413,6 @@ namespace GUIClient
             //Loop until we got a valid move and notify.
             while(!stop)
             {
-                Console.WriteLine("LOOP");
                 response = GetResponse();
                 if (response.ToLower() == "exit\r\n" || response.ToLower().Equals("exit"))
                 {
@@ -308,6 +440,5 @@ namespace GUIClient
                 
             }
         }
-
     }
 }

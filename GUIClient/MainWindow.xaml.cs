@@ -1,36 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
+﻿using System.Windows;
 using System.Reflection;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ViewModel;
 
 namespace GUIClient
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    /// This is a part of the "View" component in the "MVVM" standard.
     /// </summary>
     public partial class MainWindow : Window
     {
-        MainWindowViewModel vm;
-
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MainWindow()
         {
-            vm = new MainWindowViewModel();
             InitializeComponent();
-            //TODO set data context to be viewmodel all data binding goes through there.
+            //ODO set data context to be viewmodel all data binding goes through there.
         }
 
+        /// <summary>
+        /// Closes this window and opens a single player window.
+        /// </summary>
+        /// <param name="sender"> An object. Not meaningful. </param>
+        /// <param name="args"> Not meaningful. </param>
         public void SinglePlayerClick(object sender,RoutedEventArgs args) 
         {
             SinglePlayerWindow window = new SinglePlayerWindow();
@@ -38,6 +31,11 @@ namespace GUIClient
             this.Close();
         }
 
+        /// <summary>
+        /// Closes this window and opens a nulti player window.
+        /// </summary>
+        /// <param name="sender"> An object. Not meaningful. </param>
+        /// <param name="args"> Not meaningful. </param>
         private void MultiPlayerClick(object sender,RoutedEventArgs args)
         {
             MultiPlayerWindow window = new MultiPlayerWindow();
@@ -45,6 +43,11 @@ namespace GUIClient
             this.Close();
         }
 
+        /// <summary>
+        /// Closes this window and opens the setting window.
+        /// </summary>
+        /// <param name="sender"> An object. Not meaningful. </param>
+        /// <param name="args"> Not meaningful. </param>
         private void SettingsClick(object sender,RoutedEventArgs args)
         {
             try

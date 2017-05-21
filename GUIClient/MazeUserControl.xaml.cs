@@ -1,24 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.ComponentModel;
 using ViewModel;
 using System.Windows.Threading;
 
 namespace GUIClient
 {
-
+    /// <summary>
+    /// delegate that notify listeners when a game is over.
+    /// </summary>
     public delegate void GameOver();
 
     /// <summary>
@@ -26,7 +18,9 @@ namespace GUIClient
     /// </summary>
     public partial class MazeUserControl : UserControl,INotifyPropertyChanged
     {
-
+        /// <summary>
+        /// Event that notify listeners when a property has changed.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -34,6 +28,10 @@ namespace GUIClient
         /// </summary>
         public event GameOver Done;
 
+        /// <summary>
+        /// Invoke "PropertyChanged" member.
+        /// </summary>
+        /// <param name="propName"> The name of the property that has changed. </param>
         public void NotifyPropertyChanged(string propName)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
@@ -44,10 +42,21 @@ namespace GUIClient
         /// </summary>
         private string mudalMessage;
 
+        /// <summary>
+        /// The content for mudal window first button.
+        /// </summary>
         private string mudalFirstButton;
 
+        /// <summary>
+        /// The content for mudal window second button.
+        /// </summary>
         private string mudalSecondButton;
 
+        /// <summary>
+        /// MudalMessage property.
+        /// Get or set the "mudalMessage" field.
+        /// Also, if set, "NotifyPropertyChanged" is called.
+        /// </summary>
         public string MudalMessage
         {
             get { return mudalMessage; }
@@ -61,6 +70,11 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// MudalFirstButton property.
+        /// Get or set the "mudalFirstButton" field.
+        /// Also, if set, "NotifyPropertyChanged" is called.
+        /// </summary>
         public string MudalFirstButton
         {
             get { return mudalFirstButton; }
@@ -74,6 +88,11 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// MudalSecondButton property.
+        /// Get or set the "mudalSecondButton" field.
+        /// Also, if set, "NotifyPropertyChanged" is called.
+        /// </summary>
         public string MudalSecondButton
         {
             get { return mudalSecondButton; }
@@ -87,6 +106,11 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// MazeCols property.
+        /// Get or set the "mazeCols" field.
+        /// Also, if set, redrawing the maze to the screen.
+        /// </summary>
         public int MazeCols
         {
             get { return (int)GetValue(MazeColsProperty); }
@@ -98,18 +122,32 @@ namespace GUIClient
             }
         }
 
-        // Using a DependencyProperty as the backing store for MazeCols.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Using a DependencyProperty as the backing store for MazeCols.
+        /// This enables animation, styling, binding, etc...
+        /// </summary>
         public static readonly DependencyProperty MazeColsProperty =
             DependencyProperty.Register("MazeCols", typeof(int), 
                 typeof(MazeUserControl), new UIPropertyMetadata(UpdatedCols));
 
-        private static void UpdatedCols(DependencyObject d,DependencyPropertyChangedEventArgs args)
+        /// <summary>
+        /// Update d.MazeCols with args.NewValue.
+        /// </summary>
+        /// <param name="d"> MazeUserControl object. </param>
+        /// <param name="args">
+        /// DependencyPropertyChangedEventArgs with the field "NewValue" as int.
+        /// </param>
+        private static void UpdatedCols(DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
             MazeUserControl maze = (MazeUserControl)d;
             maze.MazeCols = (int)args.NewValue;
         }
 
-
+        /// <summary>
+        /// MazeRows property.
+        /// Get or set the "mazeRows" field.
+        /// Also, if set, redrawing the maze to the screen.
+        /// </summary>
         public int MazeRows
         {
             get { return (int)GetValue(MazeRowsProperty); }
@@ -120,18 +158,32 @@ namespace GUIClient
             }
         }
 
-        // Using a DependencyProperty as the backing store for MazeRows.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Using a DependencyProperty as the backing store for MazeCols.
+        /// This enables animation, styling, binding, etc...
+        /// </summary>
         public static readonly DependencyProperty MazeRowsProperty =
             DependencyProperty.Register("MazeRows", typeof(int), 
                 typeof(MazeUserControl), new UIPropertyMetadata(UpdatedRows));
 
-       private static void UpdatedRows(DependencyObject d,DependencyPropertyChangedEventArgs args)
+        /// <summary>
+        /// Update d.MazeRows with args.NewValue.
+        /// </summary>
+        /// <param name="d"> MazeUserControl object. </param>
+        /// <param name="args">
+        /// DependencyPropertyChangedEventArgs with the field "NewValue" as int.
+        /// </param>
+        private static void UpdatedRows(DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
             MazeUserControl maze = (MazeUserControl)d;
             maze.MazeRows = (int)args.NewValue;
         }
 
-
+        /// <summary>
+        /// MazeString property.
+        /// Get or set the "mazeString" field.
+        /// Also, if set, redrawing the maze to the screen.
+        /// </summary>
         public string MazeString
         {
             get { return (string)GetValue(MazeStringProperty); }
@@ -147,19 +199,32 @@ namespace GUIClient
             }
         }
 
-        // Using a DependencyProperty as the backing store for MazeString.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Using a DependencyProperty as the backing store for MazeCols.
+        /// This enables animation, styling, binding, etc...
+        /// </summary>
         public static readonly DependencyProperty MazeStringProperty =
             DependencyProperty.Register("MazeString", typeof(string),
                 typeof(MazeUserControl), new UIPropertyMetadata(MazeStringChanged));
 
-        private static void MazeStringChanged(DependencyObject d,DependencyPropertyChangedEventArgs args)
+        /// <summary>
+        /// Update d.MazeString with args.NewValue.
+        /// </summary>
+        /// <param name="d"> MazeUserControl object. </param>
+        /// <param name="args">
+        /// DependencyPropertyChangedEventArgs with the field "NewValue" as string.
+        /// </param>
+        private static void MazeStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
             MazeUserControl maze = (MazeUserControl)d;
             maze.MazeString = (string)args.NewValue;
         }
 
-
-
+        /// <summary>
+        /// StartLocation property.
+        /// Get or set the "startLocation" field.
+        /// Also, if set, redrawing the maze to the screen.
+        /// </summary>
         public Location StartLocation
         {
             get { return (Location)GetValue(StartLocationProperty); }
@@ -174,18 +239,32 @@ namespace GUIClient
             }
         }
 
-        // Using a DependencyProperty as the backing store for StartLocation.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Using a DependencyProperty as the backing store for MazeCols.
+        /// This enables animation, styling, binding, etc...
+        /// </summary>
         public static readonly DependencyProperty StartLocationProperty =
             DependencyProperty.Register("StartLocation", typeof(Location), 
                 typeof(MazeUserControl),new UIPropertyMetadata(UpdatedStart));
 
-        private static void UpdatedStart(DependencyObject d,DependencyPropertyChangedEventArgs args)
+        /// <summary>
+        /// Update d.StartLocation with args.NewValue.
+        /// </summary>
+        /// <param name="d"> MazeUserControl object. </param>
+        /// <param name="args">
+        /// DependencyPropertyChangedEventArgs with the field "NewValue" as Location.
+        /// </param>
+        private static void UpdatedStart(DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
             MazeUserControl maze = (MazeUserControl)d;
             maze.StartLocation = (Location)args.NewValue;
         }
 
-
+        /// <summary>
+        /// EndLocation property.
+        /// Get or set the "endLocation" field.
+        /// Also, if set, redrawing the maze to the screen.
+        /// </summary>
         public Location EndLocation
         {
             get { return (Location)GetValue(EndLocationProperty); }
@@ -204,9 +283,15 @@ namespace GUIClient
             }
         }
 
-        //Tells if it's my maze or the other player's maze.
+        /// <summary>
+        /// Tells if it's my maze or the other player maze.
+        /// </summary>
         private bool isMine = true;
 
+        /// <summary>
+        /// IsMine property.
+        /// Get or set the "isMine" field.
+        /// </summary>
         public bool IsMine
         {
             get { return isMine; }
@@ -217,18 +302,29 @@ namespace GUIClient
             }
         }
 
-        // Using a DependencyProperty as the backing store for EndLocation.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Using a DependencyProperty as the backing store for MazeCols.
+        /// This enables animation, styling, binding, etc...
+        /// </summary>
         public static readonly DependencyProperty EndLocationProperty =
             DependencyProperty.Register("EndLocation", typeof(Location), 
                 typeof(MazeUserControl),new UIPropertyMetadata(UpdateEnd));
 
-        private static void UpdateEnd(DependencyObject d,DependencyPropertyChangedEventArgs args)
+        /// <summary>
+        /// Update d.EndLocation with args.NewValue.
+        /// </summary>
+        /// <param name="d"> MazeUserControl object. </param>
+        /// <param name="args">
+        /// DependencyPropertyChangedEventArgs with the field "NewValue" as Location.
+        /// </param>
+        private static void UpdateEnd(DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
             MazeUserControl maze = (MazeUserControl)d;
             maze.EndLocation = (Location)args.NewValue;
         }
 
 
+        /* The Begining of some Real Coding */
 
 
         /// <summary>
@@ -237,22 +333,41 @@ namespace GUIClient
         /// </summary>
         private MazeBoard board;
 
+        /// <summary>
+        /// The ViewModel object. Used as Model for this object.
+        /// This class tells it when a key is pressed.
+        /// </summary>
         private MazeViewModel vm;
        
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MazeUserControl()
         {
             InitializeComponent();
             board = new MazeBoard(myCanvas);
-            //Add game ended function to event.
+            // Add game ended function to event.
             board.GameDone += GameEnded;
             vm = new MazeViewModel(board);
         }
 
-        private void GameEnded(string message,string firstButton,string secondButton)
+        /// <summary>
+        /// Opens a windows with text and two buttons. The text content is "message",
+        /// the first button content is "firstButton" and the second button content
+        /// is "secondButton".
+        /// One button closes the program. The other close the window and opens the main
+        /// window(starting window).
+        /// </summary>
+        /// <param name="message"> The text from above. </param>
+        /// <param name="firstButton"> The content from above. </param>
+        /// <param name="secondButton"> The content from above. </param>
+        private void GameEnded(string message, string firstButton, string secondButton)
         {
-            MudalWindow window = new MudalWindow();
-            //Set data context.
-            window.DataContext = this;
+            MudalWindow window = new MudalWindow()
+            {
+                //Set data context.
+                DataContext = this
+            };
             MudalMessage = message;
             MudalFirstButton = firstButton;
             MudalSecondButton = secondButton;
@@ -278,19 +393,28 @@ namespace GUIClient
             window.Show();
         }
 
-
-        private void Border_KeyDown(object sender, KeyEventArgs e)
+        /// <summary>
+        /// Notify "vm" member what key was pressed.
+        /// </summary>
+        /// <param name="sender"> Meaningless. </param>
+        /// <param name="e"> e.Key should contain the pressed key. </param>
+        private void BorderKeyDown(object sender, KeyEventArgs e)
         {
             vm.KeyPressed(e.Key);
         }
 
-       
-        private void MazeLoaded(object sender,RoutedEventArgs e)
+        /// <summary>
+        /// Gets the window and if this maze is our, it adds a listener to "KeyDown"
+        /// of the window.
+        /// </summary>
+        /// <param name="sender"> Meaningless. </param>
+        /// <param name="e"> Meaningless. </param>
+        private void MazeLoaded(object sender, RoutedEventArgs e)
         {
             var window = Window.GetWindow(this);
             //Add only if it's my window.
             if (IsMine)
-                window.KeyDown += Border_KeyDown;
+                window.KeyDown += BorderKeyDown;
         }
 
         /// <summary>
@@ -366,7 +490,5 @@ namespace GUIClient
             }
 
         }
-
-
     }
 }

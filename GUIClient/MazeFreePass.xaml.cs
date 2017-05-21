@@ -1,17 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GUIClient
 {
@@ -20,8 +8,15 @@ namespace GUIClient
     /// </summary>
     public partial class MazeFreePass : UserControl
     {
+        /// <summary>
+        /// UserControl memebr which will draw to the screen ot use in the xaml.
+        /// </summary>
         private UserControl control;
 
+        /// <summary>
+        /// Control property.
+        /// UserControl memebr which will draw to the screen ot use in the xaml.
+        /// </summary>
         public UserControl Control
         {
             set
@@ -53,6 +48,10 @@ namespace GUIClient
             return "0";
         }
 
+        /// <summary>
+        /// Initialize the class(as a constructor would).
+        /// </summary>
+        /// <param name="e"> used as argument to the base class "OnInitialized". </param>
         protected override void OnInitialized(EventArgs e)
         {
             InitializeComponent();

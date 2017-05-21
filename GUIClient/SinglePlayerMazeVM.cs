@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MazeLib;
+﻿using MazeLib;
 
 namespace ViewModel
 {
+    /// <summary>
+    /// Single player ViewModel.
+    /// </summary>
     public class SinglePlayerMazeVM : ViewModel
     {
         /// <summary>
@@ -19,6 +17,11 @@ namespace ViewModel
         /// </summary>
         private Position playerPos;
 
+        /// <summary>
+        /// Maze property.
+        /// Get or set the "maze" member.
+        /// If set, also call "NotifyPropertyChanged".
+        /// </summary>
         public Maze Maze
         {
             get { return maze; }
@@ -29,6 +32,11 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// PlayerPos property.
+        /// Get or set the "playerPos" member.
+        /// If set, also call "NotifyPropertyChanged".
+        /// </summary>
         public Position PlayerPos
         {
             get { return playerPos; }

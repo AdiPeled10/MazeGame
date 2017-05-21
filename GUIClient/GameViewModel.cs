@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GUIClient;
+﻿using GUIClient;
 
 namespace ViewModel
 {
@@ -12,6 +7,9 @@ namespace ViewModel
     /// </summary>
     public abstract class GameViewModel : ViewModel
     {
+        /// <summary>
+        /// The model of the ViewModel in the MVVM standard.
+        /// </summary>
         protected ClientModel model;
 
         /// <summary>
@@ -24,16 +22,38 @@ namespace ViewModel
         /// </summary>
         protected string mazeString;
 
+        /// <summary>
+        /// The current maze starting location.
+        /// </summary>
         protected Location startLocation;
 
+        /// <summary>
+        /// The current maze end location.
+        /// </summary>
         protected Location endLocation;
 
+        /// <summary>
+        /// The current maze number of rows.
+        /// </summary>
         protected int mazeRows;
 
+        /// <summary>
+        /// The current maze number of cols.
+        /// </summary>
         protected int mazeCols;
 
+        /// <summary>
+        /// The current maze name.
+        /// </summary>
         protected string mazeName;
 
+        /// <summary>
+        /// MazeRows property.
+        /// </summary>
+        /// <value>
+        /// The number of rows in the current maze.
+        /// calls "NotifyPropertyChanged" when changed.
+        /// </value>
         public int MazeRows
         {
             get { return mazeRows; }
@@ -44,6 +64,13 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// MazeCols property.
+        /// </summary>
+        /// <value>
+        /// The number of cols in the current maze.
+        /// calls "NotifyPropertyChanged" when changed.
+        /// </value>
         public int MazeCols
         {
             get { return mazeCols; }
@@ -54,6 +81,14 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// MazeString property. It's value is a sequance of 0,1
+        /// where 1 represents a wall and 0 reprenets a free pass.
+        /// calls "NotifyPropertyChanged" when changed.
+        /// </summary>
+        /// <value>
+        /// A sequance of 0,1 where 1 represents a wall and 0 reprenets a free pass.
+        /// </value>
         public string MazeString
         {
             get { return mazeString; }
@@ -68,6 +103,13 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// StartLocation property.
+        /// calls "NotifyPropertyChanged" when changed.
+        /// </summary>
+        /// <value>
+        /// A new starting location.
+        /// </value>
         public Location StartLocation
         {
             get { return startLocation; }
@@ -81,6 +123,13 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// EndLocation property.
+        /// calls "NotifyPropertyChanged" when changed.
+        /// </summary>
+        /// <value>
+        /// A new ending location.
+        /// </value>
         public Location EndLocation
         {
             get { return endLocation; }
@@ -94,6 +143,13 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// MazeName property.
+        /// calls "NotifyPropertyChanged" when changed.
+        /// </summary>
+        /// <value>
+        /// New name for the maze.
+        /// </value>
         public string MazeName
         {
             get { return mazeName; }
@@ -104,9 +160,12 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// Constructor.
+        /// Creates the client model and register to some of its events.
+        /// </summary>
         public GameViewModel()
         {
-            
             model = new ClientModel();
             //Add GotMaze to event to notify when maze was generarted.
             model.GeneratedMaze += GotMaze;
@@ -125,6 +184,12 @@ namespace ViewModel
             model.Connect();
         }
 
+        /// <summary>
+        /// Generates a new maze.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="rows"></param>
+        /// <param name="cols"></param>
         public abstract void GenerateMaze(string name, int rows, int cols);
 
         /// <summary>
@@ -148,12 +213,21 @@ namespace ViewModel
             EndLocation = end;
         }
 
+        /// <summary>
+        /// Sets the maze measurements.
+        /// </summary>
+        /// <param name="rows"> Number of rows. </param>
+        /// <param name="cols"> Number of cols. </param>
         public void RowsAndCols(int rows, int cols)
         {
             MazeRows = rows;
             MazeCols = cols;
         }
 
+        /// <summary>
+        /// Sets the game name.
+        /// </summary>
+        /// <param name="name"> The new name. </param>
         public void GetName(string name)
         {
             MazeName = name;

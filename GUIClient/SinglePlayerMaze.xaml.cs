@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using ViewModel;
 
 namespace GUIClient
@@ -20,14 +7,31 @@ namespace GUIClient
     /// <summary>
     /// Interaction logic for SinglePlayerMaze.xaml
     /// </summary>
-
-
     public partial class SinglePlayerMaze : Window
     {
+        /// <summary>
+        /// The number of rows in the maze.
+        /// </summary>
         private int rows;
+
+        /// <summary>
+        /// The number of cols in the maze.
+        /// </summary>
         private int cols;
+
+        /// <summary>
+        /// The width of a rectangle on the screen.
+        /// </summary>
         private int realWidth;
+
+        /// <summary>
+        /// The height of a rectangle on the screen.
+        /// </summary>
         private int realHeight;
+
+        /// <summary>
+        /// The maze name.
+        /// </summary>
         private string mazeName;
 
         /// <summary>
@@ -35,8 +39,15 @@ namespace GUIClient
         /// </summary>
         private bool connected = true;
 
+        /// <summary>
+        /// The Model for this class.
+        /// </summary>
         private SinglePlayerVM vm;
 
+        /// <summary>
+        /// VM property.
+        /// Set the "vm" member.
+        /// </summary>
         public SinglePlayerVM VM
         {
             set {
@@ -53,11 +64,19 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// Connected property.
+        /// Get the "connected" member value.
+        /// </summary>
         public bool Connected
         {
             get { return connected; }
         }
 
+        /// <summary>
+        /// MazeName property.
+        /// Get or set the "mazeName" member.
+        /// </summary>
         public string MazeName
         {
             get { return mazeName; }
@@ -71,6 +90,10 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// RealWidth property.
+        /// Get or set the "realWidth" member.
+        /// </summary>
         public int RealWidth
         {
             get { return realWidth; }
@@ -84,6 +107,10 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// RealHeight property.
+        /// Get or set the "realHeight" member.
+        /// </summary>
         public int RealHeight
         {
             get { return realHeight; }
@@ -97,6 +124,11 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// Rows property.
+        /// Get or set the "rows" member.
+        /// also effects "RealHeight".
+        /// </summary>
         public int Rows
         {
             get
@@ -128,6 +160,11 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// Cols property.
+        /// Get or set the "cols" member.
+        /// also effects "RealWidth".
+        /// </summary>
         public int Cols
         {
             get
@@ -148,30 +185,45 @@ namespace GUIClient
             }
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SinglePlayerMaze()
         {
             InitializeComponent();
             maze.Done += GameDone;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        ///// <summary>
+        ///// Event to notify 
+        ///// </summary>
+        //public event PropertyChangedEventHandler PropertyChanged;
 
-        public void NotifyPropertyChanged(string propName)
-        {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
-        }
+        //public void NotifyPropertyChanged(string propName)
+        //{
+        //    if (this.PropertyChanged != null)
+        //        PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        //}
 
+        /// <summary>
+        /// Calls vm.GenerateMaze(MazeName, Rows, Cols);
+        /// </summary>
         public void Generate()
         {
             vm.GenerateMaze(MazeName, Rows, Cols);
         }
 
+        /// <summary>
+        /// Closes this window.
+        /// </summary>
         public void GameDone()
         {
             this.Close();
         }
 
+        /// <summary>
+        /// Calls vm.AskForSolution(vm.MazeName);
+        /// </summary>
         public void GetSolution()
         {
             //int start_x = (int)vm.StartLocation.X, start_y = (int)vm.StartLocation.Y;
@@ -181,15 +233,27 @@ namespace GUIClient
             vm.AskForSolution(vm.MazeName);
         }
 
+        /// <summary>
+        /// Calls vm.CloseConnection();
+        /// </summary>
         public void CloseConnection()
         {
             vm.CloseConnection();
         }
 
-        private void mainMenu_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Opens a mudali window that asks the user if his sure and offers two
+        /// choice buttons. One will close this window and open a MainWindow intance,
+        /// the other closes the mudali window.
+        /// </summary>
+        /// <param name="sender"> Irrelevant. </param>
+        /// <param name="e"> Irrelevant. </param>
+        private void MainMenuClick(object sender, RoutedEventArgs e)
         {
-            MudalWindow win = new MudalWindow();
-            win.DataContext = maze;
+            MudalWindow win = new MudalWindow()
+            {
+                DataContext = maze
+            };
             maze.MudalMessage = "Are you sure?";
             maze.MudalFirstButton = "Continue";
             maze.MudalSecondButton = "Cancel";
@@ -213,12 +277,18 @@ namespace GUIClient
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void restartButton_Click(object sender, RoutedEventArgs e)
+        private void RestartButtonClick(object sender, RoutedEventArgs e)
         {
             maze.Restart();
         }
 
-        private void Solve_Click(object sender,RoutedEventArgs e)
+        /// <summary>
+        /// Gets the solution to the maze(with the name "mazeName") and then calls
+        /// "maze.Solve(solution)".
+        /// </summary>
+        /// <param name="sender"> Irrelevant. </param>
+        /// <param name="e"> Irrelevant. </param>
+        private void SolveClick(object sender,RoutedEventArgs e)
         {
             //Get solution from view model.
             string solution = vm.GetMazeSolution(MazeName);

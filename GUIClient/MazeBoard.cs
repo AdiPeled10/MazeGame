@@ -1,32 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Threading;
-using System.Threading;
 
 namespace ViewModel
 {
+    /// <summary>
+    /// Notifies when the game ends.
+    /// It excpect listeners to creates 2 buttons with the content passed in the
+    /// arguments(one content fow each button, accordingly).
+    /// </summary>
+    /// <param name="message"> The ending message. </param>
+    /// <param name="firstButton"> The first button content. </param>
+    /// <param name="secondButton"> The second button content. </param>
     public delegate void Ended(string message, string firstButton, string secondButton);
 
+    /// <summary>
+    /// This class is part of the "View" in the "MVVM" standard.
+    /// It draws, moves and update the maze on the screen.
+    /// </summary>
     public class MazeBoard
     {
+        /// <summary>
+        /// event that notify when the game ends.
+        /// </summary>
         public event Ended GameDone;
 
+        /// <summary>
+        /// The maze drawing that is on the screen.
+        /// </summary>
         private Canvas maze;
 
         /// <summary>
-        /// The location that the player started in.
+        /// The location that the player starts in.
         /// </summary>
         private Location startingPosition;
 
@@ -35,39 +45,85 @@ namespace ViewModel
         /// </summary>
         private int startSerialNumber;
 
+        /// <summary>
+        /// The location that the player need to arrive in oreder to win.
+        /// </summary>
         private Location endPosition;
 
+        /// <summary>
+        /// The image that represent the player.
+        /// </summary>
         private ImageSource playerLogo;
 
+        /// <summary>
+        /// The string that represents the maze. 0 means a free pass and 1 means a wall.
+        /// </summary>
         private string mazeString;
 
+        /// <summary>
+        /// The number of rows in the maze.
+        /// </summary>
         private int rows;
 
+        /// <summary>
+        /// The number of cols in the maze.
+        /// </summary>
         private int cols;
 
+        /// <summary>
+        /// Rows property.
+        /// </summary>
+        /// <value>
+        /// The number of rows in the current maze.
+        /// </value>
         public int Rows
         {
             get { return rows; }
             set { rows = value; }
         }
 
+        /// <summary>
+        /// Cols property.
+        /// </summary>
+        /// <value>
+        /// The number of cols in the current maze.
+        /// </value>
         public int Cols
         {
             get { return cols; }
             set { cols = value; }
         }
 
+        /// <summary>
+        /// MazeString property. It's value is a sequance of 0,1
+        /// where 1 represents a wall and 0 reprenets a free pass.
+        /// </summary>
+        /// <value>
+        /// A sequance of 0,1 where 1 represents a wall and 0 reprenets a free pass.
+        /// </value>
         public string MazeString
         {
             get { return mazeString; }
             set { mazeString = value; }
         }
 
+        /// <summary>
+        /// StartingPosition property.
+        /// </summary>
+        /// <value>
+        /// A new starting location.
+        /// </value>
         public Location StartingPosition
         {
             set { startingPosition = value; }
         }
 
+        /// <summary>
+        /// EndPosition property.
+        /// </summary>
+        /// <value>
+        /// A new ending location.
+        /// </value>
         public Location EndPosition
         {
             set { endPosition = value; }
@@ -90,30 +146,63 @@ namespace ViewModel
         /// </summary>
         private double heightPerRect;
 
+        /// <summary>
+        /// WidthPerRect property.
+        /// The width of a single squre in the maze.
+        /// </summary>
+        /// <value>
+        /// New width for each rectangle.
+        /// </value>
         public double WidthPerRect
         {
             get { return widthPerRect; }
             set { widthPerRect = value; }
         }
 
+        /// <summary>
+        /// HeightPerRect property.
+        /// The height of a single squre in the maze.
+        /// </summary>
+        /// <value>
+        /// New height for each rectangle.
+        /// </value>
         public double HeightPerRect
         {
             get { return heightPerRect; }
             set { heightPerRect = value; }
         }
 
+        /// <summary>
+        /// PlayerLogo property.
+        /// The image of the player in the maze.
+        /// </summary>
+        /// <value>
+        /// New image for the player.
+        /// </value>
         public ImageSource PlayerLogo
         {
             get { return playerLogo; }
             set { playerLogo = value; }
         }
 
+        /// <summary>
+        /// Maze property.
+        /// The maze drawing that is on the screen.
+        /// </summary>
+        /// <value>
+        /// New maze drawing.
+        /// </value>
         public Canvas Maze
         {
             get { return maze; }
             set { maze = value; }
         }
 
+        /// <summary>
+        /// Constructor.
+        /// Creates the logic member.
+        /// </summary>
+        /// <param name="canvas"> Empty Canvas to fill with the maze drawing. </param>
         public MazeBoard(Canvas canvas)
         {
             maze = canvas;
@@ -125,6 +214,13 @@ namespace ViewModel
         /// </summary>
         private bool isMine;
 
+        /// <summary>
+        /// IsMine property.
+        /// True if it's my maze false if it's enemy maze.
+        /// </summary>
+        /// <value>
+        /// New boolean value to set "IsMine" with.
+        /// </value>
         public bool IsMine
         {
             get { return isMine; }
@@ -134,11 +230,18 @@ namespace ViewModel
             }
         }
 
+        /// <summary>
+        /// Draw a new maze to the screen if it can(all the required members are set).
+        /// memebers requirments for this to work:
+        ///     rows > 0
+        ///     cols > 0
+        ///     startingPosition != null
+        ///     endPosition != null
+        /// Also, strMaze != null is required. It will be the new "mazeString".
+        /// </summary>
+        /// <param name="strMaze"> a string at the format as specified in "mazeString" comments. </param>
         public void DrawOnCanvas(string strMaze)
         {
-            //FOR NOW FIX LATER.
-            strMaze = mazeString;
-            //REMEMBER TO FIX LATER.
             if (rows == 0 || cols == 0 || strMaze == null || startingPosition == null
                     || endPosition == null)
             {
@@ -223,10 +326,15 @@ namespace ViewModel
                     serialNumber++;
                 }
                 currentY += heightPerRectangle;
-                
             }
         }
 
+        /// <summary>
+        /// Draws the player on the maze.
+        /// Given a valid key(see "CalculateLocation" for valid keys) it will
+        /// move the player to a different locaion depending on the key.
+        /// </summary>
+        /// <param name="key"> Key class that determine the movement. </param>
         public void DrawPlayer(Key key)
         {
             Location loc = CalculateLocation(key);
@@ -238,19 +346,15 @@ namespace ViewModel
                     GameDone("Congrats you won!", "Back to main menu", "Close game");
                 else
                     GameDone("You lost.\n Good luck next time.", "Back to main menu", "Close game");
-
-                
-
                 //Update view that game is over and update view model.
-
             }
         }
 
-
         /// <summary>
-        /// 
+        /// Redraw the player at the given "loc" and redraw the current location of
+        /// the player as an free pass.
         /// </summary>
-        /// <param name="loc"></param>
+        /// <param name="loc"> The player new location. </param>
         /// <returns bool>True if player got to goal,false otherwise</returns>
         private bool ReplacePlayerLocation(Location loc)
         {
@@ -285,6 +389,13 @@ namespace ViewModel
             return false;
         }
 
+        /// <summary>
+        /// Creates the location of the player if he moved using "key". It uses
+        /// the member "logic" to calculate the above location.
+        /// key is only meaningful for: Key.Right, Key.Left, Key.Up, Key.Down.
+        /// </summary>
+        /// <param name="key"> Key value that determine the location.</param>
+        /// <returns> The location of the player if he moved using "key". </returns>
         private Location CalculateLocation(Key key)
         {
             Location newLocation;
@@ -371,7 +482,8 @@ namespace ViewModel
         }
 
         /// <summary>
-        /// Move the player to it's starting position.
+        /// Move the player to it's starting position and redraw the goal image
+        /// at the ending location.
         /// </summary>
         public void RestartGame()
         {
@@ -389,9 +501,17 @@ namespace ViewModel
             maze.Children.Add(goalRec);
         }
 
+        /// <summary>
+        /// Creates a list of serial numbers that represent locations(see Logic class)
+        /// according to the solution string. Then it calls "SolutionAnimation" with the
+        /// above list as its input.
+        /// </summary>
+        /// <param name="solution">
+        /// A string representing a legal path from starting location
+        /// to ending location. "solution" contains only 0,1,2,3.
+        /// </param>
         public void AnimateSolution(string solution)
         {
-            //TODO- Check if this can be done only when player wasn't moved at all.
             char[] arr = solution.ToCharArray();
             char currentChar;
             int length = arr.Length;
@@ -443,13 +563,25 @@ namespace ViewModel
             SolutionAnimation(animationSerialNumbers);
         }
 
+        /// <summary>
+        /// Calls Activate.
+        /// </summary>
+        /// <param name="serialNumbers">
+        /// List of serial numbers that represent locations(see Logic class)
+        /// </param>
         public void SolutionAnimation(List<int> serialNumbers)
         {
-            int length = serialNumbers.Count;
-            Activate(serialNumbers,length);
+            Activate(serialNumbers);
         }
 
-        public async void Activate(List<int> serialNumbers, int length)
+        /// <summary>
+        /// Runs an animation of who the player could get from the starting location
+        /// to the goal location.
+        /// </summary>
+        /// <param name="serialNumbers">
+        /// List of serial numbers that represent locations(see Logic class)
+        /// </param>
+        public async void Activate(List<int> serialNumbers)
         {
             Location current;
             foreach(int num in serialNumbers)

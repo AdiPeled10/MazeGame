@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace GUIClient
 {
@@ -19,11 +7,21 @@ namespace GUIClient
     /// </summary>
     public partial class CantConnect : Window
     {
+        /// <summary>
+        /// Constructor.
+        /// Most logic is in the XAML file.
+        /// </summary>
         public CantConnect()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Handler to when the "back" button is pressed.
+        /// It will close this window and open the main window.
+        /// </summary>
+        /// <param name="sender"> An object. Not meaningful. </param>
+        /// <param name="e"> Not meaningful. </param>
         private void BackButton(object sender, RoutedEventArgs e)
         {
             MainWindow win = new MainWindow();

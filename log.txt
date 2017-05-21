@@ -1,3 +1,138 @@
+* commit 3790c3d202b0eb0f51864b56a22f1d05337a53c5
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sun May 21 17:15:40 2017 +0300
+| 
+|     .
+| 
+* commit a49bfe0c47a2e18730392228e7bd41f2e360369b
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sun May 21 16:57:57 2017 +0300
+| 
+|     little bug fix and finished documentation.
+| 
+* commit 91097aef35a817e3ac36b3862b2a665a8a997db6
+| Author: Adi Peled <adi.peled1210@gmail.com>
+| Date:   Sat May 20 23:05:10 2017 +0300
+| 
+|     Many bug fixes:
+|     disconnecting clients.
+|     unproperly closed clients.
+|     using search algo from setting.
+|     images not found.
+|     disapearing goal image after restart.
+|     empty name of multi player games.
+|     and some more...
+| 
+* commit bb293393e18e6dee2a8f4f5f137b2f4f2bba24ba
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Fri May 19 18:28:41 2017 +0300
+| 
+|     Added more windows to UI and fixed case of disconnected client.
+| 
+* commit efd1358e91b37d9b9ca2c4b2cd3d14bf27f00231
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Thu May 18 18:14:43 2017 +0300
+| 
+|     Added some functions to multiplayer.
+| 
+* commit 224c07a7c5f55343e852f561d16b084abb879bb0
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Mon May 15 16:30:34 2017 +0300
+| 
+|     Added solution animation and converter for the size of the maze, need to fix case where maze string is too big and json parser throws an exception.
+| 
+* commit 4d18135f2f98866c4383d07e9b15fd0b3f06192a
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sat May 13 23:11:28 2017 +0300
+| 
+|     Updated connection to server side,there are some little bugs in movement of player.
+| 
+* commit 6df9b41ffb75cb1a779717d370d8243b77c2fd44
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sat May 6 18:08:05 2017 +0300
+| 
+|     Added handling of settings.
+|     Need to add later in view data binding via dependency properties,for now there are parts implemented in code behind instead because dependency properties cause a lot of bugs for some reason.
+| 
+* commit 3f128c6fdcdd89a6715e85a98013d89b733683d3
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sat May 6 14:26:04 2017 +0300
+| 
+|     View model doesn't know anything about windows,user controls or anything related to wpf,adds flexibility.
+| 
+* commit 76f2449a7da80cdf1b3eaec3cfc4427906b53c3e
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sat May 6 13:43:36 2017 +0300
+| 
+|     There is a view model for each class,in order to keep single responsibility principle.
+| 
+* commit c7e06211e2f5656473d52a6bb91917d5cfe17c3c
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sat May 6 13:06:57 2017 +0300
+| 
+|     Moved the logic to the view model,code behind in view became very slim.
+| 
+* commit f2a98a2d7185939557aed6c55e55827883ce5b08
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sat May 6 11:17:06 2017 +0300
+| 
+|     Added classes to hold logic of maze and the way to draw the maze. Mario can move now.Going to start implementing the view model,view almost done.
+| 
+* commit b414ff30d5f4b26a51f3bba5185ba3c2dd2bc253
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Fri May 5 11:05:18 2017 +0300
+| 
+|     Added window for the settings, going to change drawing of maze from grid to canvas,adds flexibility.
+| 
+* commit ed6b4b96be34cb52142cf26b31e14e62a2a9a9fc
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Fri Apr 28 20:15:04 2017 +0300
+| 
+|     Made window size dependent on the size of the maze in SinglePlayerMaze
+| 
+* commit 6f1e06cdee19edc2a5a55c5df58e6ca1102f6a87
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Fri Apr 28 01:10:44 2017 +0300
+| 
+|     The User Control for the maze works and presents the grid,now that the grid is dynamic we can create mazes of different sizes(maybe later use the MazeFreePass and MazeObstacle user controlers to create generic mazes), also added delegates that are part of the events for the buttons so one window can open another window,
+|     Also added checking for validity of input in Single Player mode.
+| 
+* commit a14fe03d451b786fdf0065e8f4737292ebf43ff4
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Wed Apr 26 19:20:49 2017 +0300
+| 
+|     Seperated the SinglePlayer window to a new cs file and added the MazeFreePass and MazeObstacle to add flexibility to the design of the maze.
+| 
+* commit 44aadd6013135f4c6bb84f3019acdff8078d6439
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Wed Apr 26 01:07:09 2017 +0300
+| 
+|     Added the XAML design for the main menu of the game and the popup window for the single player button, the next step will be to implement the single player game which means to implement by the principles of MVVM.Started adding the IPropertyChanged interface in the new ViewModel project and the View is written with XAML in the GUIClient project.
+| 
+* commit ae0364ba247124bab3cd951289ee5ede3e2fdf05
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sun Apr 23 20:51:28 2017 +0300
+| 
+|     Moved part of deleting games from join to generate command.
+| 
+* commit ff1bdd1a22c601ca0ce2b7bd3c509bca212c49d0
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sun Apr 23 20:17:29 2017 +0300
+| 
+|     Fixed another logic about generating multiple games from same client.
+| 
+* commit eb6e53f02d545ba1f648c34e8d86d14b123b8477
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sun Apr 23 18:44:41 2017 +0300
+| 
+|     Added documentation for ex1 and deleted code that was used for debugging
+| 
+* commit 3feb61ab20f0f8f5de21b0d2d8b0bc15f7131728
+| Author: Lior <liormoshe0909@gmail.com>
+| Date:   Sun Apr 23 18:24:03 2017 +0300
+| 
+|     Fixed case in the Server when peek method of StreamReader is blocking the code and can't accept requests from second client until the first client gets the request
+| 
 * commit 9bcca9043180890d8a63c6ea9624c63b51b61e52
 | Author: Lior <liormoshe0909@gmail.com>
 | Date:   Sun Apr 23 14:59:18 2017 +0300

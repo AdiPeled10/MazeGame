@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Maze Game</title>
+    <link rel="stylesheet" href="/views/styles.css">
+</head>
+<body>
+    <!-- This line adds the main bar to this html. -->
+    <iframe src="/views/MainBar.htmL" width="100%" height="50px" marginwidth="0" frameborder="0"></iframe>
+    <!-- This page objects -->
+    <h1>Single Game</h1>
+    <!-- TODO handle the submition -->
+    <form action="/action_generate.js" method="post" class="gameFormStyle">
+        <table>
+            <tr>
+                <td>Name</td>
+                <td><input type="text" name="name" /></td>
+            </tr>
+            <tr>
+                <td>Rows</td>
+                <td><input type="text" name="rows" /></td>
+            </tr>
+            <tr>
+                <td>Cols</td>
+                <td><input type="text" name="cols" /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Start New Game"></td>
+            </tr>
+            <tr>
+                <td>
+                    Search
+                    <br />
+                    Algo
+                </td>
+                <td>
+                    <select name="algo">
+                        <!-- TODO parse the value here or in an intermidate class to 0/1 -->
+                        <option value="defaultAlgo">Default</option>
+                        <option value="DFS">DFS</option>
+                        <option value="BFS">BFS</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Solve Game" formaction="/action_solve.js"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

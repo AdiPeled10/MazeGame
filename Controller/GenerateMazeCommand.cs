@@ -59,6 +59,7 @@ namespace Controllers
                 }
             }
             (model.GetGameByName(name) as MazeGame).MaxPlayersAllowed = 1;
+            client.Disconnect();
         }
 
     }

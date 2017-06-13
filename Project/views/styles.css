@@ -1,0 +1,109 @@
+/* General styles */
+body {  /* This is mostly for the bar */
+    margin: 0;
+    background-color: gray;
+}
+
+h1 {
+    margin: 15px 20px;
+    font-family: Arial;
+}
+
+p {
+    margin: 10px 30px;
+}
+
+/* style for Home.html */
+.backgroundSquare {
+    background-color: azure;
+    margin: 0px 15%;
+    padding: 20px;
+}
+.logo {
+    display: block;
+    width: 300px;
+    height: 300px;
+    margin: 15px auto;
+}
+
+/* style for MainBar.html */
+
+.topMenu {
+    margin: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+.topMenu a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.topMenu p {
+    margin: 0;
+    float: right;
+    display: inline-block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.topMenu a:hover {
+    background-color: #ddd;
+    color: black;
+    cursor: pointer;
+}
+
+.topMenu a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* style for forms */
+.formStyle {
+    display: block;
+    float: left;
+    margin: 10%;
+    background-color: lightgray;
+    padding: 10px;
+}
+
+.gameFormStyle {
+    display: block;
+    float: left;
+    margin: 0px 15px 0px 0px;
+    background-color: azure;
+    padding: 10px 10px 100% 15px;
+}
+
+.gameFormStyle table td {
+    padding-bottom: 1em;
+}
+
+/* style for user ranks */
+.userRanks {
+    display: flex;
+    justify-content: center;
+    background-color: lightblue;
+    margin: 0px 15%;
+    padding: 20px 40px;
+    font-family: Arial;
+}
+
+.userRanks td {
+    text-align:center;
+    padding-bottom: 1em;
+    padding-right: 0.5em;
+}
+
+.userRanks th {
+    padding-bottom: 1em;
+    padding-right: 0.5em;
+}

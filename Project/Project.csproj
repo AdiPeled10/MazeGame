@@ -9,12 +9,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7E80299C-680E-4077-BFCC-FE602B427190}</ProjectGuid>
+    <ProjectGuid>{AE12F76C-DB08-4A53-9610-02729DDD69A3}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WebApp</RootNamespace>
-    <AssemblyName>WebApp</AssemblyName>
+    <RootNamespace>Project</RootNamespace>
+    <AssemblyName>Project</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -43,6 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClientForServer">
+      <HintPath>..\..\..\MazeGame\ClientForServer\bin\Debug\ClientForServer.dll</HintPath>
+    </Reference>
     <Reference Include="MazeGeneratorLib">
       <HintPath>..\..\..\MazeGame\Ex1\MazeGeneratorLib.dll</HintPath>
     </Reference>
@@ -82,6 +85,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SearchAlgorithmsLib">
+      <HintPath>..\..\..\MazeGame\SearchAlgorithmsLib\bin\Release\SearchAlgorithmsLib.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -115,14 +121,56 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="action_register.js" />
+    <Content Include="general_set_up.js" />
     <Content Include="Global.asax" />
+    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="MainBarLogic.js" />
+    <Content Include="Scripts\jquery-3.1.1.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
+    <Content Include="start_game_single.js" />
+    <Content Include="views\bootstrap.css" />
+    <Content Include="views\bootstrap.js" />
+    <Content Include="views\Home.html" />
+    <Content Include="views\Images\goal.png" />
+    <Content Include="views\Images\logo.jpg" />
+    <Content Include="views\Images\luigi.png" />
+    <Content Include="views\Images\mario.png" />
+    <Content Include="views\Images\player.png" />
+    <Content Include="views\LoginSheet.html" />
+    <Content Include="views\MainBar.html" />
+    <Content Include="views\MultiPlayer.html" />
+    <Content Include="views\RegisterSheet.html" />
+    <Content Include="views\Settings.html" />
+    <Content Include="views\SinglePlayer.html" />
+    <Content Include="views\styles.css" />
+    <Content Include="views\UserRankings.html" />
     <Content Include="Web.config" />
+    <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="All\Connector.cs" />
+    <Compile Include="All\Converter.cs" />
+    <Compile Include="All\IModel.cs" />
+    <Compile Include="All\ISearchGame.cs" />
+    <Compile Include="All\ISearchGameGenerator.cs" />
+    <Compile Include="All\MazeGame.cs" />
+    <Compile Include="All\MazeGameGenerator.cs" />
+    <Compile Include="All\MazeToSearchableAdapter.cs" />
+    <Compile Include="All\Model.cs" />
+    <Compile Include="All\Player.cs" />
+    <Compile Include="All\SolutionCache.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\MazeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\WebMaze.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -139,11 +187,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controller\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -158,9 +201,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>62255</DevelopmentServerPort>
+          <DevelopmentServerPort>52690</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:62255/</IISUrl>
+          <IISUrl>http://localhost:52690/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

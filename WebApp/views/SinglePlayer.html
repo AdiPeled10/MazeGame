@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Maze Game</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../start_game_single.js"></script>
+</head>
+<body>
+    <div class="container body-content">
+        <!-- This line adds the main bar to this html. -->
+        <iframe src="/views/MainBar.htmL" width="100%" height="50px" marginwidth="0" frameborder="0"></iframe>
+        <!-- This page objects -->
+        <h2>Single Player Game</h2>
+        <div class="col-sm-4">
+        <!-- TODO handle the submition -->
+        <!----<form action="/action_generate.js" method="post" class="gameFormStyle">-->
+            <table class="table table-striped">
+                <tr>
+                    <td>Name</td>
+                    <td><input class="form-control" id= "mazeName" type="text" name="name"
+                               placeholder="Enter name" /></td>
+                </tr>
+                <tr>
+                    <td>Rows</td>
+                    <td><input id="rows" class="form-control" type="text" name="rows"
+                               placeholder="Enter rows" /></td>
+                </tr>
+                <tr>
+                    <td>Cols</td>
+                    <td><input id ="cols" class="form-control" type="text" name="cols"
+                               placeholder="Enter cols" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button onclick="generateMaze()">Start New Game</button></td>
+                </tr>
+                
+                
+                <tr>
+                    <td>
+                        Search
+                        <br />
+                        Algo
+                    </td>
+                    <td>
+                        <!-- TODO parse the value here or in an intermidate class to 0/1 -->
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                Search Algo
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>Default</li>
+                                <li>BFS</li>
+                                <li>DFS</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input class="btn-info" type="submit" value="Solve Game" formaction="/action_solve.js"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="col-sm-8 text-center">
+        <canvas id="mazeCanvas" tabindex="1" style="border:3px solid black" width="500" height="500"></canvas>
+    </div>
+    </div>
+</body>
+</html>

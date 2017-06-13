@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Maze Game</title>
+    <link rel="stylesheet" href="/views/styles.css">
+    <base target="_parent">
+    <!--<script src="/Scripts/jquery-3.1.1.js"></script>-->
+    <script>
+        function tabClicked(element) {
+            // deactivate the previous active tab
+            document.getElementsByClassName("active")[0].className = "";
+            // activate the clicked tab
+            element.className = "active"
+        }
+    </script>
+</head>
+<body>
+    <div class="topMenu">
+        <a id="home" href="/views/Home.html" onclick="tabClicked(this)">Maze Game</a>
+        <a href="/views/SinglePlayer.html" onclick="tabClicked(this)">Single Game</a>
+        <a id="multi" href="/views/MultiPlayer.html" onclick="tabClicked(this)">Multiplayer Game</a>
+        <a href="/views/Settings.html" onclick="tabClicked(this)">Settings</a>
+        <a href="/views/UserRankings.html" onclick="tabClicked(this)">User Ranking</a>
+        <a id="register" href="/views/RegisterSheet.html" style="float:right;" onclick="tabClicked(this)">Register</a>
+        <a id="login" href="/views/LoginSheet.html" style="float:right;" onclick="tabClicked(this)">Login</a>
+    </div>
+</body>
+</html>
+
+<!--<div class="topMenu">
+    <a id="home" href="/views/Home.html" onclick="fuckkkk()">Maze Game</a>
+    <a onclick="tabClicked(this, '/views/SinglePlayer.html')">Single Game</a>
+    <a id="multi" onclick="tabClicked(this, '/views/MultiPlayer.html')">Multiplayer Game</a>
+    <a onclick="tabClicked(this, '/views/Settings.html')">Settings</a>
+    <a onclick="tabClicked(this, '/views/UserRankings.html')">User Ranking</a>
+    <a id="register" onclick="tabClicked(this, '/views/RegisterSheet.html')" style="float:right;">Register</a>
+    <a id="login" onclick="tabClicked(this, '/views/LoginSheet.html')" style="float:right;">Login</a>
+</div>
+<div id="page-placeholder" />-->

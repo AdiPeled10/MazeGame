@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Maze Game</title>
+    <link rel="stylesheet" href="/views/styles.css">
+</head>
+<body>
+    <!-- This line adds the main bar to this html. -->
+    <iframe src="/views/MainBar.htmL" width="100%" height="50px" marginwidth="0" frameborder="0"></iframe>
+    <!-- This page objects -->
+    <h1>Multiplayer Game</h1>
+    <!-- TODO handle the submition -->
+    <form method="post" class="gameFormStyle">
+        <table>
+            <tr>
+                <td>Games</td>
+                <td>
+                    <select style="width: 100%; margin-right: 15px">
+                        <!-- TODO fill -->
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Join Game" formaction="action_join.js"></td>
+            </tr>
+        </table>
+        <h2 style="margin: 5px 5px 5px 30px">Start New Game</h2>
+        <table>
+            <tr>
+                <td>Name</td>
+                <td><input type="text" name="name" /></td>
+            </tr>
+            <tr>
+                <td>Rows</td>
+                <td><input type="text" name="rows" /></td>
+            </tr>
+            <tr>
+                <td>Cols</td>
+                <td><input type="text" name="cols" /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Start Game" formaction="action_start.js"></td>
+            </tr>
+        </table>
+    </form>
+
+    <!--<h2 style="margin: 5px 5px 5px 30px">Start New Game</h2>-->
+    <!-- TODO handle the submition -->
+    <!--<form action="/action_start.js" method="post" class="gameFormStyle">
+        <table>
+            <tr>
+                <td>Name</td>
+                <td><input type="text" name="name" /></td>
+            </tr>
+            <tr>
+                <td>Rows</td>
+                <td><input type="text" name="rows" /></td>
+            </tr>
+            <tr>
+                <td>Cols</td>
+                <td><input type="text" name="cols" /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Start Game"></td>
+            </tr>
+        </table>
+    </form>-->
+</body>
+</html>

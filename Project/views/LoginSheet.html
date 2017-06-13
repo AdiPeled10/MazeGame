@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Maze Game</title>
+    <link rel="stylesheet" href="/views/styles.css">
+    <!----<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- This line adds the main bar to this html. -->
+        <iframe src="/views/MainBar.htmL" width="100%" height="50px" marginwidth="0" frameborder="0"></iframe>
+        <!-- This page objects -->
+        <h1>Log in</h1>
+        <p>Use a local account to log in.</p>
+        <!-- TODO handle the submition -->
+        <form action="/action_login.js" method="post" class="formStyle">
+            <table>
+                <tr>
+                    <td>Username:</td>
+                    <td><input type="text" name="username" /></td>
+                </tr>
+                <tr>
+                    <td>Password:</td>
+                    <td><input type="text" name="password" /></td>
+                </tr>
+            </table>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+</body>
+</html>

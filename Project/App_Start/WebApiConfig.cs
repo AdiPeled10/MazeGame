@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Routing;
 
 namespace Project
 {
     public static class WebApiConfig
     {
+        public static object RouteConfig { get; private set; }
+
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
 
             // Web API routes
             config.MapHttpAttributeRoutes();
+            
 
             config.Routes.MapHttpRoute(
                     name: "GenerateMaze",

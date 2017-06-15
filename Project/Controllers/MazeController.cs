@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Project.Models;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using MazeLib;
 using MazeGeneratorLib;
 using SearchAlgorithmsLib;
@@ -18,6 +19,9 @@ namespace Project.Controllers
     {
         private static List<WebMaze> mazes = new List<WebMaze>();
         private static Model model = new Model(new MazeGameGenerator(new DFSMazeGenerator()));
+        private static Dictionary<string, GameInfo> clientToGameInfo = new
+            Dictionary<string, GameInfo>();
+        private static List<GameInfo> gameInformation = new List<GameInfo>();
         private Dictionary<string, Algorithm> numToAlgo = new Dictionary<string, Algorithm>()
         {
             { "BFS",Algorithm.BFS },
@@ -56,6 +60,64 @@ namespace Project.Controllers
 
         }
 
-       
+
+
+        public static void StartGame(string clientId,string name,int rows,int cols)
+        {
+            //Generate new game.
+            GameInfo info = new GameInfo();
+            MazeGame game = (MazeGame)model.GenerateNewGame(name, rows, cols);
+            WebMaze myMaze = new WebMaze();
+            //Set the maze.
+            myMaze.SetMaze(game.maze);
+            //Save info in GameInfo
+            info.Maze = myMaze;
+            info.FirstClient = clientId;
+            //Add to list.
+            gameInformation.Add(info);
+            clientToGameInfo[clientId] = info;
+        }
+
+        public static GameInfo JoinGame(string clientId,string name)
+        {
+            //Find entry in list which contains name of game
+            GameInfo info = gameInformation.Find(x => x.Maze.Name == name);
+            //Assign to dictionary.
+            clientToGameInfo[clientId] = info;
+            //Set info for second client.
+            info.SecondClient = clientId;
+
+            //Now return the maze that will be sent to both clients from the hub.
+            return info;
+        }
+
+        public static string GetOpponent(string clientId)
+        {
+            try
+            {
+                return clientToGameInfo[clientId].GetOpponent(clientId);
+            } catch(KeyNotFoundException exp)
+            {
+                return null;
+            }
+        }
+
+        [Route("api/Maze/gamelist")]
+        [HttpGet]
+        public IHttpActionResult GetListOfAvailableGames()
+        {
+            List<string> lst = new List<string>();
+            foreach (GameInfo game in gameInformation)
+            {
+                if (ReferenceEquals(null, game.SecondClient))
+                {
+                    lst.Add(game.Maze.Name);
+                }
+            }
+            return Ok(lst);
+        }
+
+
+
     }
 }

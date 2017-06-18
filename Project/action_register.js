@@ -6,19 +6,61 @@ function register() {
     var passwordValidation = document.getElementById("passwordValidation").value;
     var email = document.getElementById("email").value;
     if (password !== passwordValidation) {
-        alert("Password and the reapted password differ!")
+        document.getElementById("errorMsg").textContent = "Password and the repeated password differ!";
         return;
     }
 
     // register at the server and get the new bar
-    $.post("/views/MainBar.html", {
-        "username": username,
-        "password": password,
-        "email": email
-    })
-
-    // go to main page
-    location.replace("/views/Home.html")
+    url = "../api/Users" + "/" + username + "/" + password + "/" + email;
+    $.getJSON(url).done(function (answer) {
+        answer = answer.ans;
+        if (answer === "1") {
+            // go to main page
+            location.replace("/views/Home.html");
+        }
+        else {
+            document.getElementById("errorMsg").textContent = "Username already exists";
+        }
+    });
+    //$.ajax({
+    //    type: "POST",
+    //    traditional: true,
+    //    dataType: "json",
+    //    url: "../api/Users",
+    //    data: {
+    //        username: username,
+    //        password: password,
+    //        email: email
+    //    },
+    //    cache: false,
+    //    complete: function (data) {
+    //        var answer = data.ans;
+    //        if (answer === "1") {
+    //            // go to main page
+    //            location.replace("/views/Home.html");
+    //        }
+    //        else {
+    //            document.getElementById("errorMsg").textContent = "Username already exists";
+    //        }
+    //    }
+    //});
+    //$.post("../api/Users",
+    //    {
+    //        username: username,
+    //        password: password,
+    //        email: email
+    //    }).done(function (answer) {
+    //        answer = answer.ans;
+    //        if (answer === "1") {
+    //            // go to main page
+    //            location.replace("/views/Home.html");
+    //        }
+    //        else {
+    //            document.getElementById("errorMsg").textContent = "Username already exists";
+    //        }
+    //    }).fail(function (error) {
+    //        console.log('Invocation of start failed. Error:' + error);
+    //    });
 
     // TODO send the server the password and username
     //alert("Welcome to a world of mazes and wonder!");

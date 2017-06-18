@@ -14,7 +14,8 @@
     <h1>Register</h1>
     <p>Create a new account.</p>
     <!-- TODO handle the submition -->
-    <form onsubmit="register()" method="post" class="formStyle">
+    <form onsubmit="register()" class="formStyle">
+        <p id="errorMsg" style="color:red;"/>
         <table>
             <tr>
                 <td>Username:</td>
@@ -22,11 +23,11 @@
             </tr>
             <tr>
                 <td>Password:</td>
-                <td><input type="password" id="password" required /></td>
+                <td><input type="password" id="password" required placeholder="write 8 to 20 chars"/></td>
             </tr>
             <tr>
                 <td>Repeat password:</td>
-                <td><input type="password" id="passwordValidation" required /></td>
+                <td><input type="password" id="passwordValidation" required  pattern=".{8,20}" /></td>
             </tr>
             <tr>
                 <td>Email:</td>
@@ -35,5 +36,6 @@
         </table>
         <input type="submit" value="Submit">
     </form>
+    <form id="asd" method="post"></form>
 </body>
 </html>

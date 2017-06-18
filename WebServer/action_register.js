@@ -17,6 +17,8 @@ function register() {
         "email": email
     })
 
+
+
     // go to main page
     location.replace("/views/Home.html")
 

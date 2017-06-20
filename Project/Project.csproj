@@ -158,12 +158,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="main_bar.js" />
+    <Content Include="mazeBoard.js" />
     <Content Include="ranking_table.js" />
     <Content Include="register_login.js" />
-    <Content Include="App_Data\ProjectContext-20170614104644.mdf" />
-    <Content Include="App_Data\ProjectContext-20170614104644_log.ldf">
-      <DependentUpon>ProjectContext-20170614104644.mdf</DependentUpon>
-    </Content>
     <Content Include="general_set_up.js" />
     <Content Include="Global.asax" />
     <Content Include="maze_logic.js" />
@@ -248,7 +245,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201706182025340_Initial.resx">
       <DependentUpon>201706182025340_Initial.cs</DependentUpon>

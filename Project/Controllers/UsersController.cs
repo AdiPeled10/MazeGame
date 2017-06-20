@@ -128,7 +128,7 @@ namespace Project.Controllers
                 db.Users.Add(user);
                 try
                 {
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                     solveObj = new JObject
                     {
                         ["ans"] = "/views/MultiPlayer.html"

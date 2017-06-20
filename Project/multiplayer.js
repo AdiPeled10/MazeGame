@@ -75,6 +75,7 @@ function checkNumber(myVal, fieldName) {
 }
 
 var gameEnded;
+var start_func, join_func;
 
 //Runs when document is ready.
 $(document).ready(function () {
@@ -115,17 +116,17 @@ $(document).ready(function () {
     //Create function that accepts the maze and draws it.
     hub.client.getmaze = function (maze) {
         //Draw the maze.
+        var canvas = document.getElementById("mazeCanvas");
+        context = mazeCanvas.getContext("2d");
+        context.clearRect(0,0,925,500);
         arr = strToArr(maze.Maze, maze.Rows, maze.Cols);
         drawMaze(arr, maze.Start, maze.End, 0, 0, 450, 500, 1);
         //Save positions of my and opponents positions.
         playerCurrent = maze.Start;
         opponentCurrent = maze.Start;
         goal = maze.End;
-        //Draw line on canvas.
-        var canvas = document.getElementById("mazeCanvas");
-        context = mazeCanvas.getContext("2d");
         // clear the canvas
-        context.clearRect();
+       
         context.beginPath();
         context.lineWidth = 3;
         context.moveTo(450, 0);
@@ -152,9 +153,12 @@ $(document).ready(function () {
     gameEnded = hub.server.gameEnded;
 
     $.connection.hub.start().done(function () {
-        $("#startButton").click(function () {
+        start_func = function () {
+            // disable join
+            $("#joinButton").off();
             var myCanvas = document.getElementById("mazeCanvas");
             var ctx = mazeCanvas.getContext("2d");
+            ctx.clearRect(0, 0, 925, 500);
             ctx.font = "40px Georgia";
             ctx.fillText("Loading...", 350, 250);
             var name = $("#mazeName").val();
@@ -173,7 +177,8 @@ $(document).ready(function () {
             cols = checkNumber(cols, "cols");
             //Start game from hub.
             hub.server.startGame(name, rows, cols, sessionStorage.getItem("username"));
-        });
+        };
+        $("#startButton").click(start_func);
     }).fail(function (error) {
         console.log('Invocation of start failed. Error:' + error)
         });
@@ -199,10 +204,13 @@ $(document).ready(function () {
     });
 
     //Set click for join button.
-    $("#joinButton").click(function () {
+    join_func = function () {
+        // disable start
+        $("#startButton").off();
         //Connect through the hub to join the game.
         hub.server.joinGame($("#games").val(), sessionStorage.getItem("username"));
-    });
+    };
+    $("#joinButton").click(join_func);
 
     //Set reaction to movement by setting reaction to
     //keyboard on the body.
@@ -279,14 +287,29 @@ function movePlayer(key,xInd,yInd,image,currentPos,isMine) {
             }
             break;
     }
-    if (key.keyCode >= 37 && key.keyCode <= 40 && currentPos.Row == goal.Row &&
-        currentPos.Col == goal.Col) {
-        setTimeout(function () {
-            alert("You won!!!");
-            gameEnded();
-        }, 40);
-        $("body").off();
+    if (isMine == 1) {
+        if (key.keyCode >= 37 && key.keyCode <= 40 && currentPos.Row == goal.Row &&
+            currentPos.Col == goal.Col) {
+            setTimeout(function () {
+                alert("You won!!!");
+                gameEnded();
+            }, 40);
+            $("body").off();
+            $("#joinButton").click(join_func);
+            $("#startButton").click(start_func);
+        }
+    } else {
+        if (key >= 37 && key <= 40 && currentPos.Row == goal.Row &&
+            currentPos.Col == goal.Col) {
+            setTimeout(function () {
+                alert("You lost!!!");
+            }, 40);
+            $("body").off();
+            $("#joinButton").click(join_func);
+            $("#startButton").click(start_func);
+        }
     }
+
     if (isMine == 1) {
         //If it's my player prevent it from moving twice.
         key.stopImmediatePropagation();

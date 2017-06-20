@@ -15,15 +15,16 @@ $(document).ready(function () {
         document.getElementById("register").outerHTML = '<p id="register">Welcome ' + username + '!</p>';
         var loginTab = document.getElementById("login");
         loginTab.innerHTML = "Log out";
-        loginTab.setAttribute("href", "");//document.getElementById("home").getAttribute("href");
-        loginTab.onclick = (event) => logout();
+        loginTab.setAttribute("href", "/views/Home.html");//document.getElementById("home").getAttribute("href");
+        loginTab.onclick = logout;
     }
 });
 
 function logout() {
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("multiplayerHTMLPath");
-    document.getElementById("home").click();
+    activate("home");
+    //window.location.href = "/views/Home.html";
 }
 
 function activate(elementId)

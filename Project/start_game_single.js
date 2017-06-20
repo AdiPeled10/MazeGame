@@ -30,6 +30,9 @@ $(document).ready(function () {
         $('#datebox').val($(this).text());
     });
     $("#StartButton").click(function () {
+        context.clearRect(0, 0, 500, 500);
+        context.font = "40px Georgia";
+        context.fillText("Loading...", 150, 250);
         mazeName = $("#mazeName").val();
         var mazeRows = $("#rows").val();
         var mazeCols = $("#cols").val();

@@ -12,6 +12,7 @@ goalImage.src = "/views/Images/goal.png";
 var playerCurrent, opponentCurrent, isValid;
 var cellWidth, cellHeight, goal, context;
 
+
 function strToArr(myString, rows, cols) {
     var maze = new Array(rows);
     for (var i = 0; i < rows; i++) {
@@ -73,9 +74,15 @@ function checkNumber(myVal, fieldName) {
     }
 }
 
+var gameEnded;
 
 //Runs when document is ready.
 $(document).ready(function () {
+    //// for dynamic canvas size
+    //var tmp = document.getElementById("mazeCanvas");
+    //tmp.width = window.innerWidth - tmp.getBoundingClientRect().left - 35;
+    //tmp.height = window.innerHeight - tmp.getBoundingClientRect().top;
+
     //Activates when start button is clicked.
     //Declare reference to hub.
     //Set list of games text.
@@ -117,6 +124,8 @@ $(document).ready(function () {
         //Draw line on canvas.
         var canvas = document.getElementById("mazeCanvas");
         context = mazeCanvas.getContext("2d");
+        // clear the canvas
+        context.clearRect();
         context.beginPath();
         context.lineWidth = 3;
         context.moveTo(450, 0);
@@ -138,7 +147,10 @@ $(document).ready(function () {
             return 0 <= j && j < cols && 0 <= i && i < rows && arr[i][j] != 1;
         };
     };
-    
+
+    // set a function to end a game
+    gameEnded = hub.server.gameEnded;
+
     $.connection.hub.start().done(function () {
         $("#startButton").click(function () {
             var myCanvas = document.getElementById("mazeCanvas");
@@ -159,23 +171,13 @@ $(document).ready(function () {
                 return;
             }
             cols = checkNumber(cols, "cols");
-            //Create url and send post request by using ajax
-            //Send post request to server.
-            apiUrl = "../api/MultMaze/" + name + "/" + String(rows) + "/" + String(cols);
             //Start game from hub.
-
-            hub.server.startGame(name, rows, cols);
-
-
-            // $.getJSON(apiUrl).done(function () {
-            //   alert("Done.");
-            //})
-
-
+            hub.server.startGame(name, rows, cols, sessionStorage.getItem("username"));
         });
     }).fail(function (error) {
         console.log('Invocation of start failed. Error:' + error)
-    });
+        });
+
     //Set games button.
     $("#gamesButton").click(function () {
         //Send list request to server.
@@ -184,7 +186,7 @@ $(document).ready(function () {
             //Update list of games.
             var options = document.getElementById("mylist");
             options.innerHTML = "";
-            for (var i = 0; i < lst.length;i++) {
+            for (var i = 0; i < lst.length; i++) {
                 var li = document.createElement("li");
                 li.appendChild(document.createTextNode(lst[i]));
                 options.appendChild(li);
@@ -193,13 +195,13 @@ $(document).ready(function () {
             $("#mylist li").click(function () {
                 $('#games').val($(this).text());
             });
-        })
-    })
+        });
+    });
 
     //Set click for join button.
     $("#joinButton").click(function () {
         //Connect through the hub to join the game.
-        hub.server.joinGame($("#games").val());
+        hub.server.joinGame($("#games").val(), sessionStorage.getItem("username"));
     });
 
     //Set reaction to movement by setting reaction to
@@ -279,7 +281,10 @@ function movePlayer(key,xInd,yInd,image,currentPos,isMine) {
     }
     if (key.keyCode >= 37 && key.keyCode <= 40 && currentPos.Row == goal.Row &&
         currentPos.Col == goal.Col) {
-        setTimeout(function () { alert("You won!!! Daniel!"); }, 40);
+        setTimeout(function () {
+            alert("You won!!!");
+            gameEnded();
+        }, 40);
         $("body").off();
     }
     if (isMine == 1) {

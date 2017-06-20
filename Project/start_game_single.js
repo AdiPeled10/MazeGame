@@ -32,11 +32,29 @@ $(document).ready(function () {
         var mazeName = $("#mazeName").val();
         var mazeRows = $("#rows").val();
         var mazeCols = $("#cols").val();
-        console.log(mazeName);
-        console.log(mazeRows);
-        console.log(mazeCols);
+        if (mazeName === "") {
+            document.getElementById("errMsg").innerHTML = "Name wasn't entered!";
+            return;
+        }
+        if (mazeRows === "") {
+            mazeRows = localStorage.getItem("defaultRows");
+            if (mazeRows === null) {
+                document.getElementById("errMsg").innerHTML = "Rows weren't entered!";
+                return;
+            }
+        }
+        if (mazeCols === "") {
+            mazeCols = localStorage.getItem("defaultCols");
+            if (mazeCols === null) {
+                document.getElementById("errMsg").innerHTML = "Cols weren't entered!";
+                return;
+            }
+        }
+
+        document.getElementById("errMsg").innerHTML = "";
+        document.title = mazeName;
+
         var apiUrl = "../api/Maze" + "/" + mazeName + "/" + mazeRows + "/" + mazeCols;
-        console.log(apiUrl)
         //Send request.
         var mazeObject;
         $.getJSON(apiUrl).done(function (maze) {
@@ -100,7 +118,7 @@ $(document).ready(function () {
             }
             if (key.keyCode >= 37 && key.keyCode <= 40 && current.Row == goal.Row &&
                 current.Col == goal.Col) {
-                setTimeout(function (){alert("You won!!! Daniel!");}, 40);
+                setTimeout(function (){alert("You won!!!");}, 40);
                 $("body").off();
             }
             key.stopImmediatePropagation();
@@ -110,7 +128,13 @@ $(document).ready(function () {
         $("#solveButton").click(function () {
             //Check value of algorithm.
             var algorithm = $('#datebox').val();
-            
+            if (algorithm === "") {
+                algorithm = localStorage.getItem("defaultAlgo");
+                if (algorithm === null) {
+                    document.getElementById("errMsg").innerHTML = "Algorithm wasn't selected!";
+                    return;
+                }
+            }
             
             var url = "../api/Maze/" + mazeName + "/" + algorithm;
             //Send ajax get request to the server in order to get solution.

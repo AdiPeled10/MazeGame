@@ -5,7 +5,7 @@
     <title id="title">Maze Game</title>
     <link rel="stylesheet" href="/views/styles.css">
     <script src="/Scripts/jquery-3.1.1.js"></script>
-    <script src="/action_register.js"></script>
+    <script src="/register_login.js"></script>
 </head>
 <body>
     <!-- This line adds the main bar to this html. -->
@@ -14,28 +14,25 @@
     <h1>Register</h1>
     <p>Create a new account.</p>
     <!-- TODO handle the submition -->
-    <form onsubmit="register()" class="formStyle">
-        <p id="errorMsg" style="color:red;"/>
-        <table>
-            <tr>
-                <td>Username:</td>
-                <td><input type="text" id="username" required /></td>
-            </tr>
-            <tr>
-                <td>Password:</td>
-                <td><input type="password" id="password" required placeholder="write 8 to 20 chars"/></td>
-            </tr>
-            <tr>
-                <td>Repeat password:</td>
-                <td><input type="password" id="passwordValidation" required  pattern=".{8,20}" /></td>
-            </tr>
-            <tr>
-                <td>Email:</td>
-                <td><input type="email" id="email" required /></td>
-            </tr>
-        </table>
-        <input type="submit" value="Submit">
-    </form>
-    <form id="asd" method="post"></form>
+    <p id="errorMsg" style="color:red;"/>
+    <table>
+        <tr>
+            <td>Username:</td>
+            <td><input type="text" id="username" required /></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type="password" id="password" required placeholder="write 8 to 20 chars"/></td>
+        </tr>
+        <tr>
+            <td>Repeat password:</td>
+            <td><input type="password" id="passwordValidation" required  pattern=".{8,20}" /></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><input type="email" id="email" required /></td>
+        </tr>
+    </table>
+    <input type="submit" value="Submit" onclick="register()">
 </body>
 </html>

@@ -5,17 +5,18 @@
     <title>Maze Game</title>
     <link rel="stylesheet" href="/views/styles.css">
     <base target="_parent">
-    <!--<script src="/Scripts/jquery-3.1.1.js"></script>-->
+    <script src="/Scripts/jquery-3.1.1.js"></script>
+    <script src="/main_bar.js"></script>
 </head>
 <body>
     <div class="topMenu">
-        <a id="home" href="/views/Home.html">Maze Game</a>
-        <a href="/views/SinglePlayer.html">Single Game</a>
-        <a id="multi" href="/views/MultiPlayer.html">Multiplayer Game</a>
-        <a href="/views/Settings.html">Settings</a>
-        <a href="/views/UserRankings.html">User Ranking</a>
-        <a id="register" href="/views/RegisterSheet.html" style="float:right;">Register</a>
-        <a id="login" href="/views/LoginSheet.html" style="float:right;">Login</a>
+        <a id="home" href="/views/Home.html" onclick="activate(this.id)">Maze Game</a>
+        <a id="single" href="/views/SinglePlayer.html" onclick="activate(this.id)">Single Game</a>
+        <a id="multi" href="/views/LoginSheet.html" onclick="activate(this.id)">Multiplayer Game</a>
+        <a id="settings" href="/views/Settings.html" onclick="activate(this.id)">Settings</a>
+        <a id="ranking" href="/views/UserRankings.html" onclick="activate(this.id)">User Ranking</a>
+        <a id="register" href="/views/RegisterSheet.html" style="float:right;" onclick="activate(this.id)">Register</a>
+        <a id="login" href="/views/LoginSheet.html" style="float:right;" onclick="activate(this.id)">Login</a>
     </div>
 </body>
 </html>

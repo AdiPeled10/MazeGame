@@ -10,6 +10,8 @@ namespace Project.Models
         public WebMaze Maze { get; set; }
         public string FirstClient { get; set; }
         public string SecondClient { get; set; }
+        public string FirstUsername { get; set; }
+        public string SecondUsername { get; set; }
 
         public string GetOpponent(string id)
         {

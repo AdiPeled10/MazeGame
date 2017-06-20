@@ -19,13 +19,18 @@ namespace Project.Models
         [Key]
         public string UserName { get; set; }
         [Required]
-        private string salt;
+        public string Salt { get; set; }
         [Required]
-        public string HashValue { get; }
+        public string HashValue { get; set; }
         [Required]
         public string Email { get; set; }
-        public uint Wins { get; set; }
-        public uint Loses { get; set; }
+        public short Wins { get; set; }
+        public short Loses { get; set; }
+
+        private User()
+        {
+
+        }
 
         public User(string username, string password, string email)
         {
@@ -40,9 +45,16 @@ namespace Project.Models
             // crypto stuff
             byte[] saltTemp = new byte[8];
             CryptoData.PRG.GetBytes(saltTemp);
-            this.salt = Encoding.ASCII.GetString(saltTemp);
-            byte[] input = Encoding.ASCII.GetBytes(password + salt);
+            this.Salt = Encoding.ASCII.GetString(saltTemp);
+            byte[] input = Encoding.ASCII.GetBytes(password + Salt);
             this.HashValue = Encoding.ASCII.GetString(CryptoData.HashFunc.ComputeHash(input));
+        }
+
+        public bool IsPassword(string password)
+        {
+            byte[] input = Encoding.ASCII.GetBytes(password + Salt);
+            password = Encoding.ASCII.GetString(CryptoData.HashFunc.ComputeHash(input));
+            return password == this.HashValue;
         }
     }
 }

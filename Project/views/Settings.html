@@ -4,38 +4,40 @@
     <meta charset="utf-8" />
     <title>Maze Game</title>
     <link rel="stylesheet" href="/views/styles.css">
+    <script src="/settings_script.js"></script>
 </head>
 <body>
     <!-- This line adds the main bar to this html. -->
     <iframe src="/views/MainBar.htmL" width="100%" height="50px" marginwidth="0" frameborder="0"></iframe>
     <!-- This page objects -->
-    <form method="post" class="formStyle" action="action_save_settings.js">
-        <table>
-            <tr>
-                <td>Default rows</td>
-                <td><input type="text" name="defaultRows" /></td>
-            </tr>
-            <tr>
-                <td>Default cols</td>
-                <td><input type="text" name="defaultCols" /></td>
-            </tr>
-            <tr>
-                <td>
-                    Default Search Algo
-                </td>
-                <td>
-                    <select name="defaultAlgo">
-                        <!-- TODO parse the value here or in an intermidate class to 0/1 -->
-                        <option value="DFS">DFS</option>
-                        <option value="BFS">BFS</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type="submit" value="Save Settings"></td>
-            </tr>
-        </table>
-    </form>
+    <table>
+        <tr>
+            <td>Default rows</td>
+            <td><input type="text" id="rows" /></td>
+        </tr>
+        <tr>
+            <td>Default cols</td>
+            <td><input type="text" id="cols" /></td>
+        </tr>
+        <tr>
+            <td>
+                Default Search Algo
+            </td>
+            <td>
+                <select id="algo">
+                    <!-- TODO parse the value here or in an intermidate class to 0/1 -->
+                    <option id="default"></option>
+                    <option value="DFS">DFS</option>
+                    <option value="BFS">BFS</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Save Settings" onclick="saveSettings()"></td>
+        </tr>
+    </table>
+    <p>Leave field empty to delete its default</p>
+    <p id="msg" style="color:red;"></p>
 </body>
 </html>

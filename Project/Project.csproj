@@ -157,7 +157,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="action_register.js" />
+    <Content Include="main_bar.js" />
+    <Content Include="ranking_table.js" />
+    <Content Include="register_login.js" />
+    <Content Include="App_Data\ProjectContext-20170614104644.mdf" />
+    <Content Include="App_Data\ProjectContext-20170614104644_log.ldf">
+      <DependentUpon>ProjectContext-20170614104644.mdf</DependentUpon>
+    </Content>
     <Content Include="general_set_up.js" />
     <Content Include="Global.asax" />
     <Content Include="maze_logic.js" />
@@ -176,6 +182,7 @@
     <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
     <Content Include="Scripts\knockout-3.4.2.debug.js" />
     <Content Include="Scripts\knockout-3.4.2.js" />
+    <Content Include="settings_script.js" />
     <Content Include="start_game_single.js" />
     <Content Include="views\bootstrap.css" />
     <Content Include="views\bootstrap.js" />
@@ -216,6 +223,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706182025340_Initial.cs" />
+    <Compile Include="Migrations\201706182025340_Initial.Designer.cs">
+      <DependentUpon>201706182025340_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\GameInfo.cs" />
     <Compile Include="Models\ProjectContext.cs" />
     <Compile Include="Models\User.cs" />
@@ -236,8 +248,11 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <EmbeddedResource Include="Migrations\201706182025340_Initial.resx">
+      <DependentUpon>201706182025340_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

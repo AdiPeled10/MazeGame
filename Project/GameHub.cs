@@ -15,25 +15,37 @@ namespace Project
             Clients.All.hello();
         }
 
-        public void Send(string userId,string message)
+        public void Send(string userId, string message)
         {
             //Send message to user.
             string id = Context.ConnectionId;
             Clients.User(userId).send(message);
         }
 
-        public void StartGame(string name,int rows,int cols)
+        public void StartGame(string name, int rows, int cols, string username)
         {
-            // Start the game.
-            MazeController.StartGame(Context.ConnectionId, name, rows, cols);
+            // check that the username exists
+            UsersController db = new UsersController();
+            if (db.UserExists(username))
+            {
+                // Start the game.
+                MazeController.StartGame(Context.ConnectionId, name, rows, cols, username);
+            }
+            db.TearDown();
         }
 
-        public void JoinGame(string name)
+        public void JoinGame(string name, string username)
         {
-            GameInfo game = MazeController.JoinGame(Context.ConnectionId, name);
-            //Send to first client and second client the maze.
-            Clients.Client(game.FirstClient).getMaze(game.Maze);
-            Clients.Client(game.SecondClient).getMaze(game.Maze);
+            // check that the username exists
+            UsersController db = new UsersController();
+            if (db.UserExists(username))
+            {
+                GameInfo game = MazeController.JoinGame(Context.ConnectionId, name, username);
+                //Send to first client and second client the maze.
+                Clients.Client(game.FirstClient).getMaze(game.Maze);
+                Clients.Client(game.SecondClient).getMaze(game.Maze);
+            }
+            db.TearDown();
         }
 
         public void Play(int num)
@@ -43,6 +55,9 @@ namespace Project
             Clients.Client(opponent).play(num);
         }
 
-
+        public void GameEnded()
+        {
+            MazeController.GameEnded(Context.ConnectionId);
+        }
     }
 }

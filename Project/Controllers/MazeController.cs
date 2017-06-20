@@ -11,6 +11,7 @@ using MazeLib;
 using MazeGeneratorLib;
 using SearchAlgorithmsLib;
 using All;
+using System.Threading.Tasks;
 
 namespace Project.Controllers
 {
@@ -60,9 +61,7 @@ namespace Project.Controllers
 
         }
 
-
-
-        public static void StartGame(string clientId,string name,int rows,int cols)
+        public static void StartGame(string clientId, string name, int rows, int cols, string username)
         {
             //Generate new game.
             GameInfo info = new GameInfo();
@@ -73,15 +72,17 @@ namespace Project.Controllers
             //Save info in GameInfo
             info.Maze = myMaze;
             info.FirstClient = clientId;
+            info.FirstUsername = username;
             //Add to list.
             gameInformation.Add(info);
             clientToGameInfo[clientId] = info;
         }
 
-        public static GameInfo JoinGame(string clientId,string name)
+        public static GameInfo JoinGame(string clientId, string name, string username)
         {
             //Find entry in list which contains name of game
             GameInfo info = gameInformation.Find(x => x.Maze.Name == name);
+            info.SecondUsername = username;
             //Assign to dictionary.
             clientToGameInfo[clientId] = info;
             //Set info for second client.
@@ -117,7 +118,42 @@ namespace Project.Controllers
             return Ok(lst);
         }
 
-
+        public static async Task GameEnded(string clientId)
+        {
+            GameInfo game;
+            try
+            {
+                game = clientToGameInfo[clientId];
+            }
+            catch
+            {
+                return;  // someone tried to cheat some extra wins
+            }
+            // get users from database
+            UsersController db = new UsersController();
+            User winner, looser;
+            if (clientId == game.FirstClient)
+            {
+                winner = db.GetUser(game.FirstUsername);
+                looser = db.GetUser(game.SecondUsername);
+            }
+            else
+            {
+                looser = db.GetUser(game.FirstUsername);
+                winner = db.GetUser(game.SecondUsername);
+            }
+            if (!ReferenceEquals(winner, null) && !ReferenceEquals(looser, null)
+                && !ReferenceEquals(winner, looser))
+            {
+                // add ranking
+                ++winner.Wins;
+                ++looser.Loses;
+                // update the database
+                await db.UpdateUserAsync(winner);
+                await db.UpdateUserAsync(looser);
+                db.TearDown();
+            }
+        }
 
     }
 }

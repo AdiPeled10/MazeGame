@@ -1,18 +1,16 @@
-﻿(function ($) {
+﻿/*********************************************************
+* This is our mazeboard plugin, the plugin will receive the maze
+* object that we will receive from the server and it will contain all 
+* the functions that operate on the server in order to create an api for
+* us when we are using the maze in the single player game.
+*********************************************************/
+(function ($) {
 
     $.fn.mazeBoard = function (
         mazeObj
-        /*
-            mazeData,           // the matrix containing the maze cells
-            startRow, startCol, // initial position of the player
-            exitRow, exitCol,   // the exit position
-            playerImage,        // player's icon (of type Image)
-            exitImage,          // exit's icon (of type Image)
-            isEnabaled,         // is the board enabled (i.e., player can move)
-            func                // a callback function which is invoked after each move 
-       */
        ) {
 
+        //Load the images.
         var playerImage = new Image();
         playerImage.src = "/views/Images/mario.png";
         var goalImage = new Image();
@@ -23,6 +21,11 @@
         };
         var goal = mazeObj.End;
 
+        /*************************************************
+        * The draw maze function will extract the start,end,rows
+        * and cols from the maze object,and draw the maze according
+        * to the maze string.
+        *************************************************/
         $.fn.drawMaze = function(maze) {
             var start = mazeObj.Start;
             var end = mazeObj.End;
@@ -42,13 +45,17 @@
                 }
             }
 
-            //Draw player.
+            //Draw player and goal images.
             context.drawImage(playerImage, start.Col * cellWidth, start.Row * cellHeight, cellWidth, cellHeight);
 
             context.drawImage(goalImage, end.Col * cellWidth, end.Row * cellHeight, cellWidth, cellHeight);
 
         }
 
+        /*********************************************
+        * Move the player based on the key that was entered
+        * by using a switch case.
+        **********************************************/
         var movePlayer = function (key) {
             //left = 37
             //up = 38
@@ -100,6 +107,12 @@
             key.stopImmediatePropagation();
         };
 
+        /**********************************************************
+        * Function Name:moveAccordingToSolution.
+        * Input: solution string and current index in the string.
+        * Output: void.
+        * Operation: move the player according to the solution.
+        **********************************************************/
         function moveAccordingToSolution(solution, currIndex) {
             context.clearRect(current.Col * cellWidth, current.Row * cellHeight, cellWidth, cellHeight);
             switch (solution[currIndex]) {
@@ -127,6 +140,11 @@
                                     current.Row * cellHeight, cellWidth, cellHeight);
         }
 
+        /*********************************************
+        * Function that will create the full solution animation
+        * by using SetTimeout and the solution animation function
+        * that we defined before.
+        *********************************************/
         var solve_func = function (solution, index) {
             moveAccordingToSolution(solution, index);
             setTimeout(function () {

@@ -1,7 +1,7 @@
 ﻿/****************************************************
-This part is code taken from the single player for some reason
-taking it from another js file doesn't work so it's here for now
-TODO- move it to a file that the single player and multi player will use.
+First load the images for player and opponent.
+Save cell width,height,the goal destination and the context
+of the canvas so that each function could use it.
 ******************************************************/
 var playerImage = new Image();
 playerImage.src = "/views/Images/mario.png";
@@ -13,6 +13,11 @@ var playerCurrent, opponentCurrent, isValid;
 var cellWidth, cellHeight, goal, context;
 
 
+/*************************************************************
+* The strToArr function receives a string and a number for rows and
+* cols, this will turn the string format of the array that we receive
+* from the server to a multidimensional array that we will use later.
+***************************************************************/
 function strToArr(myString, rows, cols) {
     var maze = new Array(rows);
     for (var i = 0; i < rows; i++) {
@@ -25,6 +30,17 @@ function strToArr(myString, rows, cols) {
     return maze;
 }
 
+/*****************************************************************************
+* Function Name: drawMaze.
+* Input: The maze array,start and end positions, the x and y offsets that the maze
+* will be drawn on the canvas,the height of the maze and a boolean that tells us if
+* the maze is ours or the opponents.
+* Output: void.
+* Operation: Fill the rectangles of the canvas according to the maze array in order
+* to the draw the given array on the canvas in the given offsets, later we will check
+* the boolean to know what image we need to draw of the canvas, that of the player or
+* that of the opponent.
+*******************************************************************************/
 function drawMaze(maze, start, end, xInd, yInd, mazeWidth, mazeHeight,isMine) {
     var myCanvas = document.getElementById("mazeCanvas");
     var context = mazeCanvas.getContext("2d");
@@ -42,20 +58,29 @@ function drawMaze(maze, start, end, xInd, yInd, mazeWidth, mazeHeight,isMine) {
         }
     }
 
-    //Draw player.
+    //Draw player. If it's ours draw the player's otherwise the opponents.
     if (isMine == 1) {
-        context.drawImage(playerImage, xInd + start.Col * cellWidth, yInd + start.Row * cellHeight, cellWidth, cellHeight);
+        context.drawImage(playerImage, xInd + start.Col * cellWidth,
+            yInd + start.Row * cellHeight, cellWidth, cellHeight);
     } else {
-        context.drawImage(opponentImage, xInd + start.Col * cellWidth, yInd + start.Row * cellHeight, cellWidth, cellHeight);
+        context.drawImage(opponentImage, xInd + start.Col * cellWidth,
+            yInd + start.Row * cellHeight, cellWidth, cellHeight);
     }
 
-    context.drawImage(goalImage, xInd + end.Col * cellWidth, yInd + end.Row * cellHeight, cellWidth, cellHeight);
+    //Draw the image of the goal of the maze.
+    context.drawImage(goalImage, xInd + end.Col * cellWidth,
+        yInd + end.Row * cellHeight, cellWidth, cellHeight);
 }
 
 
-/****************
-End of part of identical code.
-********************/
+/*************************************************************
+* Function Name: checkVal.
+* Input: The value that we will check and the name we will use in the
+* alert.
+* Output: 0 if there is an error and 1 otherwise.
+* Operation: Check if a value was entered otherwise notify the user
+* by using the alert function.
+*************************************************************/
 function checkVal(myVal, name) {
     if (myVal.length == 0) {
         alert("Please enter " + name + " in order to continue");
@@ -79,10 +104,6 @@ var start_func, join_func;
 
 //Runs when document is ready.
 $(document).ready(function () {
-    //// for dynamic canvas size
-    //var tmp = document.getElementById("mazeCanvas");
-    //tmp.width = window.innerWidth - tmp.getBoundingClientRect().left - 35;
-    //tmp.height = window.innerHeight - tmp.getBoundingClientRect().top;
 
     //Activates when start button is clicked.
     //Declare reference to hub.
@@ -118,15 +139,17 @@ $(document).ready(function () {
         //Draw the maze.
         var canvas = document.getElementById("mazeCanvas");
         context = mazeCanvas.getContext("2d");
+        //Clear the canvas.
         context.clearRect(0,0,925,500);
         arr = strToArr(maze.Maze, maze.Rows, maze.Cols);
+        //Draw the first maze.
         drawMaze(arr, maze.Start, maze.End, 0, 0, 450, 500, 1);
         //Save positions of my and opponents positions.
         playerCurrent = maze.Start;
         opponentCurrent = maze.Start;
         goal = maze.End;
-        // clear the canvas
        
+        //Set the canvas inorder to draw 2 mazes.
         context.beginPath();
         context.lineWidth = 3;
         context.moveTo(450, 0);
@@ -138,6 +161,7 @@ $(document).ready(function () {
         context.moveTo(475, 0);
         context.lineTo(475, 500);
         context.stroke();
+        //Draw the second maze.
         drawMaze(arr, maze.Start, maze.End, 475, 0, 450, 500, 0);
         //Set is valid function.
         rows = maze.Rows;
@@ -151,7 +175,8 @@ $(document).ready(function () {
 
     // set a function to end a game
     gameEnded = hub.server.gameEnded;
-
+    
+    //Set the following function to operate when hub start() function is done.
     $.connection.hub.start().done(function () {
         start_func = function () {
             // disable join
@@ -162,15 +187,18 @@ $(document).ready(function () {
             ctx.font = "40px Georgia";
             ctx.fillText("Loading...", 350, 250);
             var name = $("#mazeName").val();
+            //Check the input in the name field.
             if (!checkVal(name, "name")) {
                 return;
             }
             var rows = $("#rows").val();
+            //Check the value in row field.
             if (!checkVal(rows, "rows")) {
                 return;
             }
             rows = checkNumber(rows, "rows");
             var cols = $("#cols").val();
+            //Check the value in cols field.
             if (!checkVal(cols, "cols")) {
                 return;
             }
@@ -183,7 +211,7 @@ $(document).ready(function () {
         console.log('Invocation of start failed. Error:' + error)
         });
 
-    //Set games button.
+    //Set games button.When it is clicked send list request to the server.
     $("#gamesButton").click(function () {
         //Send list request to server.
         var apiUrl = "../api/Maze/gamelist"
@@ -196,7 +224,7 @@ $(document).ready(function () {
                 li.appendChild(document.createTextNode(lst[i]));
                 options.appendChild(li);
             }
-            //Again set click
+            //Again set click for the following click.
             $("#mylist li").click(function () {
                 $('#games').val($(this).text());
             });
@@ -228,7 +256,15 @@ $(document).ready(function () {
     });
 });
 
-
+/*******************************************************************
+* Function Name: movePlayer.
+* Input: The key,index of x and y values, the image of the player,the
+* current position and a boolean that tells us if it's the player or
+* the opponent.
+* Output: The direction.
+* Operation: Switch case based on the key that removes the previous image
+* of the player updates the position and draws a new one.
+********************************************************************/
 function movePlayer(key,xInd,yInd,image,currentPos,isMine) {
     //left = 37
     //up = 38
@@ -241,8 +277,10 @@ function movePlayer(key,xInd,yInd,image,currentPos,isMine) {
     } else {
         myKey = key;
     }
+    //Check which key we got.
     switch (myKey) {
         case 37:
+            //Move left.
             if (isValid(currentPos.Row, currentPos.Col - 1)) {
                 direction = 1;
                 context.clearRect(xInd + currentPos.Col * cellWidth,
@@ -254,6 +292,7 @@ function movePlayer(key,xInd,yInd,image,currentPos,isMine) {
             }
             break;
         case 38:
+            //Move up.
             if (isValid(currentPos.Row - 1, currentPos.Col)) {
                 direction = 2;
                 context.clearRect(xInd + currentPos.Col * cellWidth,
@@ -265,6 +304,7 @@ function movePlayer(key,xInd,yInd,image,currentPos,isMine) {
             }
             break;
         case 39:
+            //Move right
             if (isValid(currentPos.Row, currentPos.Col + 1)) {
                 direction = 3;
                 context.clearRect(xInd + currentPos.Col * cellWidth,
@@ -276,6 +316,7 @@ function movePlayer(key,xInd,yInd,image,currentPos,isMine) {
             }
             break;
         case 40:
+            //Move down.
             if (isValid(currentPos.Row + 1, currentPos.Col)) {
                 direction = 4;
                 context.clearRect(xInd + currentPos.Col * cellWidth,
@@ -287,7 +328,9 @@ function movePlayer(key,xInd,yInd,image,currentPos,isMine) {
             }
             break;
     }
+    //Check if it's ours.
     if (isMine == 1) {
+        //Check if we won.
         if (key.keyCode >= 37 && key.keyCode <= 40 && currentPos.Row == goal.Row &&
             currentPos.Col == goal.Col) {
             setTimeout(function () {
@@ -299,6 +342,7 @@ function movePlayer(key,xInd,yInd,image,currentPos,isMine) {
             $("#startButton").click(start_func);
         }
     } else {
+        //Check if the opponent won.
         if (key >= 37 && key <= 40 && currentPos.Row == goal.Row &&
             currentPos.Col == goal.Col) {
             setTimeout(function () {

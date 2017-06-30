@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using Project.Models;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using MazeLib;
 using MazeGeneratorLib;
 using SearchAlgorithmsLib;
@@ -15,7 +10,9 @@ using System.Threading.Tasks;
 
 namespace Project.Controllers
 {
-    
+    /// <summary>
+    /// Controller for handling maze related requests.
+    /// </summary>
     public class MazeController : ApiController
     {
         private static List<WebMaze> mazes = new List<WebMaze>();
@@ -29,6 +26,13 @@ namespace Project.Controllers
             {"DFS",Algorithm.DFS }
         };
 
+        /// <summary>
+        /// Generates a new maze with name as its name, with rows rows and cols cols.
+        /// </summary>
+        /// <param name="name"> string </param>
+        /// <param name="rows"> int </param>
+        /// <param name="cols"> int </param>
+        /// <returns> HTTP OK with the generated WebMaze </returns>
         [HttpGet]
         public IHttpActionResult GetMaze(string name,int rows,int cols)
         {
@@ -40,6 +44,12 @@ namespace Project.Controllers
             return Ok(newMaze);
         }
 
+        /// <summary>
+        /// Solve the maze with the given name using DFS or BFS algorithm(determined by algo argument).
+        /// </summary>
+        /// <param name="name"> string - name of existing single player maze </param>
+        /// <param name="algo"> "BFS" or "DFS" - The algorithm to solve with the maze </param>
+        /// <returns> HTTP Ok with the solution or NotFound if the maze wasn't found </returns>
         [HttpGet]
         public IHttpActionResult GetSolve(string name, string algo)
         {
@@ -61,6 +71,15 @@ namespace Project.Controllers
 
         }
 
+        /// <summary>
+        /// generate a new multi player game with the name name. This function adds the
+        /// generating client to the game.
+        /// </summary>
+        /// <param name="clientId"> string - The requesting client id </param>
+        /// <param name="name"> string - the generated maze name </param>
+        /// <param name="rows"> int - the number of rows in the generated maze </param>
+        /// <param name="cols"> int - the number of cols in the generated maze </param>
+        /// <param name="username"> string - The requesting client username(he has to be signed in) </param>
         public static void StartGame(string clientId, string name, int rows, int cols, string username)
         {
             //Generate new game.
@@ -78,6 +97,13 @@ namespace Project.Controllers
             clientToGameInfo[clientId] = info;
         }
 
+        /// <summary>
+        /// This function joins the client to the multiplayer game named name.
+        /// </summary>
+        /// <param name="clientId"> string - The requesting client id </param>
+        /// <param name="name"> The existing multiplayer game </param>
+        /// <param name="username"> string - The requesting client username(he has to be signed in) </param>
+        /// <returns> GameInfo class object - the multiplayer game corresponding GameInfo </returns>
         public static GameInfo JoinGame(string clientId, string name, string username)
         {
             //Find entry in list which contains name of game
@@ -92,6 +118,11 @@ namespace Project.Controllers
             return info;
         }
 
+        /// <summary>
+        /// returns the id of the client that the client with clientId plays against.
+        /// </summary>
+        /// <param name="clientId"> a client id </param>
+        /// <returns> the id of the opponent </returns>
         public static string GetOpponent(string clientId)
         {
             try
@@ -103,6 +134,10 @@ namespace Project.Controllers
             }
         }
 
+        /// <summary>
+        /// returns the list of joinable multiplayer games.
+        /// </summary>
+        /// <returns> HTTP Ok with a list </returns>
         [Route("api/Maze/gamelist")]
         [HttpGet]
         public IHttpActionResult GetListOfAvailableGames()
@@ -118,6 +153,14 @@ namespace Project.Controllers
             return Ok(lst);
         }
 
+        /// <summary>
+        /// This function adds 1 to the number of winnings of the user of the client with
+        /// clientId.
+        /// This function adds 1 to the number of loses of the user that plays against the
+        /// client with clientId.
+        /// This function deletes their multiplayer game.
+        /// </summary>
+        /// <param name="clientId"> The winning client </param>
         public static async Task GameEnded(string clientId)
         {
             GameInfo game;

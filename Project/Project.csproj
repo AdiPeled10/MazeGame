@@ -161,12 +161,9 @@
     <Content Include="mazeBoard.js" />
     <Content Include="ranking_table.js" />
     <Content Include="register_login.js" />
-    <Content Include="general_set_up.js" />
     <Content Include="Global.asax" />
-    <Content Include="maze_logic.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
-    <Content Include="MainBarLogic.js" />
     <Content Include="multiplayer.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -228,7 +225,6 @@
     <Compile Include="Models\GameInfo.cs" />
     <Compile Include="Models\ProjectContext.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UsersModel.cs" />
     <Compile Include="Models\WebMaze.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

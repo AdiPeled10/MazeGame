@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Newtonsoft.Json.Linq;
-using MazeLib;
-using All;
-using MazeGeneratorLib;
-using SearchAlgorithmsLib;
+﻿using MazeLib;
 
 namespace Project.Models
 {
+    /// <summary>
+    /// This class purpose is to be a maze. It contain all the required data.
+    /// </summary>
     public class WebMaze
     {
         public string Name { get; set; }
@@ -18,15 +13,11 @@ namespace Project.Models
         public Position Start { get; set; }
         public Position End { get; set; }
         public string Maze { get; set; }
-        //public Maze Original { get; set; }
-        //public char[,] Maze { get; set; }
 
-        
-        public void SolveMaze()
-        {
-            
-        }
-
+        /// <summary>
+        /// set this maze to be an exact copy of the given maze.
+        /// </summary>
+        /// <param name="original"> Maze class object </param>
         public void SetMaze(Maze original)
         {
             //Original = original;

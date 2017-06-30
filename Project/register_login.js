@@ -1,4 +1,12 @@
-﻿
+﻿/*************************************************************
+* This function takes the user inputs from the elements "username",
+* "password", "passwordValidation" and "email" (all are IDs).
+* If the value of password and passwordValidation differ, the
+* function display an error message and return. Otherwise, it will
+* ask the server to register the username. If registerssion was
+* sucessful, "onSuccessfulLogin(username, the server answer)" is
+* called. Else, an error message is showed.
+***************************************************************/
 function register() {
     // get the values
     var username = document.getElementById("username").value;
@@ -27,6 +35,14 @@ function register() {
     });
 }
 
+/*************************************************************
+* This function takes the user inputs from the elements "username"
+* and "password" (all are IDs of elements).
+* It will ask the server to login to the username with the given
+* password. If a username with that name and password exists, it
+* will call "onSuccessfulLogin(username, the server answer)".
+* Else, an error message is showed.
+***************************************************************/
 function login() {
     // get the values
     var username = document.getElementById("username").value;
@@ -43,6 +59,13 @@ function login() {
     });
 }
 
+/*************************************************************
+* This function saves the username argument to the session storage
+* under the key "username". It also saves multiplayerHTMLPath argument
+* under the key "multiplayerHTMLPath".
+* Then, it set the "active" key of the session storage to "home"
+* and replaces the current page with "/views/Home.html".
+***************************************************************/
 function onSuccessfulLogin(username, multiplayerHTMLPath)
 {
     // save the data for the main bar
@@ -52,9 +75,3 @@ function onSuccessfulLogin(username, multiplayerHTMLPath)
     sessionStorage.setItem("active", "home");  // set the home page as active
     window.location.href = "/views/Home.html";
 }
-
-//function logout(username, multiplayerHTMLPath)
-//{
-//    sessionStorage.removeItem("username");
-//    sessionStorage.removeItem("multiplayerHTMLPath");
-//}

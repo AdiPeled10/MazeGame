@@ -12,42 +12,6 @@ namespace All
     /// </summary>
     public class Converter
     {
-        //// assumption: to != from
-        //protected static char GetDirection(Position from, Position to)
-        //{
-        //    /**
-        //     * on the space Col_Diff*Row_Diff*Direction would like to connect:
-        //     * "(to.Col - from.Col, to.Row - from.Row, direction)
-        //     * (-1,0,0)
-        //     * (1,0,1)
-        //     * (0,-1,2)
-        //     * (0,1,3)
-        //     * using Trilinear interpolation will get the function:
-        //     *              f(x,y) = (x + 1 + 5 * y * y + y) / 2 = (5 * y * y + y + x + 1) / 2
-        //     *
-        //     * I basically just computed linear line between(x,z): (-1,0),(1,1)
-        //     * and then I needed to use the Y values to "get in the game" under the need that when y=0 the
-        //     * X values will set Z. So I used newton interpolation betwwn(y,z): (0,0),(-1,2),(1,3).
-        //     * (Note: I should have done the x,z interpolation with (0,0) also, but it worked without it).
-        //     *
-        //     * (x,z) computation:
-        //     * m = (z1-z0)/(x1-x0) = (1-0)/(1--1) = 1/2
-        //     * z = (x--1)/2 = (x+1)/2
-        //     *
-        //     * (y,z) computation:
-        //     *  0  0
-        //     *          -2
-        //     * -1  2           2.5
-        //     *          1/2
-        //     *  1  3
-        //     *  we got: z = 0 - 2 * (y - 0) + 2.5 * (y - 0) * (y - -1) = -2y + 2.5*y*y + 2.5y = 2.5*y*y + y/2
-        //     *          z = (5*y*y + y)/2
-        //     */
-        //    int y = to.Row - from.Row;
-        //    int x = to.Col - from.Col;
-        //    // The ASCII value of '0' is 48. So I inserted it into the brackets.
-        //    return (char) ((5 * y * y + y + x + 97) >> 1);
-        //}
 
         /// <summary>
         /// Convert a given solution to a SearchGame to a string in the

@@ -1,4 +1,8 @@
-﻿
+﻿/*************************************************************
+* This code will run only after the page will finish loading.
+* It will ask the server for the top 10 players and then show
+* them in a table (will add them to the HTML).
+***************************************************************/
 $(document).ready(function () {
     $.get("../api/Users/GetTop10").done(function (lst) {
         //Update list of games.

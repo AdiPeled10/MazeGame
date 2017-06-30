@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
+﻿
 namespace Project.Models
 {
+    /// <summary>
+    /// This class holds a multiplayer game information.
+    /// </summary>
     public class GameInfo
     {
         public WebMaze Maze { get; set; }
@@ -13,6 +12,12 @@ namespace Project.Models
         public string FirstUsername { get; set; }
         public string SecondUsername { get; set; }
 
+        /// <summary>
+        /// get the other player. If id isn't the id of this game players,
+        /// null will be returned
+        /// </summary>
+        /// <param name="id"> string - id of a player </param>
+        /// <returns> string - the id of the other player</returns>
         public string GetOpponent(string id)
         {
             if (FirstClient == id)
@@ -26,7 +31,5 @@ namespace Project.Models
                 return null;
             }
         }
-
-
     }
 }

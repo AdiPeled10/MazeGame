@@ -14,7 +14,7 @@ namespace All
     ///  It has medium-high coupling with class Model. The only purpose of this class is to avoid handling
     ///  all the connections between objects in the Model.The Model maybe uses many of Connector methods but
     ///  it makes the Model simplier.
-      /// </summary>
+    /// </summary>
     internal class Connector
     {
         /// <summary>

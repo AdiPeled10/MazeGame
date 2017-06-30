@@ -1,4 +1,10 @@
-﻿
+﻿/*************************************************************
+* This function will save the input values to the session storage.
+* If an input field is empty, its current value will be removed
+* form the session storage.
+* if an input field has a bad value(g.e. "asdsa" where a number is
+* expected) the save will fail and nothing will change.
+***************************************************************/
 function saveSettings() {
     // get the values
     var rows = document.getElementById("rows").value;
